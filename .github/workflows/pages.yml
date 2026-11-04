@@ -5,7 +5,9 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'rashid.html'
       - 'assets/**'
+      - '.github/workflows/pages.yml'
 permissions:
   contents: read
   pages: write
@@ -25,10 +27,25 @@ jobs:
       - name: Prepare public files
         run: |
           test -f index.html
+          test -f rashid.html
           mkdir -p _site
-          cp index.html _site/
+          cp index.html rashid.html _site/
           cp -R assets _site/
           touch _site/.nojekyll
+      - name: Embed Rashid widget in published homepage
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('_site/index.html')
+          html = page.read_text()
+          embed = '''<section id="rashid-tracker" aria-label="Rashid location finder" style="padding:32px 0 0"><div class="wrap"><iframe id="rashid-frame" src="rashid.html" title="Rashid location finder and server-save countdown" height="440" style="display:block;width:100%;border:0;background:#0b1110"></iframe><p style="font-size:11px;text-align:right"><a href="rashid.html" target="_blank" rel="noopener noreferrer">Open Rashid tracker in a new tab ↗</a></p></div></section><script>window.addEventListener('message',function(event){const frame=document.getElementById('rashid-frame');if(!frame||event.origin!==location.origin||event.source!==frame.contentWindow||!event.data||event.data.type!=='hylian-rashid-height')return;const height=Number(event.data.height);if(Number.isFinite(height))frame.style.height=Math.min(1600,Math.max(300,height))+'px';});</script>'''
+          if 'id="rashid-tracker"' not in html:
+              anchor = '<section id="codex">'
+              if html.count(anchor) != 1:
+                  raise SystemExit('Expected exactly one Codex section; no homepage changes applied.')
+              html = html.replace(anchor, embed + '\n' + anchor, 1)
+          page.write_text(html)
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
