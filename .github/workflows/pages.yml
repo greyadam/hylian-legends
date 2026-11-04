@@ -7,6 +7,7 @@ on:
       - 'index.html'
       - 'rashid.html'
       - 'anniversary.html'
+      - 'riddle-section.html'
       - 'assets/**'
       - '.github/workflows/pages.yml'
 permissions:
@@ -46,6 +47,23 @@ jobs:
               if html.count(anchor) != 1:
                   raise SystemExit('Expected exactly one Codex section; no homepage changes applied.')
               html = html.replace(anchor, embed + '\n' + anchor, 1)
+          page.write_text(html)
+          PY
+      - name: Insert guild riddle below anniversary
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('_site/index.html')
+          html = page.read_text()
+          anchor = '<section id="rashid-tracker"'
+          anniversary = '<section id="anniversary"'
+          if html.count(anchor) != 1 or html.count(anniversary) != 1:
+              raise SystemExit('Expected one anniversary and one Rashid section.')
+          if html.index(anniversary) >= html.index(anchor):
+              raise SystemExit('Anniversary must precede Rashid tracker.')
+          if 'id="great-hylian-legend"' not in html:
+              fragment = Path('riddle-section.html').read_text()
+              html = html.replace(anchor, fragment + '\n' + anchor, 1)
           page.write_text(html)
           PY
       - name: Configure Pages
