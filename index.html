@@ -13,7 +13,7 @@
 <dialog id="modal"><button class="button outline" id="close">Close ×</button><h3 id="modal-title"></h3><p id="modal-text"></p></dialog>
 <script>
 // Set your real invite here. No backend or account service is included.
-const DISCORD_URL='';
+const DISCORD_URL='https://discord.gg/FUDj7Sj';
 const roman=['I','II','III','IV','V','VI'];
 const rules=[['Honour the Party','Respect every member, in chat and in-game. No harassment, slurs or personal attacks.'],['Answer the Call',"If you RSVP to a quest, show up. Can’t make it? Release your slot 24 hours ahead."],['Share the Rupees','Loot, tips and routes belong to the guild. Teach freely, hoard nothing.'],['Keep the Hearth Clean','No spoilers outside tagged channels. No spam, no self-promo without Council blessing.'],['Heed the Council','Officers keep the peace. Disputes go to #council-hall, never to public channels.']];
 document.querySelector('#decrees').innerHTML=rules.map((r,i)=>`<div class="decree"><span class="roman">${roman[i]}</span><div><h3>${r[0]}</h3><p>${r[1]}</p></div></div>`).join('');
