@@ -6,6 +6,7 @@ on:
     paths:
       - 'index.html'
       - 'rashid.html'
+      - 'anniversary.html'
       - 'assets/**'
       - '.github/workflows/pages.yml'
 permissions:
@@ -28,8 +29,9 @@ jobs:
         run: |
           test -f index.html
           test -f rashid.html
+          test -f anniversary.html
           mkdir -p _site
-          cp index.html rashid.html _site/
+          cp index.html rashid.html anniversary.html _site/
           cp -R assets _site/
           touch _site/.nojekyll
       - name: Embed Rashid widget in published homepage
