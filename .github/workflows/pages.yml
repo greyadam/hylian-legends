@@ -66,6 +66,22 @@ jobs:
               html = html.replace(anchor, fragment + '\n' + anchor, 1)
           page.write_text(html)
           PY
+      - name: Add official guild application navigation link
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html import escape
+          page = Path('_site/index.html')
+          html = page.read_text()
+          start = '<nav aria-label="Main navigation">'
+          if html.count(start) != 1 or html.count('</nav>') != 1:
+              raise SystemExit('Expected exactly one main navigation.')
+          url = 'https://www.tibia.com/community/?subtopic=guilds&page=view&GuildName=Hylian+Legends&character=Linkmupi&action=characters'
+          link = '<a id="apply-to-guild" href="' + escape(url, quote=True) + '">Apply to guild</a>'
+          if 'id="apply-to-guild"' not in html:
+              html = html.replace('</nav>', link + '</nav>', 1)
+          page.write_text(html)
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
