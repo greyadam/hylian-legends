@@ -1,6 +1,8 @@
 name: Deploy standalone site to GitHub Pages
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
   push:
     branches: [main]
     paths:
@@ -8,10 +10,11 @@ on:
       - 'rashid.html'
       - 'anniversary.html'
       - 'riddle-section.html'
+      - 'scripts/update_sages.py'
       - 'assets/**'
       - '.github/workflows/pages.yml'
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -26,6 +29,19 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Check official Sage roster
+        run: |
+          python3 -m pip install beautifulsoup4
+          python3 scripts/update_sages.py
+      - name: Save roster cache and check status
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/sage-roster.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh Sage roster check status'
+            git push origin HEAD:main
+          fi
       - name: Prepare public files
         run: |
           test -f index.html
@@ -80,6 +96,19 @@ jobs:
           link = '<a id="apply-to-guild" href="' + escape(url, quote=True) + '">Apply to guild</a>'
           if 'id="apply-to-guild"' not in html:
               html = html.replace('</nav>', link + '</nav>', 1)
+          page.write_text(html)
+          PY
+      - name: Load Sage roster in Ranks section
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('_site/index.html')
+          html = page.read_text()
+          tag = '<script src="assets/sage-roster.js" defer></script>'
+          if 'assets/sage-roster.js' not in html:
+              if html.count('</head>') != 1:
+                  raise SystemExit('Expected one document head')
+              html = html.replace('</head>', tag + '</head>', 1)
           page.write_text(html)
           PY
       - name: Configure Pages
