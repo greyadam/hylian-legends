@@ -77,3 +77,9 @@
   });
   quests.append(panel);
 })();
+
+(() => {
+  const style = document.createElement('style');
+  style.textContent = '#tibiawiki-query::placeholder{color:var(--gold);opacity:1}';
+  document.head.append(style);
+})();
