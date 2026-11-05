@@ -33,13 +33,26 @@ jobs:
         run: |
           python3 -m pip install beautifulsoup4
           python3 scripts/update_sages.py
-      - name: Save roster cache and check status
+      - name: Persist Sage roster loader in source homepage
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('index.html')
+          html = page.read_text()
+          tag = '<script src="assets/sage-roster.js" defer></script>'
+          if 'assets/sage-roster.js' not in html:
+              if html.count('</head>') != 1:
+                  raise SystemExit('Expected one document head')
+              html = html.replace('</head>', tag + '</head>', 1)
+              page.write_text(html)
+          PY
+      - name: Save roster cache and source loader
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/sage-roster.json
+          git add assets/sage-roster.json index.html
           if ! git diff --cached --quiet; then
-            git commit -m 'Refresh Sage roster check status'
+            git commit -m 'Refresh Sage roster and persist source loader'
             git push origin HEAD:main
           fi
       - name: Prepare public files
