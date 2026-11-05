@@ -1,4 +1,19 @@
 (() => {
+  const hero = [...document.querySelectorAll('#rank-list .rank')].find(row => row.querySelector('h3')?.textContent.trim() === 'Hero of Time');
+  if (hero && !document.getElementById('hero-of-time-roster')) {
+    const heroList = document.createElement('ul');
+    heroList.id = 'hero-of-time-roster';
+    heroList.setAttribute('aria-label', 'Hero of Time member');
+    heroList.style.cssText = 'list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:7px';
+    const member = document.createElement('li');
+    member.style.cssText = 'border:1px solid var(--line);border-radius:14px;padding:3px 10px;font:12px/1.7 Arial,sans-serif;color:var(--green)';
+    const profile = document.createElement('a');
+    profile.href = 'https://www.tibia.com/community/?subtopic=characters&name=Linkmupi';
+    profile.textContent = 'Linkmupi';
+    member.append(profile);
+    heroList.append(member);
+    hero.querySelector('h3').parentElement.append(heroList);
+  }
   const rank = [...document.querySelectorAll('#rank-list .rank')].find(row => row.querySelector('h3')?.textContent.trim() === 'Sage of the Temple');
   if (!rank) return;
   const box = document.createElement('div');
