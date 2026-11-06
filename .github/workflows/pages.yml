@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'about.html'
       - 'rashid.html'
       - 'anniversary.html'
       - 'guildhall.html'
@@ -34,7 +35,7 @@ jobs:
         run: |
           python3 -m pip install beautifulsoup4
           python3 scripts/update_sages.py
-      - name: Persist Sage roster loader and Guildhall link in source homepage
+      - name: Persist Sage roster loader and navigation in source homepage
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -50,6 +51,8 @@ jobs:
               raise SystemExit('Expected exactly one main navigation.')
           if 'id="guildhall-link"' not in html:
               html = html.replace(start, start + '<a id="guildhall-link" href="guildhall.html">Guildhall</a>', 1)
+          if 'id="about-link"' not in html:
+              html = html.replace(start, start + '<a id="about-link" href="about.html">About</a>', 1)
           page.write_text(html)
           PY
       - name: Add guildhall details to source page
@@ -85,11 +88,12 @@ jobs:
       - name: Prepare public files
         run: |
           test -f index.html
+          test -f about.html
           test -f rashid.html
           test -f anniversary.html
           test -f guildhall.html
           mkdir -p _site
-          cp index.html rashid.html anniversary.html guildhall.html _site/
+          cp index.html about.html rashid.html anniversary.html guildhall.html _site/
           cp -R assets _site/
           touch _site/.nojekyll
       - name: Add Guildhall navigation link
