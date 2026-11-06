@@ -75,3 +75,22 @@
   script.src = 'assets/quest-extras.js';
   document.head.append(script);
 })();
+
+(() => {
+  const list = document.querySelector('#discord .channels ul');
+  if (!list) return;
+  const names = [
+    '𝔄𝔫𝔫𝔬𝔲𝔫𝔠𝔢𝔪𝔢𝔫𝔱𝔰-𝔞𝔫𝔡-𝔘𝔭𝔡𝔞𝔱𝔢𝔰',
+    '𝔗𝔥𝔢-𝔏𝔬𝔲𝔫𝔤𝔢',
+    '𝕿𝖍𝖊 𝕷𝖔𝖚𝖓𝖌𝖊 vc',
+    '𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 I',
+    '𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 II',
+    '𝖂𝖆𝖗𝖟𝖔𝖓𝖊𝖘',
+    '𝖁𝖔𝖎𝖈𝖊/𝕾𝖙𝖗𝖊𝖆𝖒'
+  ];
+  list.replaceChildren(...names.map(name => {
+    const item = document.createElement('li');
+    item.textContent = name;
+    return item;
+  }));
+})();
