@@ -91,7 +91,7 @@
   list.replaceChildren(...names.map((name,index) => {
     const item = document.createElement('li');
     item.textContent = name;
-    if (index === 2 || index === 6) item.className = 'hearth-voice-channel';
+    if ([2,3,4,6].includes(index)) item.className = 'hearth-voice-channel';
     return item;
   }));
   const style = document.createElement('style');
