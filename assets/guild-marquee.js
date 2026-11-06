@@ -46,13 +46,13 @@
   };
   const style = document.createElement('style');
   style.textContent = `
-#guild-marquee{position:relative;width:100%;overflow:hidden;border-top:1px solid rgba(212,175,55,.22);border-bottom:1px solid rgba(212,175,55,.22);background:#101a15;padding:1.25rem 0}
+#guild-marquee{position:relative;width:100%;overflow:hidden;border-top:1px solid rgba(212,175,55,.22);border-bottom:1px solid rgba(212,175,55,.22);background:#101a15;padding:1.75rem 0}
 #guild-marquee-track{display:flex;width:max-content;animation:marquee 36s linear infinite;will-change:transform}
 #guild-marquee .guild-marquee-group{display:flex;flex:0 0 auto;min-width:100vw;justify-content:space-around;align-items:center}
-#guild-marquee .guild-marquee-item{display:inline-flex;flex:0 0 auto;align-items:center;font:700 28px/1.5 Georgia,serif;letter-spacing:2px;white-space:nowrap;text-transform:uppercase;text-shadow:0 0 10px rgba(212,175,55,0.4)}
+#guild-marquee .guild-marquee-item{display:inline-flex;flex:0 0 auto;align-items:center;font:700 44px/1.5 Georgia,serif;letter-spacing:2px;white-space:nowrap;text-transform:uppercase;text-shadow:0 0 10px rgba(212,175,55,0.4)}
 #guild-marquee .guild-marquee-gold{color:#d4af37}
 #guild-marquee .guild-marquee-white{color:#ffffff}
-#guild-marquee .guild-marquee-separator{display:block;flex:0 0 auto;width:32px;height:28px;margin:0 1.5rem;fill:#d4af37;color:#d4af37;overflow:visible;filter:drop-shadow(0 0 4px rgba(212,175,55,0.5))}
+#guild-marquee .guild-marquee-separator{display:block;flex:0 0 auto;width:calc(44px * 32 / 28);height:44px;margin:0 2rem;fill:#d4af37;color:#d4af37;overflow:visible;filter:drop-shadow(0 0 4px rgba(212,175,55,0.5))}
 #guild-marquee .guild-marquee-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:5px 9px;border:1px solid rgba(212,175,55,.3);border-radius:12px;background:#101a15;color:var(--muted);font:10px/1.5 Arial,sans-serif}
 #guild-marquee .guild-marquee-toggle:focus-visible{outline:2px solid #d4af37;outline-offset:2px}
 #guild-marquee.is-paused #guild-marquee-track{animation-play-state:paused}
