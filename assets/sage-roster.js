@@ -99,3 +99,9 @@
 <div class="wrap"><article class="panel riddle-card"><div class="micro">Riddle</div><h2 id="legend-riddle-title">The Great <em>Hylian Legend</em></h2><div class="poem"><p>Many thought this legend a sham,<br>It was just too much for their minds to cram,<br>And when the webs of evil were weaved,<br>That is when all believed.</p><p>Chaos spread everywhere,<br>To challenge the evil, no one would dare,<br>But in all this darkness there was one light,<br>And that light vowed, &quot;I will fight.&quot;</p><p>The light purified all,<br>And to its power evil did fall,<br>Many thought this legend a mystery,<br>But now it has gone down in history.</p></div><p class="riddle-question">What is this legend?</p></article></div>
 </section>`);
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/hunting-guides.js';
+  document.head.append(script);
+})();
