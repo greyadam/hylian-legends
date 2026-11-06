@@ -123,3 +123,9 @@
   level.addEventListener('input',render);
   render();
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/quest-filters.js';
+  document.head.append(script);
+})();
