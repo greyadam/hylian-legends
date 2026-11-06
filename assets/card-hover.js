@@ -43,3 +43,21 @@ main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank
   script.src = 'assets/guild-marquee.js';
   document.head.append(script);
 })();
+
+(() => {
+  const descriptions = {
+    COURAGE: 'The Kokiri’s Emerald, guarded by the Deku Tree. Farore’s green light guides those who take initiative, lead the raid, try the risky skip, and welcome newcomers first.',
+    WISDOM: 'The Zora’s Sapphire, passed through royal lineage. Nayru’s blue radiance empowers those who master the strat, write the guide, and preserve our guild lore.',
+    POWER: 'The Goron’s Ruby, forged deep in Death Mountain. Din’s red flame fuels those who train hard, compete with honor, and lift the whole guild with them.'
+  };
+  document.querySelectorAll('#codex .virtues .panel').forEach(card => {
+    const virtue = card.querySelector('h3')?.textContent.trim().toUpperCase();
+    const paragraph = card.querySelector('p');
+    if (paragraph && descriptions[virtue]) paragraph.textContent = descriptions[virtue];
+  });
+  if (document.getElementById('virtue-description-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'virtue-description-styles';
+  style.textContent = '#codex .virtues .panel p{font-size:0.9rem;line-height:1.5;color:rgba(255,255,255,0.8)}';
+  document.head.append(style);
+})();
