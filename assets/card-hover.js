@@ -37,3 +37,9 @@ main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank
   const guides = document.getElementById('guide-list');
   if (guides) new MutationObserver(prepareImages).observe(guides,{childList:true,subtree:true});
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/guild-marquee.js';
+  document.head.append(script);
+})();
