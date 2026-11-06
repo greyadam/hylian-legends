@@ -19,9 +19,14 @@
     const text = document.createElement('span');
     text.className = goldWords.has(word) ? 'guild-marquee-gold' : 'guild-marquee-white';
     text.textContent = word;
-    const separator = document.createElement('span');
-    separator.className = 'guild-marquee-separator';
-    separator.textContent = '▲';
+    const separator = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    separator.setAttribute('class','guild-marquee-separator');
+    separator.setAttribute('viewBox','0 0 32 28');
+    separator.setAttribute('aria-hidden','true');
+    separator.setAttribute('focusable','false');
+    const triangles = document.createElementNS('http://www.w3.org/2000/svg','path');
+    triangles.setAttribute('d','M16 0L8 14H24Z M8 14L0 28H16Z M24 14L16 28H32Z');
+    separator.append(triangles);
     item.append(text,separator);
     group.append(item);
   }
@@ -47,7 +52,7 @@
 #guild-marquee .guild-marquee-item{display:inline-flex;flex:0 0 auto;align-items:center;font:700 28px/1.5 Georgia,serif;letter-spacing:2px;white-space:nowrap;text-transform:uppercase;text-shadow:0 0 10px rgba(212,175,55,0.4)}
 #guild-marquee .guild-marquee-gold{color:#d4af37}
 #guild-marquee .guild-marquee-white{color:#ffffff}
-#guild-marquee .guild-marquee-separator{margin:0 1.5rem;font-size:28px;color:#d4af37}
+#guild-marquee .guild-marquee-separator{display:block;flex:0 0 auto;width:32px;height:28px;margin:0 1.5rem;fill:#d4af37;color:#d4af37;overflow:visible;filter:drop-shadow(0 0 4px rgba(212,175,55,0.5))}
 #guild-marquee .guild-marquee-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:5px 9px;border:1px solid rgba(212,175,55,.3);border-radius:12px;background:#101a15;color:var(--muted);font:10px/1.5 Arial,sans-serif}
 #guild-marquee .guild-marquee-toggle:focus-visible{outline:2px solid #d4af37;outline-offset:2px}
 #guild-marquee.is-paused #guild-marquee-track{animation-play-state:paused}
