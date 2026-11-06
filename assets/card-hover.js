@@ -46,7 +46,7 @@ main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank
 
 (() => {
   const descriptions = {
-    COURAGE: 'The Kokiri’s Emerald, guarded by the Deku Tree. Farore’s green light guides those who take initiative, lead the raid, try the risky skip, and welcome newcomers first.',
+    COURAGE: 'The Kokiri’s Emerald, guarded by the Deku Tree. Farore’s green light guides those who take initiative, lead the raid, and welcome newcomers first.',
     WISDOM: 'The Zora’s Sapphire, passed through royal lineage. Nayru’s blue radiance empowers those who master the strat, write the guide, and preserve our guild lore.',
     POWER: 'The Goron’s Ruby, forged deep in Death Mountain. Din’s red flame fuels those who train hard, compete with honor, and lift the whole guild with them.'
   };
