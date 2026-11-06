@@ -4,7 +4,7 @@
   style.id = 'hylian-card-hover-styles';
   style.textContent = `
 main :is(.panel,.decree,.rank,.guide,.event){transition:all 0.3s ease}
-main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank,.guide,.event):focus-within{box-shadow:0 0 12px rgba(212,175,55,0.25);border-color:rgba(212,175,55,0.5)}
+main :is(.panel,.decree,.rank,.guide,.event):not(.virtue-themed):hover,main :is(.panel,.decree,.rank,.guide,.event):not(.virtue-themed):focus-within{box-shadow:0 0 12px rgba(212,175,55,0.25);border-color:rgba(212,175,55,0.5)}
 #discord .channels:hover,#discord .channels:focus-within{border-color:rgba(212,175,55,0.5)}
 .hylian-image-frame{display:block;overflow:hidden;isolation:isolate}
 .ocarina>.hylian-image-frame{border-radius:50%}
@@ -64,20 +64,21 @@ main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank
 
 (() => {
   const themes = {
-    COURAGE: ['#4ade80','rgba(74,222,128,0.4)'],
-    WISDOM: ['#60a5fa','rgba(96,165,250,0.4)'],
-    POWER: ['#f87171','rgba(248,113,113,0.4)']
+    COURAGE: ['#4ade80','rgba(74,222,128,0.5)'],
+    WISDOM: ['#60a5fa','rgba(96,165,250,0.5)'],
+    POWER: ['#f87171','rgba(248,113,113,0.5)']
   };
   document.querySelectorAll('#codex .virtues .panel').forEach(card => {
     const virtue = card.querySelector('h3')?.textContent.trim().toUpperCase();
     if (!themes[virtue]) return;
     card.classList.add('virtue-themed');
+    card.dataset.virtue = virtue.toLowerCase();
     card.style.setProperty('--virtue-color',themes[virtue][0]);
     card.style.setProperty('--virtue-glow',themes[virtue][1]);
   });
   if (document.getElementById('virtue-theme-styles')) return;
   const style = document.createElement('style');
   style.id = 'virtue-theme-styles';
-  style.textContent = '#codex .virtues .panel.virtue-themed{transition:all 0.3s ease-in-out}#codex .virtues .panel.virtue-themed h3{color:var(--virtue-color)}#codex .virtues .panel.virtue-themed:hover,#codex .virtues .panel.virtue-themed:focus-within{box-shadow:0 0 15px var(--virtue-glow);border-color:var(--virtue-color)}@media(prefers-reduced-motion:reduce){#codex .virtues .panel.virtue-themed{transition:none}}';
+  style.textContent = '#codex .virtues > .panel.virtue-themed[data-virtue]{transition:all 0.3s ease-in-out}#codex .virtues > .panel.virtue-themed[data-virtue] h3{color:var(--virtue-color)}#codex .virtues > .panel.virtue-themed[data-virtue]:hover,#codex .virtues > .panel.virtue-themed[data-virtue]:focus-within{box-shadow:0 0 15px var(--virtue-glow);border-color:var(--virtue-color)}@media(prefers-reduced-motion:reduce){#codex .virtues > .panel.virtue-themed[data-virtue]{transition:none}}';
   document.head.append(style);
 })();
