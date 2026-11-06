@@ -77,25 +77,32 @@
 })();
 
 (() => {
-  const list = document.querySelector('#discord .channels ul');
-  if (!list) return;
-  const names = [
-    '𝔄𝔫𝔫𝔬𝔲𝔫𝔠𝔢𝔪𝔢𝔫𝔱𝔰-𝔞𝔫𝔡-𝔘𝔭𝔡𝔞𝔱𝔢𝔰',
-    '𝔗𝔥𝔢-𝔏𝔬𝔲𝔫𝔤𝔢',
-    '𝕿𝖍𝖊 𝕷𝖔𝖚𝖓𝖌𝖊 vc',
-    '𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 I',
-    '𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 II',
-    '𝖂𝖆𝖗𝖟𝖔𝖓𝖊𝖘',
-    '𝖁𝖔𝖎𝖈𝖊/𝕾𝖙𝖗𝖊𝖆𝖒'
+  const card = document.querySelector('#discord .channels');
+  if (!card) return;
+  const groups = [
+    { title: 'TEXT CHANNELS', voice: false, names: ['𝔄𝔫𝔫𝔬𝔲𝔫𝔠𝔢𝔪𝔢𝔫𝔱𝔰-𝔞𝔫𝔡-𝔘𝔭𝔡𝔞𝔱𝔢𝔰','𝔗𝔥𝔢-𝔏𝔬𝔲𝔫𝔤𝔢','𝖂𝖆𝖗𝖟𝖔𝖓𝖊𝖘'] },
+    { title: 'VOICE CHANNELS', voice: true, names: ['𝕿𝖍𝖊 𝕷𝖔𝖚𝖓𝖌𝖊 vc','𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 I','𝕳𝖚𝖓𝖙𝖎𝖓𝖌 𝕲𝖗𝖔𝖚𝖕 II','𝖁𝖔𝖎𝖈𝖊/𝕾𝖙𝖗𝖊𝖆𝖒'] }
   ];
-  list.replaceChildren(...names.map((name,index) => {
-    const item = document.createElement('li');
-    item.textContent = name;
-    if ([2,3,4,6].includes(index)) item.className = 'hearth-voice-channel';
-    return item;
+  card.replaceChildren(...groups.map((group,index) => {
+    const container = document.createElement('div');
+    container.className = 'hearth-channel-group';
+    const heading = document.createElement('h3');
+    heading.id = 'hearth-channel-heading-' + index;
+    heading.className = 'hearth-channel-heading';
+    heading.textContent = group.title;
+    const list = document.createElement('ul');
+    list.setAttribute('aria-labelledby',heading.id);
+    list.replaceChildren(...group.names.map(name => {
+      const item = document.createElement('li');
+      item.textContent = name;
+      if (group.voice) item.className = 'hearth-voice-channel';
+      return item;
+    }));
+    container.append(heading,list);
+    return container;
   }));
   const style = document.createElement('style');
-  style.textContent = '#discord .channels li.hearth-voice-channel::before{content:"🔊";font-size:12px;opacity:.7;color:var(--green);margin-right:12px}#hearth-online-badge{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:fit-content;max-width:100%;margin-top:14px;padding:8px 13px;border:1px solid #d4af3766;border-radius:12px;background:#13271e;color:var(--green);font:12px/1.6 Arial,sans-serif}#hearth-online-badge small{color:var(--muted);font-size:10px}';
+  style.textContent = '#discord .channels{border:1px solid rgba(212,175,55,.3)}#discord .channels .hearth-channel-heading{margin:0;color:var(--muted);font:10px/1.6 Arial,sans-serif;letter-spacing:1.5px;font-variant:normal}#discord .channels .hearth-channel-group+.hearth-channel-group{margin-top:22px}#discord .channels ul{margin-top:8px}#discord .channels li{transition:color 120ms ease}#discord .channels li:hover{color:#d4af37}#discord .channels li.hearth-voice-channel::before{content:"🔊";font-size:12px;opacity:.7;color:var(--green);margin-right:12px}@media(prefers-reduced-motion:reduce){#discord .channels li{transition:none}}#hearth-online-badge{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:fit-content;max-width:100%;margin-top:14px;padding:8px 13px;border:1px solid #d4af3766;border-radius:12px;background:#13271e;color:var(--green);font:12px/1.6 Arial,sans-serif}#hearth-online-badge small{color:var(--muted);font-size:10px}';
   document.head.append(style);
   const join = document.querySelector('#discord button.discord');
   if (join && !document.getElementById('hearth-online-badge')) {
