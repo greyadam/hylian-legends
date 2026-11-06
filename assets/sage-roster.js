@@ -89,3 +89,13 @@
   script.src = 'assets/virtue-stones.js';
   document.head.append(script);
 })();
+
+(() => {
+  if (document.getElementById('great-hylian-legend')) return;
+  const anniversary = document.getElementById('anniversary');
+  if (!anniversary) return;
+  anniversary.insertAdjacentHTML('afterend', `<section id="great-hylian-legend" aria-labelledby="legend-riddle-title" style="padding:24px 0 0">
+<style>#great-hylian-legend .riddle-card{max-width:720px;margin:0 auto;text-align:center;padding:clamp(20px,3vw,30px);border-top:2px solid var(--gold)}#great-hylian-legend h2{font-size:clamp(26px,4vw,34px);margin:10px 0 18px}#great-hylian-legend .poem{font:clamp(15px,2vw,17px)/1.6 Georgia,serif}#great-hylian-legend .poem p{color:var(--cream);margin:0 0 14px}#great-hylian-legend .poem p:last-child{margin-bottom:0}#great-hylian-legend .riddle-question{font:italic clamp(20px,2.5vw,23px)/1.4 Georgia,serif;color:var(--gold);margin:18px 0 0}</style>
+<div class="wrap"><article class="panel riddle-card"><div class="micro">Riddle</div><h2 id="legend-riddle-title">The Great <em>Hylian Legend</em></h2><div class="poem"><p>Many thought this legend a sham,<br>It was just too much for their minds to cram,<br>And when the webs of evil were weaved,<br>That is when all believed.</p><p>Chaos spread everywhere,<br>To challenge the evil, no one would dare,<br>But in all this darkness there was one light,<br>And that light vowed, &quot;I will fight.&quot;</p><p>The light purified all,<br>And to its power evil did fall,<br>Many thought this legend a mystery,<br>But now it has gone down in history.</p></div><p class="riddle-question">What is this legend?</p></article></div>
+</section>`);
+})();
