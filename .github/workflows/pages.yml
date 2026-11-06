@@ -9,6 +9,7 @@ on:
       - 'index.html'
       - 'rashid.html'
       - 'anniversary.html'
+      - 'guildhall.html'
       - 'riddle-section.html'
       - 'scripts/update_sages.py'
       - 'assets/**'
@@ -60,10 +61,23 @@ jobs:
           test -f index.html
           test -f rashid.html
           test -f anniversary.html
+          test -f guildhall.html
           mkdir -p _site
-          cp index.html rashid.html anniversary.html _site/
+          cp index.html rashid.html anniversary.html guildhall.html _site/
           cp -R assets _site/
           touch _site/.nojekyll
+      - name: Add Guildhall navigation link
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('_site/index.html')
+          html = page.read_text()
+          if html.count('<nav aria-label="Main navigation">') != 1 or html.count('</nav>') != 1:
+              raise SystemExit('Expected exactly one main navigation.')
+          if 'href="guildhall.html"' not in html:
+              html = html.replace('</nav>', '<a id="guildhall-link" href="guildhall.html">Guildhall</a></nav>', 1)
+          page.write_text(html)
+          PY
       - name: Embed Rashid widget in published homepage
         run: |
           python3 - <<'PY'
