@@ -52,13 +52,34 @@ jobs:
               html = html.replace(start, start + '<a id="guildhall-link" href="guildhall.html">Guildhall</a>', 1)
           page.write_text(html)
           PY
-      - name: Save roster cache and source navigation
+      - name: Add guildhall details to source page
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          page = Path('guildhall.html')
+          html = page.read_text()
+          details = '''<!-- guildhall-details:start --><style>#guildhall-details{margin-top:28px}#guildhall-details .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:0 0 28px}#guildhall-details .facts div{border-bottom:1px solid var(--line);padding-bottom:12px}#guildhall-details dt{font-size:12px;color:var(--muted)}#guildhall-details dd{margin:4px 0 0;color:var(--cream)}#guildhall-details h3{color:var(--gold);font:22px Georgia,serif;margin:24px 0 12px}#guildhall-details li{margin:8px 0}</style><section id="guildhall-details" class="panel" aria-labelledby="guildhall-details-title"><h2 id="guildhall-details-title">Guildhall details</h2><dl class="facts"><div><dt>Name</dt><dd>Carlin Clanhall</dd></div><div><dt>City</dt><dd>Carlin</dd></div><div><dt>Size</dt><dd>211 sqm</dd></div><div><dt>Rent</dt><dd>250,000 gp</dd></div><div><dt>Beds</dt><dd>10</dd></div><div><dt>Levels</dt><dd>1 + underground</dd></div><div><dt>Rooms</dt><dd>15</dd></div><div><dt>Independent rooms</dt><dd>8</dd></div></dl><h3>What you can find inside</h3><ul><li>Reward Shrine</li><li>Beds for offline training</li><li>Gilded Imbuing Shrine</li><li>Ferumbras Exercise Dummy</li><li>A hireling with the Trader skill</li></ul><p>You can train your skills by using training weapons with our expert exercise dummy.</p><h3>Hireling Trader</h3><p>Our Hireling Trader buys and sells common magic supplies, such as runes and potions, at the same prices as the NPCs. The trader also sells postal items, including <a href="https://tibia.fandom.com/wiki/Parcel" target="_blank" rel="noopener noreferrer">Parcels</a> and <a href="https://tibia.fandom.com/wiki/Letter" target="_blank" rel="noopener noreferrer">Letters</a>.</p></section><!-- guildhall-details:end -->'''
+          start = '<!-- guildhall-details:start -->'
+          end = '<!-- guildhall-details:end -->'
+          if start in html or end in html:
+              if html.count(start) != 1 or html.count(end) != 1:
+                  raise SystemExit('Expected one guildhall details block')
+              html = re.sub(re.escape(start) + r'.*?' + re.escape(end), lambda match: details, html, flags=re.S)
+          else:
+              anchor = '<a class="back" href="index.html">'
+              if html.count(anchor) != 1:
+                  raise SystemExit('Expected one guildhall back link')
+              html = html.replace(anchor, details + anchor, 1)
+          page.write_text(html)
+          PY
+      - name: Save roster cache and source pages
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/sage-roster.json index.html
+          git add assets/sage-roster.json index.html guildhall.html
           if ! git diff --cached --quiet; then
-            git commit -m 'Refresh Sage roster and persist source navigation'
+            git commit -m 'Refresh Sage roster and persist source page updates'
             git push origin HEAD:main
           fi
       - name: Prepare public files
