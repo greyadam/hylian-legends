@@ -1,5 +1,6 @@
 (() => {
   const hero = [...document.querySelectorAll('#rank-list .rank')].find(row => row.querySelector('h3')?.textContent.trim() === 'Hero of Time');
+  if (hero) hero.querySelector('h3').style.color = '#d4af37';
   if (hero && !document.getElementById('hero-of-time-roster')) {
     const heroList = document.createElement('ul');
     heroList.id = 'hero-of-time-roster';
