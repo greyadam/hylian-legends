@@ -17,6 +17,7 @@
   if (intro) intro.textContent = 'Hunting starting points for Knights, Paladins, Monks, Sorcerers, and Druids. Filter by vocation and character level, then check the source before travelling.';
   const title = section.querySelector('h2');
   if (title) title.innerHTML = 'FIELD <em>hunting guides</em>';
+  const accents = {Knight:'#d93838',Paladin:'#28a745',Druid:'#17a2b8',Sorcerer:'#8a2be2',Monk:'#e69f24'};
   const data = [
     ['Knight',20,'Elves Yalahar','Yalahar','Weapon type: Physical'],
     ['Knight',50,"Lion's Rock",'Lion\'s Rock','Weapon type: Physical'],
@@ -35,7 +36,7 @@
     ['Druid',100,'Souleater Mountain','Souleater Mountain','Playstyle: Great Fireball (GFB) runes']
   ];
   const style = document.createElement('style');
-  style.textContent = '#guides .guides{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}#guides .hunt-card{min-height:245px;cursor:default}#guides .hunt-card h3{margin:18px 0 10px;padding:0}#guides .hunt-card .button{margin-top:auto;padding:8px 15px}#guides .hunt-controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:16px 0}#guides .hunt-controls input{width:120px;background:var(--bg);color:var(--cream);border:1px solid var(--line);border-radius:20px;padding:8px 12px}#guides .hunt-note{margin:14px 0 24px;max-width:900px}#guides .hunt-count{font:12px/1.7 Arial,sans-serif;color:var(--muted)}#guides .hunt-card a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}';
+  style.textContent = '#guides .guides{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}#guides .hunt-card{min-height:245px;cursor:default;transition:border-color .18s ease,box-shadow .18s ease}#guides .hunt-card:hover,#guides .hunt-card:focus-within{border-color:var(--hunt-accent);box-shadow:0 0 20px var(--hunt-glow)}#guides .hunt-tag{display:inline-block;color:var(--hunt-accent);border:1px solid var(--hunt-accent);background:var(--hunt-tint);border-radius:20px;padding:3px 9px;letter-spacing:1px}#guides .hunt-card h3{margin:18px 0 10px;padding:0}#guides .hunt-card .button{margin-top:auto;padding:8px 15px}#guides .hunt-controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:16px 0}#guides .hunt-controls input{width:120px;background:var(--bg);color:var(--cream);border:1px solid var(--line);border-radius:20px;padding:8px 12px}#guides .hunt-note{margin:14px 0 24px;max-width:900px}#guides .hunt-count{font:12px/1.7 Arial,sans-serif;color:var(--muted)}#guides .hunt-card a:focus-visible{outline:2px solid var(--hunt-accent);outline-offset:4px}@media(prefers-reduced-motion:reduce){#guides .hunt-card{transition:none}}';
   document.head.append(style);
   const controls = document.createElement('div');
   controls.className = 'hunt-controls';
@@ -68,9 +69,16 @@
     for (const [vocation,min,name,location,approach] of entries) {
       const card = document.createElement('article');
       card.className = 'guide hunt-card';
+      card.dataset.vocation = vocation.toLowerCase();
+      card.style.setProperty('--hunt-accent',accents[vocation]);
+      card.style.setProperty('--hunt-glow',accents[vocation] + '40');
+      card.style.setProperty('--hunt-tint',accents[vocation] + '14');
       const meta = document.createElement('div');
       meta.className = 'micro';
-      meta.textContent = vocation + ' | Level ' + min + '+';
+      const tag = document.createElement('span');
+      tag.className = 'hunt-tag';
+      tag.textContent = vocation;
+      meta.append(tag,document.createTextNode(' | Level ' + min + '+'));
       const heading = document.createElement('h3');
       heading.textContent = name;
       const place = document.createElement('p');
