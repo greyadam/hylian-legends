@@ -105,3 +105,9 @@
   script.src = 'assets/hunting-guides.js';
   document.head.append(script);
 })();
+
+(() => {
+  const style = document.createElement('style');
+  style.textContent = '#ranks #rank-list .rank h3{width:fit-content;max-width:100%;text-decoration-line:underline;text-decoration-color:transparent;text-decoration-thickness:1px;text-underline-offset:6px;transition:color 180ms ease,text-decoration-color 180ms ease}#ranks #rank-list .rank h3:hover{color:#d4af37;text-decoration-color:#d4af37}@media(prefers-reduced-motion:reduce){#ranks #rank-list .rank h3{transition:none}}';
+  document.head.append(style);
+})();
