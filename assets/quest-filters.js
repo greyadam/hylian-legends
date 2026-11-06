@@ -88,9 +88,24 @@
     '𝖂𝖆𝖗𝖟𝖔𝖓𝖊𝖘',
     '𝖁𝖔𝖎𝖈𝖊/𝕾𝖙𝖗𝖊𝖆𝖒'
   ];
-  list.replaceChildren(...names.map(name => {
+  list.replaceChildren(...names.map((name,index) => {
     const item = document.createElement('li');
     item.textContent = name;
+    if (index === 2 || index === 6) item.className = 'hearth-voice-channel';
     return item;
   }));
+  const style = document.createElement('style');
+  style.textContent = '#discord .channels li.hearth-voice-channel::before{content:"🔊";font-size:12px;opacity:.7;color:var(--green);margin-right:12px}#hearth-online-badge{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:fit-content;max-width:100%;margin-top:14px;padding:8px 13px;border:1px solid #d4af3766;border-radius:12px;background:#13271e;color:var(--green);font:12px/1.6 Arial,sans-serif}#hearth-online-badge small{color:var(--muted);font-size:10px}';
+  document.head.append(style);
+  const join = document.querySelector('#discord button.discord');
+  if (join && !document.getElementById('hearth-online-badge')) {
+    const badge = document.createElement('div');
+    badge.id = 'hearth-online-badge';
+    const label = document.createElement('span');
+    label.textContent = '🟢 Guild Members Online';
+    const note = document.createElement('small');
+    note.textContent = 'Community badge · Not live presence';
+    badge.append(label,note);
+    join.after(badge);
+  }
 })();
