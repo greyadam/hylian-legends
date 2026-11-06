@@ -69,3 +69,9 @@
   }
   renderEvents();
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/quest-extras.js';
+  document.head.append(script);
+})();
