@@ -85,3 +85,9 @@
   badges();
   new MutationObserver(badges).observe(list,{childList:true,subtree:true});
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/card-hover.js';
+  document.head.append(script);
+})();
