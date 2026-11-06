@@ -34,7 +34,7 @@ jobs:
         run: |
           python3 -m pip install beautifulsoup4
           python3 scripts/update_sages.py
-      - name: Persist Sage roster loader in source homepage
+      - name: Persist Sage roster loader and Guildhall link in source homepage
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -45,15 +45,20 @@ jobs:
               if html.count('</head>') != 1:
                   raise SystemExit('Expected one document head')
               html = html.replace('</head>', tag + '</head>', 1)
-              page.write_text(html)
+          start = '<nav aria-label="Main navigation">'
+          if html.count(start) != 1 or html.count('</nav>') != 1:
+              raise SystemExit('Expected exactly one main navigation.')
+          if 'id="guildhall-link"' not in html:
+              html = html.replace(start, start + '<a id="guildhall-link" href="guildhall.html">Guildhall</a>', 1)
+          page.write_text(html)
           PY
-      - name: Save roster cache and source loader
+      - name: Save roster cache and source navigation
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add assets/sage-roster.json index.html
           if ! git diff --cached --quiet; then
-            git commit -m 'Refresh Sage roster and persist source loader'
+            git commit -m 'Refresh Sage roster and persist source navigation'
             git push origin HEAD:main
           fi
       - name: Prepare public files
