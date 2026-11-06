@@ -61,3 +61,23 @@ main :is(.panel,.decree,.rank,.guide,.event):hover,main :is(.panel,.decree,.rank
   style.textContent = '#codex .virtues .panel p{font-size:0.9rem;line-height:1.5;color:rgba(255,255,255,0.8)}';
   document.head.append(style);
 })();
+
+(() => {
+  const themes = {
+    COURAGE: ['#4ade80','rgba(74,222,128,0.4)'],
+    WISDOM: ['#60a5fa','rgba(96,165,250,0.4)'],
+    POWER: ['#f87171','rgba(248,113,113,0.4)']
+  };
+  document.querySelectorAll('#codex .virtues .panel').forEach(card => {
+    const virtue = card.querySelector('h3')?.textContent.trim().toUpperCase();
+    if (!themes[virtue]) return;
+    card.classList.add('virtue-themed');
+    card.style.setProperty('--virtue-color',themes[virtue][0]);
+    card.style.setProperty('--virtue-glow',themes[virtue][1]);
+  });
+  if (document.getElementById('virtue-theme-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'virtue-theme-styles';
+  style.textContent = '#codex .virtues .panel.virtue-themed{transition:all 0.3s ease-in-out}#codex .virtues .panel.virtue-themed h3{color:var(--virtue-color)}#codex .virtues .panel.virtue-themed:hover,#codex .virtues .panel.virtue-themed:focus-within{box-shadow:0 0 15px var(--virtue-glow);border-color:var(--virtue-color)}@media(prefers-reduced-motion:reduce){#codex .virtues .panel.virtue-themed{transition:none}}';
+  document.head.append(style);
+})();
