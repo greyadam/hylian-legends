@@ -83,3 +83,9 @@
   style.textContent = '#tibiawiki-query::placeholder{color:var(--gold);opacity:1}#tibiawiki-query:focus{outline:1px solid #d4af37;outline-offset:0;box-shadow:0 0 8px rgba(212, 175, 55, 0.5)}';
   document.head.append(style);
 })();
+
+(() => {
+  const script = document.createElement('script');
+  script.src = 'assets/virtue-stones.js';
+  document.head.append(script);
+})();
