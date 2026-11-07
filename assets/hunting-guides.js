@@ -129,3 +129,11 @@
   script.src = 'assets/quest-filters.js';
   document.head.append(script);
 })();
+
+(() => {
+  if (!document.getElementById('guides') || document.getElementById('guild-history-loader')) return;
+  const script = document.createElement('script');
+  script.id = 'guild-history-loader';
+  script.src = 'assets/guild-history.js';
+  document.head.append(script);
+})();
