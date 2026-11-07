@@ -11,7 +11,7 @@
     'Annual Autumn Vintage 04.jpg',
     'Chris Solo and Alma on Menera married.gif',
     'Dragonling Mounting.jpg',
-    'Elysiapumpk_webp.jpg',
+    "Mutated Pumpkin's_Raid.jpg",
     'First Dragon 1.JPG',
     'First Dragon 2.JPG',
     'First Dragon 3.JPG',
