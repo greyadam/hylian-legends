@@ -109,6 +109,26 @@
 
 (() => {
   const style = document.createElement('style');
-  style.textContent = '#ranks #rank-list .rank h3{width:fit-content;max-width:100%;text-decoration-line:underline;text-decoration-color:transparent;text-decoration-thickness:1px;text-underline-offset:6px;transition:color 180ms ease,text-decoration-color 180ms ease}#ranks #rank-list .rank h3:hover{color:#d4af37;text-decoration-color:#d4af37}@media(prefers-reduced-motion:reduce){#ranks #rank-list .rank h3{transition:none}}';
+  style.textContent = `/* Left-to-right filling gold progress bar for Ranks I through VI */
+#ranks #rank-list > .rank:nth-child(-n + 6) {
+  position: relative;
+  overflow: hidden;
+}
+#ranks #rank-list > .rank:nth-child(-n + 6)::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease-in-out;
+}
+#ranks #rank-list > .rank:nth-child(-n + 6):hover::before {
+  transform: scaleX(1);
+}`;
   document.head.append(style);
 })();
