@@ -132,3 +132,13 @@
 }`;
   document.head.append(style);
 })();
+
+(() => {
+  const quests=document.querySelector('#quests > .wrap');
+  if(!quests)return;
+  const link=document.createElement('a');
+  link.href='quests.html';link.className='button outline';link.textContent='Open Quest Board / Admin';
+  quests.prepend(link);
+  const status=document.createElement('p');status.id='quest-load-status';status.setAttribute('role','status');quests.append(status);
+  const script=document.createElement('script');script.src='quests-board.js';document.head.append(script);
+})();
