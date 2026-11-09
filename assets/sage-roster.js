@@ -136,9 +136,11 @@
 (() => {
   const quests=document.querySelector('#quests > .wrap');
   if(!quests)return;
-  const link=document.createElement('a');
-  link.href='quests.html';link.className='button outline';link.textContent='Open Quest Board / Admin';
-  quests.prepend(link);
+  const style=document.createElement('style');
+  style.textContent='#quests>.wrap>.two{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2rem;align-items:start}#quests>.wrap>.two>.panel{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}#quests #events,#quests #events .event,#quests #events .event>div,#quests .quest-item,#quests .quest-card-content,#quests .quest-details{width:100%!important;max-width:100%!important;min-width:0!important;display:block!important;grid-template-columns:none!important;box-sizing:border-box;word-break:normal!important;overflow-wrap:break-word!important;white-space:normal!important}#quests #events :is(h3,p,.meta){width:auto!important;max-width:100%;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important}.guild-admin-float-btn{position:fixed;bottom:20px;right:20px;z-index:9999;background:#141414;color:#d4af37;border:1px solid #d4af37;padding:10px 16px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:.9rem;box-shadow:0 4px 12px #0008;text-decoration:none}@media(max-width:800px){#quests>.wrap>.two{grid-template-columns:minmax(0,1fr)!important}}';
+  document.head.append(style);
+  const link=document.createElement('a');link.id='homepage-guild-admin';link.href='quests.html#admin';link.className='guild-admin-float-btn';link.textContent='Guild Admin';link.title='Open Quest Admin';
+  document.body.append(link);
   const status=document.createElement('p');status.id='quest-load-status';status.setAttribute('role','status');quests.append(status);
-  const script=document.createElement('script');script.src='quests-board.js';document.head.append(script);
+  const script=document.createElement('script');script.src='quests-board.js?v=quest-layout-4';document.head.append(script);
 })();
