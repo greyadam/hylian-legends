@@ -59,12 +59,14 @@
   const guildMemories = files.map((file, index) => ({
     src: 'assets/images/' + encodeURIComponent(file),
     title: caption(file, index),
-    desc: 'Guild archive · Memory ' + (index + 1) + ' of ' + files.length
+    desc: 'Preserved in the Hylian Legends guild archive.',
+    format: file.split('.').pop().toUpperCase(),
+    date: file.match(/^\d{4}-\d{2}-\d{2}/)?.[0] || ''
   }));
   const section = document.getElementById('guild-memories') || document.createElement('section');
   document.getElementById('guild-history')?.remove();
   guides.before(section);
-  if (section.dataset.archiveLayout === 'split-header-v2') return;
+  if (section.dataset.archiveLayout === 'side-banner-v3') return;
   section.id = 'guild-memories';
   section.className = 'guild-memories-section';
   section.setAttribute('aria-labelledby', 'guild-memories-heading');
@@ -72,7 +74,7 @@
   section.innerHTML = `<div class="wrap">
 <div class="section-head archive-heading"><div><div class="micro">THE ARCHIVES</div><h2 id="guild-memories-heading">GUILD <em>history</em></h2></div><p>Shared adventures, milestones, and memories from our guild archive.</p></div>
 <div class="archive-carousel" role="region" aria-roledescription="carousel" aria-label="Guild archive memories">
-<div class="carousel-main-display"><div id="carousel-viewport" class="carousel-viewport"><div class="carousel-image-stage"><img id="main-carousel-img" alt="" decoding="async"></div><div class="carousel-caption-box"><h3 id="main-carousel-title"></h3><p id="main-carousel-desc"></p></div></div></div>
+<div class="carousel-main-display"><div id="carousel-viewport" class="carousel-viewport"><div class="carousel-image-stage"><img id="main-carousel-img" alt="" decoding="async"></div><div class="carousel-caption-box"><p id="main-carousel-position" class="memory-position"></p><h3 id="main-carousel-title"></h3><p id="main-carousel-desc"></p><dl class="memory-metadata"><div><dt>Format</dt><dd id="main-carousel-format"></dd></div><div id="memory-date-row" hidden><dt>Date in filename</dt><dd><time id="main-carousel-date"></time></dd></div></dl></div></div></div>
 <div class="memory-thumbnail-navigation"><button class="memory-strip-arrow" type="button" data-memory-scroll="-1" aria-label="Scroll memory thumbnails left" aria-controls="thumbnail-strip"><span aria-hidden="true">&#10094;</span></button><div id="thumbnail-strip" class="thumbnail-strip" role="group" aria-label="Choose a guild memory"></div><button class="memory-strip-arrow" type="button" data-memory-scroll="1" aria-label="Scroll memory thumbnails right" aria-controls="thumbnail-strip"><span aria-hidden="true">&#10095;</span></button></div>
 <p class="memory-announcement" role="status" aria-live="polite" aria-atomic="true"></p></div></div>`;
   const style = document.getElementById('guild-archive-layout-style') || document.createElement('style');
@@ -86,27 +88,33 @@
 #guild-memories .archive-heading h2{margin:18px 0 0;color:var(--cream,#f1e5c5);font:48px/1.15 Georgia,serif}
 #guild-memories .archive-heading h2 em{color:var(--gold,#d4af37);font-weight:normal}
 #guild-memories .archive-heading>p{max-width:350px;margin:8px 0;color:var(--muted,#aca995);font:14px/1.7 Arial,sans-serif}
-#guild-memories .carousel-main-display{width:100%;max-width:900px;margin:0 auto 20px;overflow:hidden;border:3px solid var(--hylian-gold);border-radius:10px;background:var(--hylian-card-bg);box-shadow:0 8px 28px #d4af3729}
-#guild-memories .carousel-viewport{position:relative;isolation:isolate}
-#guild-memories .carousel-image-stage{height:clamp(340px,48vw,500px);background:var(--hylian-card-bg)}
-#guild-memories #main-carousel-img{display:block;width:100%;max-width:100%;height:100%;margin:0;padding:0;object-fit:cover}
-#guild-memories .carousel-caption-box{position:absolute;inset:auto 0 0;z-index:1;padding:64px 28px 24px;border:0;background:linear-gradient(to bottom,transparent,rgba(10,10,12,.9) 45%,rgba(10,10,12,.98));overflow-wrap:break-word;pointer-events:none}
-#guild-memories .carousel-caption-box h3{margin:0 0 8px;color:var(--hylian-gold);font:clamp(23px,3vw,34px)/1.2 Georgia,serif;font-variant:normal}
-#guild-memories .carousel-caption-box p{max-width:650px;margin:0;color:#eee;font:15px/1.6 Arial,sans-serif}
-#guild-memories .memory-thumbnail-navigation{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:12px;max-width:900px;margin:0 auto}
-#guild-memories .thumbnail-strip{display:flex;gap:14px;width:100%;min-width:0;max-width:none;margin:0;padding:10px 6px 14px;overflow-x:auto;scroll-padding-inline:6px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--hylian-gold) var(--hylian-dark-bg)}
+#guild-memories .carousel-main-display{width:100%;max-width:1000px;margin:0 auto 12px;overflow:hidden;border:3px solid var(--hylian-gold);border-radius:10px;background:var(--hylian-card-bg);box-shadow:0 8px 28px #d4af3729}
+#guild-memories .carousel-viewport{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);align-items:stretch}
+#guild-memories .carousel-image-stage{position:relative;height:auto;min-height:360px;min-width:0;background:#090d0b}
+#guild-memories #main-carousel-img{position:absolute;inset:0;display:block;width:100%;max-width:100%;height:100%;margin:0;padding:0;object-fit:contain}
+#guild-memories .carousel-caption-box{position:static;inset:auto;z-index:auto;display:flex;flex-direction:column;justify-content:center;min-width:0;padding:32px;border:0;border-left:1px solid #d4af374d;background:linear-gradient(145deg,#20251e,#111712);overflow-wrap:anywhere;pointer-events:auto}
+#guild-memories .carousel-caption-box h3{margin:0 0 16px;color:var(--hylian-gold);font:clamp(22px,2.5vw,32px)/1.2 Georgia,serif;font-variant:normal}
+#guild-memories .carousel-caption-box p{max-width:none;margin:0;color:#ddd;font:14px/1.7 Arial,sans-serif}
+#guild-memories .carousel-caption-box .memory-position{margin:0 0 14px;color:var(--hylian-gold);font:10px/1.6 monospace;letter-spacing:2px;text-transform:uppercase}
+#guild-memories .memory-metadata{display:flex;flex-wrap:wrap;gap:16px 24px;margin:24px 0 0;padding:18px 0 0;border-top:1px solid #d4af3733;font:12px/1.5 Arial,sans-serif}
+#guild-memories .memory-metadata dt{color:#aca995;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+#guild-memories .memory-metadata dd{margin:5px 0 0;color:#f1e5c5}
+#guild-memories .memory-thumbnail-navigation{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:12px;max-width:1000px;margin:0 auto}
+#guild-memories .thumbnail-strip{display:flex;gap:14px;width:100%;min-width:0;max-width:none;margin:0;padding:24px 6px 14px;overflow-x:auto;scroll-padding-inline:6px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--hylian-gold) var(--hylian-dark-bg)}
 #guild-memories .thumbnail-strip::-webkit-scrollbar{height:6px}#guild-memories .thumbnail-strip::-webkit-scrollbar-thumb{border-radius:3px;background:var(--hylian-gold)}
-#guild-memories .thumb-card{display:flex;flex:0 0 170px;flex-direction:column;width:170px;height:auto;margin:0;padding:0;overflow:hidden;scroll-snap-align:start;border:2px solid #ffffff24;border-radius:7px;background:var(--hylian-card-bg);color:#ddd;text-align:left;cursor:pointer;opacity:.7;transform:none;transition:border-color .2s,opacity .2s}
-#guild-memories .thumb-card img{display:block;width:100%;height:96px;margin:0;padding:0;object-fit:cover}
-#guild-memories .thumb-card span{display:block;width:100%;padding:9px 10px;font:12px/1.4 Arial,sans-serif}
+#guild-memories .thumb-card{position:relative;display:flex;flex:0 0 170px;flex-direction:column;width:170px;height:auto;margin:0;padding:0;overflow:visible;scroll-snap-align:start;border:2px solid #ffffff24;border-radius:7px;background:var(--hylian-card-bg);color:#ddd;text-align:left;cursor:pointer;opacity:.7;transform:none;transition:border-color .2s,opacity .2s}
+#guild-memories .thumb-card img{display:block;width:100%;height:96px;margin:0;padding:0;border-radius:5px 5px 0 0;object-fit:cover}
+#guild-memories .thumb-card span{display:block;width:100%;padding:9px 10px;overflow-wrap:anywhere;font:12px/1.4 Arial,sans-serif}
 #guild-memories .thumb-card:hover,#guild-memories .thumb-card:focus-visible{opacity:1}
 #guild-memories .thumb-card.active-thumb{border-color:var(--hylian-gold);color:var(--hylian-gold);opacity:1;transform:none;box-shadow:0 0 12px #d4af3726}
+#guild-memories .thumb-card.active-thumb::before{content:'';position:absolute;top:-13px;left:50%;width:0;height:0;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--hylian-gold);pointer-events:none}
 #guild-memories .memory-strip-arrow{position:static;display:grid;place-items:center;width:44px;height:44px;margin:0;padding:0;border:1px solid var(--hylian-gold);border-radius:50%;background:var(--hylian-card-bg);color:var(--hylian-gold);font:18px/1 Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s}
 #guild-memories .memory-strip-arrow:hover{background:var(--hylian-gold);color:#121214}
 #guild-memories button:focus-visible{outline:3px solid var(--hylian-gold);outline-offset:3px}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:760px){#guild-memories{padding:65px 0}#guild-memories>.wrap{padding:0 20px}#guild-memories .archive-heading{flex-direction:column;align-items:flex-start;gap:15px;margin-bottom:35px}#guild-memories .archive-heading h2{font-size:37px}}
-@media(max-width:600px){#guild-memories .carousel-image-stage{height:340px}#guild-memories .carousel-caption-box{padding:56px 18px 20px}#guild-memories .memory-thumbnail-navigation{gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
+@media(max-width:700px){#guild-memories .carousel-viewport{grid-template-columns:minmax(0,1fr)}#guild-memories .carousel-image-stage{height:280px;min-height:0}#guild-memories .carousel-caption-box{padding:24px;border-left:0;border-top:1px solid #d4af374d}}
+@media(max-width:600px){#guild-memories .memory-thumbnail-navigation{gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
 `;
   if (!style.isConnected) document.head.append(style);
@@ -114,6 +122,10 @@
   const image = section.querySelector('#main-carousel-img');
   const title = section.querySelector('#main-carousel-title');
   const description = section.querySelector('#main-carousel-desc');
+  const position = section.querySelector('#main-carousel-position');
+  const format = section.querySelector('#main-carousel-format');
+  const dateRow = section.querySelector('#memory-date-row');
+  const date = section.querySelector('#main-carousel-date');
   const announcement = section.querySelector('.memory-announcement');
   const thumbnails = [];
   const fragment = document.createDocumentFragment();
@@ -133,13 +145,19 @@
     image.src = memory.src;
     title.textContent = memory.title;
     description.textContent = memory.desc;
+    position.textContent = 'Memory ' + String(index + 1).padStart(2, '0') + ' / ' + guildMemories.length;
+    format.textContent = memory.format;
+    dateRow.hidden = !memory.date;
+    date.textContent = memory.date;
+    if (memory.date) date.dateTime = memory.date;
+    else date.removeAttribute('datetime');
     thumbnails.forEach((button, i) => {
       const active = i === index;
       button.classList.toggle('active-thumb', active);
       button.setAttribute('aria-pressed', String(active));
     });
     if (announce) {
-      announcement.textContent = memory.desc + ': ' + memory.title;
+      announcement.textContent = position.textContent + ': ' + memory.title;
       reveal(thumbnails[index]);
     }
   }
@@ -184,7 +202,7 @@
     });
   });
   section.dataset.archiveReady = 'true';
-  section.dataset.archiveLayout = 'split-header-v2';
+  section.dataset.archiveLayout = 'side-banner-v3';
   section.dataset.memoryCount = String(guildMemories.length);
   select(0, false);
 })();
