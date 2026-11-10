@@ -54,6 +54,102 @@
     if (file.startsWith('picasion.com_')) return 'Guild Memory ' + (index + 1);
     return file.replace(/\.[^.]+$/, '').replace(/_webp|_unedited/g, '').replace(/(\d{4}-\d{2}-\d{2})_\d+_/, '$1 — ').replace(/LevelUp/g, 'Level Up').replace(/midFlood/g, 'Mid Flood').replace(/House2/g, 'House 2').replace(/_/g, ' ').replace(/\s+/g, ' ').trim().replace(/^./, c => c.toUpperCase());
   }
+
+  const memories = document.getElementById('guild-memories');
+  if (memories) {
+    if (memories.dataset.archiveReady === 'true') return;
+    const strip = memories.querySelector('#thumbnail-strip');
+    const image = memories.querySelector('#main-carousel-img');
+    const title = memories.querySelector('#main-carousel-title');
+    const description = memories.querySelector('#main-carousel-desc');
+    const announcement = memories.querySelector('.memory-announcement');
+    if (!strip || !image || !title || !description || !announcement) return;
+    const guildMemories = files.map((file, index) => ({
+      src: 'assets/images/' + encodeURIComponent(file),
+      title: caption(file, index),
+      desc: 'Guild archive · Memory ' + (index + 1) + ' of ' + files.length
+    }));
+    const thumbnails = [];
+    const fragment = document.createDocumentFragment();
+    function scrollOptions(left) {
+      return {left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'};
+    }
+    function reveal(button) {
+      const rail = strip.getBoundingClientRect();
+      const card = button.getBoundingClientRect();
+      if (card.left < rail.left + 6) strip.scrollBy(scrollOptions(card.left - rail.left - 6));
+      else if (card.right > rail.right - 6) strip.scrollBy(scrollOptions(card.right - rail.right + 6));
+    }
+    function select(index, announce = true) {
+      const memory = guildMemories[index];
+      if (!memory) return;
+      image.classList.remove('is-emblem');
+      image.alt = memory.title;
+      image.src = memory.src;
+      title.textContent = memory.title;
+      description.textContent = memory.desc;
+      thumbnails.forEach((button, i) => {
+        const active = i === index;
+        button.classList.toggle('active-thumb', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      if (announce) {
+        announcement.textContent = memory.desc + ': ' + memory.title;
+        reveal(thumbnails[index]);
+      }
+    }
+    guildMemories.forEach((memory, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'thumb-card';
+      button.dataset.src = memory.src;
+      button.dataset.title = memory.title;
+      button.dataset.description = memory.desc;
+      button.setAttribute('aria-label', 'Show memory ' + (index + 1) + ' of ' + guildMemories.length + ': ' + memory.title);
+      button.setAttribute('aria-controls', 'carousel-viewport');
+      button.setAttribute('aria-pressed', 'false');
+      const preview = document.createElement('img');
+      preview.src = memory.src;
+      preview.alt = '';
+      preview.loading = 'lazy';
+      preview.decoding = 'async';
+      const label = document.createElement('span');
+      label.textContent = memory.title;
+      button.append(preview, label);
+      button.addEventListener('click', () => select(index));
+      button.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        let next;
+        switch (event.key) {
+          case 'ArrowLeft': next = (index - 1 + guildMemories.length) % guildMemories.length; break;
+          case 'ArrowRight': next = (index + 1) % guildMemories.length; break;
+          case 'Home': next = 0; break;
+          case 'End': next = guildMemories.length - 1; break;
+          default: return;
+        }
+        event.preventDefault();
+        select(next);
+        thumbnails[next].focus({preventScroll: true});
+      });
+      thumbnails.push(button);
+      fragment.append(button);
+    });
+    strip.replaceChildren(fragment);
+    // Replace controls to remove the placeholder initializer's listeners.
+    for (const old of memories.querySelectorAll('[data-memory-scroll]')) {
+      const button = old.cloneNode(true);
+      old.replaceWith(button);
+      button.addEventListener('click', () => {
+        const direction = Number(button.dataset.memoryScroll);
+        strip.scrollBy(scrollOptions(direction * Math.max(154, strip.clientWidth * 0.8)));
+      });
+    }
+    memories.dataset.archiveReady = 'true';
+    memories.dataset.memoryCount = String(guildMemories.length);
+    select(0, false);
+    return;
+  }
+
   const style = document.createElement('style');
   style.textContent = `
 #guild-history .history-carousel{position:relative;border:1px solid #d4af37;background:var(--panel,#131b17);border-radius:12px;overflow:hidden}
