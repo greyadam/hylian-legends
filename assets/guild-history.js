@@ -71,7 +71,7 @@
     if (guides.nextElementSibling !== section) guides.after(section);
   }
   enforceArchiveOrder();
-  if (section.dataset.archiveLayout === 'depth-track-v4') return;
+  if (section.dataset.archiveLayout === 'autoplay-depth-v5') return;
   section.id = 'guild-memories';
   section.className = 'guild-memories-section';
   section.setAttribute('aria-labelledby', 'guild-memories-heading');
@@ -79,8 +79,9 @@
   section.innerHTML = `<div class="wrap">
 <div class="section-head archive-heading"><div><div class="micro">THE ARCHIVES</div><h2 id="guild-memories-heading">GUILD <em>history</em></h2></div><p>Shared adventures, milestones, and memories from our guild archive.</p></div>
 <div class="archive-carousel" role="region" aria-roledescription="carousel" aria-label="Guild archive memories">
+<div class="memory-playback"><span id="memory-playback-status"></span><button id="memory-autoplay-toggle" type="button" aria-controls="carousel-viewport thumbnail-strip">Pause slideshow</button></div>
 <div class="carousel-main-display"><div id="carousel-viewport" class="carousel-viewport"><div class="carousel-image-stage"><img id="main-carousel-img" alt="" decoding="async"></div><div class="carousel-caption-box"><p id="main-carousel-position" class="memory-position"></p><h3 id="main-carousel-title"></h3><p id="main-carousel-desc"></p><dl class="memory-metadata"><div><dt>Format</dt><dd id="main-carousel-format"></dd></div><div id="memory-date-row" hidden><dt>Date in filename</dt><dd><time id="main-carousel-date"></time></dd></div></dl></div></div></div>
-<div class="memory-thumbnail-navigation"><button class="memory-strip-arrow" type="button" data-memory-scroll="-1" aria-label="Scroll memory thumbnails left" aria-controls="thumbnail-strip"><span aria-hidden="true">&#10094;</span></button><div id="thumbnail-strip" class="thumbnail-strip" role="group" aria-label="Choose a guild memory"><div class="thumbnail-track"></div></div><button class="memory-strip-arrow" type="button" data-memory-scroll="1" aria-label="Scroll memory thumbnails right" aria-controls="thumbnail-strip"><span aria-hidden="true">&#10095;</span></button></div>
+<div class="memory-thumbnail-navigation"><button class="memory-strip-arrow" type="button" data-memory-scroll="-1" aria-label="Previous guild memory" aria-controls="carousel-viewport thumbnail-strip"><span aria-hidden="true">&#10094;</span></button><div id="thumbnail-strip" class="thumbnail-strip" role="group" aria-label="Choose a guild memory"><div class="thumbnail-track"></div></div><button class="memory-strip-arrow" type="button" data-memory-scroll="1" aria-label="Next guild memory" aria-controls="carousel-viewport thumbnail-strip"><span aria-hidden="true">&#10095;</span></button></div>
 <p class="memory-announcement" role="status" aria-live="polite" aria-atomic="true"></p></div></div>`;
   const style = document.getElementById('guild-archive-layout-style') || document.createElement('style');
   style.id = 'guild-archive-layout-style';
@@ -93,6 +94,9 @@
 #guild-memories .archive-heading h2{margin:18px 0 0;color:var(--cream,#f1e5c5);font:48px/1.15 Georgia,serif}
 #guild-memories .archive-heading h2 em{color:var(--gold,#d4af37);font-weight:normal}
 #guild-memories .archive-heading>p{max-width:350px;margin:8px 0;color:var(--muted,#aca995);font:14px/1.7 Arial,sans-serif}
+#guild-memories .memory-playback{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:12px;max-width:1000px;margin:0 auto 12px;font:12px/1.5 Arial,sans-serif}
+#guild-memories #memory-playback-status{color:var(--muted,#aca995)}
+#guild-memories #memory-autoplay-toggle{padding:8px 16px;border:1px solid var(--hylian-gold);border-radius:24px;background:var(--hylian-card-bg);color:var(--hylian-gold);font:12px/1.5 Arial,sans-serif;cursor:pointer}
 #guild-memories .carousel-main-display{width:100%;max-width:1000px;margin:0 auto 12px;overflow:hidden;border:3px solid var(--hylian-gold);border-radius:10px;background:var(--hylian-card-bg);box-shadow:0 8px 28px #d4af3729}
 #guild-memories .carousel-viewport{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);align-items:stretch}
 #guild-memories .carousel-image-stage{position:relative;height:auto;min-height:360px;min-width:0;background:#090d0b}
@@ -125,6 +129,7 @@
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .thumb-card.active-thumb,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
 `;
   if (!style.isConnected) document.head.append(style);
+  const carousel = section.querySelector('.archive-carousel');
   const strip = section.querySelector('#thumbnail-strip');
   const track = section.querySelector('.thumbnail-track');
   const image = section.querySelector('#main-carousel-img');
@@ -135,11 +140,35 @@
   const dateRow = section.querySelector('#memory-date-row');
   const date = section.querySelector('#main-carousel-date');
   const announcement = section.querySelector('.memory-announcement');
+  const playButton = section.querySelector('#memory-autoplay-toggle');
+  const playbackStatus = section.querySelector('#memory-playback-status');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const thumbnails = [];
   const fragment = document.createDocumentFragment();
+  const AUTOPLAY_INTERVAL = 5000;
   let currentIndex = 0;
+  let timer;
+  let paused = motion.matches;
+  let hovered = false;
+  let focusWithin = false;
+  let playWhileFocused = false;
+  function canAutoplay() {
+    return !paused && !hovered && (!focusWithin || playWhileFocused) && !document.hidden && section.isConnected;
+  }
+  function scheduleAutoplay() {
+    clearTimeout(timer);
+    playButton.textContent = paused ? 'Play slideshow' : 'Pause slideshow';
+    playButton.setAttribute('aria-label', paused ? 'Start automatic memory slideshow' : 'Pause automatic memory slideshow');
+    playbackStatus.textContent = paused ? 'Auto-play paused' : canAutoplay() ? 'Auto-play · Every 5 seconds' : 'Auto-play waiting · Interaction or hidden tab';
+    if (canAutoplay() && guildMemories.length > 1) {
+      timer = setTimeout(() => {
+        if (canAutoplay()) select(currentIndex + 1, false, true);
+        else scheduleAutoplay();
+      }, AUTOPLAY_INTERVAL);
+    }
+  }
   function scrollOptions(left, animate = true) {
-    return {left, behavior: animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'};
+    return {left, behavior: animate && !motion.matches ? 'smooth' : 'auto'};
   }
   function updateArc() {
     track.style.setProperty('--rail-width', strip.clientWidth + 'px');
@@ -161,9 +190,10 @@
     if (!active) return;
     strip.scrollTo(scrollOptions(track.offsetLeft + active.offsetLeft + active.offsetWidth / 2 - strip.clientWidth / 2, animate));
   }
-  function select(index, announce = true) {
+  function select(index, announce = true, animate = announce) {
+    if (!Number.isInteger(index) || !guildMemories.length) return;
+    index = ((index % guildMemories.length) + guildMemories.length) % guildMemories.length;
     const memory = guildMemories[index];
-    if (!memory) return;
     currentIndex = index;
     image.alt = memory.title;
     image.src = memory.src;
@@ -181,8 +211,9 @@
       button.setAttribute('aria-pressed', String(active));
     });
     updateArc();
-    centerThumbnail(announce);
+    centerThumbnail(animate);
     if (announce) announcement.textContent = position.textContent + ': ' + memory.title;
+    scheduleAutoplay();
   }
   guildMemories.forEach((memory, index) => {
     const button = document.createElement('button');
@@ -204,15 +235,15 @@
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
       let next;
       switch (event.key) {
-        case 'ArrowLeft': next = (index - 1 + guildMemories.length) % guildMemories.length; break;
-        case 'ArrowRight': next = (index + 1) % guildMemories.length; break;
+        case 'ArrowLeft': next = index - 1; break;
+        case 'ArrowRight': next = index + 1; break;
         case 'Home': next = 0; break;
         case 'End': next = guildMemories.length - 1; break;
         default: return;
       }
       event.preventDefault();
       select(next);
-      thumbnails[next].focus({preventScroll: true});
+      thumbnails[currentIndex].focus({preventScroll: true});
     });
     thumbnails.push(button);
     fragment.append(button);
@@ -220,9 +251,36 @@
   track.replaceChildren(fragment);
   section.querySelectorAll('[data-memory-scroll]').forEach(button => {
     button.addEventListener('click', () => {
-      const direction = Number(button.dataset.memoryScroll);
-      strip.scrollBy(scrollOptions(direction * Math.max(154, strip.clientWidth * 0.8)));
+      select(currentIndex + Number(button.dataset.memoryScroll));
     });
+  });
+  playButton.addEventListener('click', () => {
+    paused = !paused;
+    playWhileFocused = !paused;
+    scheduleAutoplay();
+  });
+  carousel.addEventListener('pointerenter', event => {
+    if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
+    hovered = true;
+    scheduleAutoplay();
+  });
+  carousel.addEventListener('pointerleave', () => { hovered = false; scheduleAutoplay(); });
+  carousel.addEventListener('focusin', event => {
+    focusWithin = true;
+    if (event.target !== playButton) playWhileFocused = false;
+    scheduleAutoplay();
+  });
+  carousel.addEventListener('focusout', event => {
+    if (!carousel.contains(event.relatedTarget)) {
+      focusWithin = false;
+      playWhileFocused = false;
+      scheduleAutoplay();
+    }
+  });
+  document.addEventListener('visibilitychange', scheduleAutoplay);
+  motion.addEventListener('change', () => {
+    if (motion.matches) paused = true;
+    scheduleAutoplay();
   });
   let resizeFrame;
   window.addEventListener('resize', () => {
@@ -230,7 +288,7 @@
     resizeFrame = requestAnimationFrame(() => { updateArc(); centerThumbnail(false); });
   });
   section.dataset.archiveReady = 'true';
-  section.dataset.archiveLayout = 'depth-track-v4';
+  section.dataset.archiveLayout = 'autoplay-depth-v5';
   section.dataset.memoryCount = String(guildMemories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList: true});
