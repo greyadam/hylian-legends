@@ -66,10 +66,9 @@
   const section = document.getElementById('guild-memories') || document.createElement('section');
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() {
-    const parent = quests.parentElement;
-    if (!parent || guides.parentElement !== parent) return;
-    if (quests.nextElementSibling !== section) quests.after(section);
-    if (section.nextElementSibling !== guides) section.after(guides);
+    const parent = guides.parentElement;
+    if (!parent) return;
+    if (guides.nextElementSibling !== section) guides.after(section);
   }
   enforceArchiveOrder();
   if (section.dataset.archiveLayout === 'side-banner-v3') return;
@@ -211,6 +210,6 @@
   section.dataset.archiveLayout = 'side-banner-v3';
   section.dataset.memoryCount = String(guildMemories.length);
   select(0, false);
-  new MutationObserver(enforceArchiveOrder).observe(quests.parentElement, {childList: true});
+  new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList: true});
   window.addEventListener('load', enforceArchiveOrder, {once: true});
 })();
