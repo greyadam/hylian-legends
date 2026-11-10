@@ -121,6 +121,21 @@
 @media(max-width:700px){#guild-memories .carousel-viewport{grid-template-columns:minmax(0,1fr)}#guild-memories .carousel-image-stage{height:280px;min-height:0}#guild-memories .carousel-caption-box{padding:24px;border-left:0;border-top:1px solid #d4af374d}}
 @media(max-width:600px){#guild-memories .memory-thumbnail-navigation{gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
+
+/* Selection-centered console-menu fan; layout widths stay unchanged. */
+@supports selector(.thumb-card:has(~ .active-thumb)){
+#guild-memories .thumbnail-strip{padding:44px 16px 42px;scroll-padding-inline:16px}
+#guild-memories .thumb-card{--fan-y:18px;--fan-turn:-14deg;--fan-tilt:3deg;--fan-scale:.88;z-index:1}
+#guild-memories .thumb-card:has(~ .active-thumb){--fan-turn:14deg;--fan-tilt:-3deg}
+#guild-memories .thumb-card:has(+ .thumb-card + .active-thumb){--fan-y:12px;--fan-turn:12deg;--fan-tilt:-2deg;--fan-scale:.92;z-index:2}
+#guild-memories .active-thumb + .thumb-card + .thumb-card{--fan-y:12px;--fan-turn:-12deg;--fan-tilt:2deg;--fan-scale:.92;z-index:2}
+#guild-memories .thumb-card:has(+ .active-thumb){--fan-y:5px;--fan-turn:8deg;--fan-tilt:-1deg;--fan-scale:.96;z-index:3}
+#guild-memories .active-thumb + .thumb-card{--fan-y:5px;--fan-turn:-8deg;--fan-tilt:1deg;--fan-scale:.96;z-index:3}
+#guild-memories .thumb-card.active-thumb{--fan-y:-4px;--fan-turn:0deg;--fan-tilt:0deg;--fan-scale:1.03;z-index:4}
+#guild-memories .thumb-card,#guild-memories .thumb-card.active-thumb{transform-origin:50% 80%;transform:perspective(1000px) translateY(var(--fan-y)) rotateY(var(--fan-turn)) rotateZ(var(--fan-tilt)) scale(var(--fan-scale));transition:transform .28s ease,border-color .2s ease,opacity .2s ease}
+#guild-memories .thumb-card:focus-visible{z-index:5}
+}
+@media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .thumb-card.active-thumb{transform:none;transition:none}}
 `;
   if (!style.isConnected) document.head.append(style);
   const strip = section.querySelector('#thumbnail-strip');
