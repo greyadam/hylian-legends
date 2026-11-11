@@ -41,20 +41,23 @@
             overflow-x: hidden;
         }
 
-        /* One explicit background image, clipped below the header; no foreground crest. */
-        .royal-chamber-main { isolation: isolate; min-width: 0; }
+        /* Explicit positioning is independent of external utility CSS; no tiny crest. */
+        .royal-chamber-main { position: relative; isolation: isolate; min-width: 0; }
         .royal-watermark-layer {
             position: absolute;
             inset: 0;
             z-index: 0;
-            display: grid;
-            place-items: center;
             overflow: hidden;
             pointer-events: none;
         }
         .royal-watermark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
             display: block;
-            width: 700px;
+            width: 650px;
             max-width: calc(100% - 32px);
             max-height: calc(100% - 32px);
             height: auto;
@@ -168,7 +171,7 @@
 
     <!-- Main Central Framed Gallery & Display -->
     <main class="royal-chamber-main w-full max-w-4xl flex-1 flex flex-col items-center justify-center relative z-20 my-auto py-2">
-        <div class="royal-watermark-layer" aria-hidden="true"><img class="royal-watermark" src="assets/triforce-graphic.png" alt="" width="700" decoding="async" draggable="false"></div>
+        <div class="royal-watermark-layer" aria-hidden="true"><img class="royal-watermark" src="assets/triforce-graphic.png" alt="" width="650" decoding="async" draggable="false"></div>
         
         <!-- Outer Ornate Chamber Frame -->
         <div class="royal-artwork-card w-full royal-border bg-sitePanel/80 p-5 sm:p-8 rounded-xl shadow-2xl relative">
