@@ -6,12 +6,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'index.html'
-      - 'about.html'
-      - 'rashid.html'
-      - 'anniversary.html'
-      - 'guildhall.html'
-      - 'riddle-section.html'
+      - '*.html'
+      - '*.css'
+      - '*.js'
+      - 'quests.json'
+      - 'admin/**'
+      - '.nojekyll'
       - 'scripts/update_sages.py'
       - 'assets/**'
       - '.github/workflows/pages.yml'
@@ -87,15 +87,17 @@ jobs:
           fi
       - name: Prepare public files
         run: |
-          test -f index.html
-          test -f about.html
-          test -f rashid.html
-          test -f anniversary.html
-          test -f guildhall.html
           mkdir -p _site
-          cp index.html about.html rashid.html anniversary.html guildhall.html _site/
-          cp -R assets _site/
-          touch _site/.nojekyll
+          for file in index.html about.html rashid.html anniversary.html guildhall.html lore.html quests.html admin.html style.css quests-board.js quests-admin.js quests.json .nojekyll; do
+            test -f "$file"
+            cp "$file" _site/
+          done
+          test -f admin/index.html
+          cp -R assets admin _site/
+          test -f _site/admin.html
+          test -f _site/admin/index.html
+          test -f _site/quests.html
+          test -f _site/.nojekyll
       - name: Add Guildhall navigation link
         run: |
           python3 - <<'PY'
