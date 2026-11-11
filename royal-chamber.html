@@ -70,7 +70,6 @@
 
         #royal-watermark {
             max-width: calc(100% - 64px);
-            max-height: calc(100% - 64px);
             height: auto;
             object-fit: contain;
             display: block;
@@ -78,6 +77,7 @@
 
         .royal-chamber-main {
             position: relative;
+            overflow: visible;
             isolation: isolate;
             min-width: 0;
         }
@@ -263,12 +263,12 @@
     <!-- Main gallery -->
     <main
         class="royal-chamber-main w-full max-w-4xl flex-1 flex flex-col items-center justify-center relative z-20 my-auto py-2"
-        style="position: relative;"
+        style="position: relative; overflow: visible;"
     >
         <img
             id="royal-watermark"
             src="assets/triforce-graphic.png"
-            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 650px; opacity: 0.65; z-index: 1; pointer-events: none; filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));"
+            style="display: block; width: 600px; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; opacity: 0.55; filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));"
             alt="Triforce Watermark"
             decoding="async"
             draggable="false"
