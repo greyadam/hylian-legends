@@ -41,6 +41,29 @@
             overflow-x: hidden;
         }
 
+        /* Decorative background layer; the prominent foreground crest stays unchanged. */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url('assets/triforce-graphic.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: min(90vw, 1000px) auto;
+            opacity: 0.12;
+            filter: sepia(1) saturate(2) drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+            animation: triforcePulse 6s ease-in-out infinite;
+        }
+        @keyframes triforcePulse {
+            0%, 100% { opacity: 0.12; }
+            50% { opacity: 0.22; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body::before { animation: none; opacity: 0.17; }
+        }
+
         /* Centered crest, outside the artwork card, with an antique-gold glow. */
         .royal-triforce-crest {
             display: block;
