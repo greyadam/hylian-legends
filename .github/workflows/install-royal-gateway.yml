@@ -1,0 +1,105 @@
+name: Install Royal Chamber gateway
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/install-royal-gateway.yml']
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: install-royal-gateway
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Guard and patch homepage, chamber, and Pages manifest
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import re
+          def blob_sha(path):
+              data = path.read_bytes()
+              return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+          home = Path('index.html')
+          source = Path('Royal Chamber Page.html')
+          destination = Path('royal-chamber.html')
+          workflow = Path('.github/workflows/pages.yml')
+          html = home.read_text()
+          pages = workflow.read_text()
+          if 'id="royal-chamber-gateway"' in html:
+              assert destination.is_file(), 'Gateway exists but destination is missing'
+              assert 'royal-chamber.html' in pages, 'Destination is absent from Pages workflow'
+              raise SystemExit(0)
+          assert blob_sha(home) == '8cad6c1810521543dc18655f01f5c8a38c06e0fb', 'Homepage changed; review before installing'
+          assert blob_sha(source) == 'bee061feddbe8be9c272829681ac9cb04a945696', 'Chamber source changed; review before installing'
+          assert not destination.exists(), 'Do not overwrite an existing canonical chamber'
+          artwork = 'assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg'
+          assert Path(artwork).is_file(), 'Verified artwork is missing'
+          gateway = '''<section id="royal-chamber-gateway" aria-labelledby="royal-gateway-title">
+          <div class="wrap"><article class="royal-gateway-card">
+          <div class="royal-gateway-preview"><img src="assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg" alt="Link and Princess Zelda" loading="lazy" decoding="async"></div>
+          <div class="royal-gateway-content"><div class="micro">Beyond the guild hall</div><h2 id="royal-gateway-title">The Royal <em>Chamber</em></h2><p>A sanctuary of honor, loyalty, and timeless devotion. Step inside to discover the tribute preserved in the Royal Chamber.</p><a class="royal-gateway-enter" href="royal-chamber.html">Enter Royal Chamber <span aria-hidden="true">&#8594;</span></a></div>
+          </article></div></section>'''
+          css = '''<style id="royal-gateway-styles">
+          #royal-chamber-gateway{--gateway-gold:#d4af37;padding:56px 0;background:#0b1110}
+          #royal-chamber-gateway .royal-gateway-card{position:relative;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);max-width:960px;margin:0 auto;border:1px solid #d4af3780;border-radius:16px;background:#131b17;box-shadow:0 12px 36px #0005,0 0 24px #d4af3714;overflow:hidden;transition:border-color .3s ease,box-shadow .3s ease}
+          #royal-chamber-gateway .royal-gateway-card:hover,#royal-chamber-gateway .royal-gateway-card:focus-within{border-color:var(--gateway-gold);box-shadow:0 16px 40px #0007,0 0 32px #d4af3733}
+          #royal-chamber-gateway .royal-gateway-preview{display:grid;place-items:center;min-width:0;padding:24px;background:radial-gradient(ellipse at center,#d4af371a,#0b1110 75%);border-right:1px solid #d4af3733}
+          #royal-chamber-gateway .royal-gateway-preview img{display:block;width:100%;height:220px;object-fit:contain;filter:drop-shadow(0 0 12px #d4af3726)}
+          #royal-chamber-gateway .royal-gateway-content{min-width:0;padding:36px}
+          #royal-chamber-gateway .micro{color:var(--gateway-gold);font:10px/1.7 monospace;letter-spacing:3px}
+          #royal-chamber-gateway h2{margin:12px 0 18px;color:#f1e5c5;font:clamp(30px,4vw,42px)/1.2 Georgia,serif}
+          #royal-chamber-gateway h2 em{color:var(--gateway-gold);font-weight:normal}
+          #royal-chamber-gateway p{max-width:440px;margin:0 0 24px;color:#aca995;font:14px/1.8 Arial,sans-serif}
+          #royal-chamber-gateway .royal-gateway-enter{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:13px 24px;border:1px solid var(--gateway-gold);border-radius:30px;background:var(--gateway-gold);color:#0b1110;font:700 13px/1.5 Arial,sans-serif;text-decoration:none;transition:box-shadow .3s ease,background .3s ease}
+          #royal-chamber-gateway .royal-gateway-enter:hover{background:#e8c65c;box-shadow:0 0 20px #d4af3759}
+          #royal-chamber-gateway .royal-gateway-enter:focus-visible{outline:3px solid #f1e5c5;outline-offset:5px}
+          @media(max-width:640px){#royal-chamber-gateway{padding:40px 0}#royal-chamber-gateway .royal-gateway-card{grid-template-columns:minmax(0,1fr)}#royal-chamber-gateway .royal-gateway-preview{border-right:0;border-bottom:1px solid #d4af3733;padding:20px}#royal-chamber-gateway .royal-gateway-preview img{height:170px}#royal-chamber-gateway .royal-gateway-content{padding:26px}#royal-chamber-gateway .royal-gateway-enter{width:100%}}
+          @media(prefers-reduced-motion:reduce){#royal-chamber-gateway .royal-gateway-card,#royal-chamber-gateway .royal-gateway-enter{transition:none}}
+          </style>'''
+          pattern = r'<section id="hylian-honor"[^>]*>.*?</section>'
+          assert len(re.findall(pattern, html, re.S)) == 1, 'Expected one inline honor section'
+          html = re.sub(pattern, lambda _: gateway, html, count=1, flags=re.S)
+          script = '<script src="assets/hylian-honor.js?v=1" defer></script>'
+          assert html.count(script) == 1, 'Expected one homepage honor loader'
+          html = html.replace(script, '', 1)
+          assert html.count('</head>') == 1
+          html = html.replace('</head>', css + '</head>', 1)
+          assert html.index('id="codex"') < html.index('id="royal-chamber-gateway"') < html.index('id="ranks"')
+          assert 'id="hylian-honor"' not in html and 'honor-particles' not in html
+          chamber = source.read_text()
+          assert chamber.count('src="assets/images/hylian-honor.jpg"') == 1
+          chamber = chamber.replace('src="assets/images/hylian-honor.jpg"', 'src="' + artwork + '"', 1)
+          chamber, removed = re.subn(r'\s+onerror="[^"]*"', '', chamber)
+          assert removed == 1, 'Expected one external artwork fallback'
+          assert chamber.count('</footer>') == 1
+          chamber = chamber.replace('</footer>', '<p class="mt-4"><a class="hylian-btn inline-block px-5 py-2 rounded-full" href="index.html#royal-chamber-gateway">Return to Guild HQ</a></p></footer>', 1)
+          manifest = 'guildhall.html lore.html quests.html'
+          assert pages.count(manifest) == 1, 'Pages manifest changed; review before installing'
+          pages = pages.replace(manifest, 'guildhall.html lore.html royal-chamber.html quests.html', 1)
+          assert pages.count('royal-chamber.html') == 1
+          home.write_text(html)
+          destination.write_text(chamber)
+          workflow.write_text(pages)
+          PY
+      - name: Commit guarded changes to main
+        run: |
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html royal-chamber.html .github/workflows/pages.yml
+          if ! git diff --cached --quiet; then
+            git commit -m 'Replace inline honor tribute with Royal Chamber gateway and publish chamber'
+            git push origin HEAD:main
+          fi
+      - name: Request fresh Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
