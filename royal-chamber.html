@@ -68,11 +68,16 @@
             pointer-events: none;
         }
 
-        #royal-watermark {
-            max-width: calc(100% - 64px);
-            height: auto;
-            object-fit: contain;
+        .royal-crest {
             display: block;
+            width: clamp(110px, 16vw, 140px);
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto 24px;
+            object-fit: contain;
+            opacity: 1;
+            pointer-events: none;
+            filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.5));
         }
 
         .royal-chamber-main {
@@ -304,21 +309,21 @@
             class="royal-artwork-card w-full royal-border p-5 sm:p-8 rounded-xl shadow-2xl relative"
             style="position: relative; z-index: 10; background-color: rgba(11, 17, 16, 0.75); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);"
         >
-            <img
-                id="royal-watermark"
-                src="assets/triforce-graphic.png"
-                style="display: block; width: 600px; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none; opacity: 0.55; filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));"
-                alt="Triforce Watermark"
-                decoding="async"
-                draggable="false"
-            >
             <div class="corner-ornament corner-tl"></div>
             <div class="corner-ornament corner-tr"></div>
             <div class="corner-ornament corner-bl"></div>
             <div class="corner-ornament corner-br"></div>
 
-            <!-- Foreground content above the watermark and card background. -->
+            <!-- Foreground content above the card background. -->
             <div class="royal-artwork-content" style="position: relative; z-index: 1;">
+            <img
+                id="royal-crest"
+                class="royal-crest"
+                src="assets/triforce-graphic.png"
+                alt="Triforce crest"
+                decoding="async"
+                draggable="false"
+            >
             <div class="twilight-container relative inline-block overflow-hidden">
             <!-- Natural image ratio: no cropping or hover zoom -->
             <div class="royal-artwork-frame bg-transparent rounded-lg border-2 border-hylianGold/60 shadow-inner">
