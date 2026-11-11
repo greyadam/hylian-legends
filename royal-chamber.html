@@ -104,27 +104,6 @@
             overflow: visible;
             isolation: isolate;
             min-width: 0;
-            perspective: 1000px;
-        }
-
-        .royal-card-container {
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            transform-origin: center center;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-            .royal-card-container:hover {
-                transform: rotateX(3deg) rotateY(-3deg) scale(1.02);
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .royal-card-container {
-                transition: none;
-                transform: none;
-            }
         }
 
         .royal-artwork-card {
@@ -159,18 +138,19 @@
             height: auto;
             object-fit: contain;
             transform: none;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Twilight-inspired treatment, confined to the artwork. */
-        .twilight-container {
+        /* Stationary recessed frame; only the artwork inside it tilts. */
+        .royal-artwork-stage {
             position: relative;
-            display: inline-block;
+            display: block;
             width: 100%;
-            vertical-align: top;
             overflow: hidden;
-            border-radius: 4px;
             isolation: isolate;
+            perspective: 1000px;
             border: 2px solid rgba(245, 226, 92, 0.4);
+            border-radius: 4px;
             box-shadow:
                 inset 0 0 25px rgba(0, 0, 0, 0.9),
                 inset 0 0 10px rgba(245, 226, 92, 0.2),
@@ -178,8 +158,40 @@
                 0 0 20px rgba(138, 43, 226, 0.15);
         }
 
-        /* Paint the recessed bevel above the image, not behind it. */
-        .twilight-container::after {
+        /* Twilight treatment moves with the artwork, not the frame. */
+        .twilight-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            vertical-align: top;
+            overflow: hidden;
+            border-radius: inherit;
+            isolation: isolate;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+            .royal-artwork-stage:hover .twilight-container {
+                transform: rotateX(4deg) rotateY(-4deg) scale(1.03);
+            }
+            .royal-artwork-stage:hover .royal-artwork-image {
+                transform: scale(1.01);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .twilight-container,
+            .royal-artwork-image {
+                transition: none;
+                transform: none;
+            }
+        }
+
+        /* Bevel and corner accents remain fixed above the moving artwork. */
+        .royal-artwork-stage::after {
             content: "";
             position: absolute;
             inset: 0;
@@ -189,6 +201,11 @@
             box-shadow:
                 inset 0 0 25px rgba(0, 0, 0, 0.9),
                 inset 0 0 10px rgba(245, 226, 92, 0.2);
+        }
+
+        .royal-artwork-stage > .artwork-corner {
+            z-index: 4;
+            pointer-events: none;
         }
 
         .twilight-overlay {
@@ -363,9 +380,9 @@
         class="royal-chamber-main w-full max-w-4xl flex-1 flex flex-col items-center justify-center relative z-20 my-auto py-2"
         style="position: relative; overflow: visible;"
     >
-        <!-- Showcase card -->
+        <!-- Stationary showcase card -->
         <div
-            class="royal-artwork-card royal-card-container w-full royal-border p-5 sm:p-8 rounded-xl shadow-2xl relative"
+            class="royal-artwork-card w-full royal-border p-5 sm:p-8 rounded-xl shadow-2xl relative"
             style="position: relative; z-index: 10; background-color: rgba(11, 17, 16, 0.75); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);"
         >
             <div class="corner-ornament corner-tl"></div>
@@ -383,9 +400,10 @@
                 decoding="async"
                 draggable="false"
             >
+            <div class="royal-artwork-stage">
             <div class="twilight-container relative inline-block overflow-hidden">
-            <!-- Natural image ratio: no cropping or hover zoom -->
-            <div class="royal-artwork-frame bg-transparent rounded-lg border-2 border-hylianGold/60 shadow-inner">
+            <!-- Natural image ratio at rest; subtle image zoom on hover. -->
+            <div class="royal-artwork-frame bg-transparent">
 
                 <img
                     id="chamberImage"
@@ -396,14 +414,14 @@
 
                 <!-- Vignette -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
-
-                <!-- Inner corner accents -->
-                <div class="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-hylianGold"></div>
-                <div class="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-hylianGold"></div>
-                <div class="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-hylianGold"></div>
-                <div class="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-hylianGold"></div>
             </div>
             <div class="twilight-overlay absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+            </div>
+            <!-- Stationary inner corner accents -->
+            <div class="artwork-corner absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-hylianGold"></div>
+            <div class="artwork-corner absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-hylianGold"></div>
+            <div class="artwork-corner absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-hylianGold"></div>
+            <div class="artwork-corner absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-hylianGold"></div>
             </div>
 
             <!-- Caption -->
