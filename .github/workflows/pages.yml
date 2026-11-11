@@ -31,6 +31,69 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Replace inline honor section and persist Royal Chamber gateway
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          home = Path('index.html')
+          html = home.read_text()
+          artwork = 'assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg'
+          assert Path(artwork).is_file(), 'Tribute artwork is missing'
+          gateway = '''<section id="royal-chamber-gateway" aria-labelledby="royal-gateway-title"><div class="wrap"><article class="royal-gateway-card"><img class="royal-gateway-preview" src="assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg" alt="Link and Princess Zelda" loading="lazy" decoding="async"><div><div class="micro">A sanctuary of honor</div><h2 id="royal-gateway-title">The Royal <em>Chamber</em></h2><p>Step beyond the guild hall into a tribute to loyalty, courage, and timeless devotion.</p><a class="royal-gateway-enter" href="royal-chamber.html">Enter the Royal Chamber <span aria-hidden="true">&#8594;</span></a></div></article></div></section>'''
+          css = '''<style id="royal-gateway-styles">
+          #royal-chamber-gateway{--gateway-gold:#d4af37;padding:48px 0;background:#0b1110}
+          #royal-chamber-gateway .royal-gateway-card{display:grid;grid-template-columns:180px minmax(0,1fr);align-items:center;gap:32px;max-width:900px;margin:auto;padding:28px;border:1px solid #d4af3780;border-radius:14px;background:#131b17;box-shadow:0 10px 32px #0005,0 0 20px #d4af371a;transition:box-shadow .3s ease,border-color .3s ease}
+          #royal-chamber-gateway .royal-gateway-card:hover,#royal-chamber-gateway .royal-gateway-card:focus-within{border-color:var(--gateway-gold);box-shadow:0 12px 36px #0007,0 0 28px #d4af3733}
+          #royal-chamber-gateway .royal-gateway-preview{display:block;width:180px;height:150px;max-width:100%;object-fit:contain;background:#0b1110;border:1px solid #d4af3733;border-radius:8px}
+          #royal-chamber-gateway .micro{color:var(--gateway-gold);letter-spacing:3px}
+          #royal-chamber-gateway h2{margin:10px 0 12px;color:#f1e5c5;font:clamp(28px,4vw,38px)/1.2 Georgia,serif}
+          #royal-chamber-gateway h2 em{color:var(--gateway-gold)}
+          #royal-chamber-gateway p{margin:0 0 20px;color:#aca995;font:14px/1.8 Arial,sans-serif}
+          #royal-chamber-gateway .royal-gateway-enter{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:12px 22px;border:1px solid var(--gateway-gold);border-radius:30px;background:var(--gateway-gold);color:#0b1110;font:700 13px/1.5 Arial,sans-serif;text-decoration:none}
+          #royal-chamber-gateway .royal-gateway-enter:focus-visible{outline:3px solid #f1e5c5;outline-offset:5px}
+          @media(max-width:640px){#royal-chamber-gateway .royal-gateway-card{grid-template-columns:minmax(0,1fr);gap:20px;padding:24px}#royal-chamber-gateway .royal-gateway-preview{width:100%;height:140px}#royal-chamber-gateway .royal-gateway-enter{width:100%}}
+          @media(prefers-reduced-motion:reduce){#royal-chamber-gateway .royal-gateway-card{transition:none}}
+          </style>'''
+          pattern = r'<section\b[^>]*\bid="hylian-honor"[^>]*>.*?</section>'
+          matches = re.findall(pattern, html, re.S)
+          if matches:
+              assert len(matches) == 1 and 'id="royal-chamber-gateway"' not in html, 'Ambiguous tribute layout'
+              html = re.sub(pattern, lambda _: gateway, html, count=1, flags=re.S)
+          else:
+              assert html.count('id="royal-chamber-gateway"') == 1, 'Neither expected tribute nor gateway found'
+              html = html.replace('>Enter Royal Chamber ', '>Enter the Royal Chamber ')
+          html = re.sub(r'<script\b[^>]*\bsrc="assets/hylian-honor\.js[^\"]*"[^>]*>\s*</script>', '', html)
+          if 'id="royal-gateway-styles"' not in html:
+              assert html.count('</head>') == 1
+              html = html.replace('</head>', css + '</head>', 1)
+          assert 'id="hylian-honor"' not in html and 'honor-particles' not in html
+          assert html.count('id="royal-chamber-gateway"') == 1
+          assert 'Enter the Royal Chamber' in html and 'href="royal-chamber.html"' in html
+          assert html.index('id="codex"') < html.index('id="royal-chamber-gateway"') < html.index('id="ranks"')
+          destination = Path('royal-chamber.html')
+          if not destination.exists():
+              source = Path('Royal Chamber Page.html')
+              assert source.is_file(), 'Existing Royal Chamber source is missing'
+              chamber = source.read_text()
+              assert chamber.count('src="assets/images/hylian-honor.jpg"') == 1
+              chamber = chamber.replace('src="assets/images/hylian-honor.jpg"', 'src="' + artwork + '"', 1)
+              chamber, count = re.subn(r'\s+onerror="[^\"]*"', '', chamber)
+              assert count == 1
+              assert chamber.count('</footer>') == 1
+              chamber = chamber.replace('</footer>', '<p class="mt-4"><a class="hylian-btn inline-block px-5 py-2 rounded-full" href="index.html#royal-chamber-gateway">Return to Guild HQ</a></p></footer>', 1)
+              destination.write_text(chamber)
+          assert destination.stat().st_size > 0
+          home.write_text(html)
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html royal-chamber.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Replace homepage honor section with direct Royal Chamber gateway'
+            git push origin HEAD:main
+          fi
       - name: Check official Sage roster
         run: |
           python3 -m pip install beautifulsoup4
@@ -88,7 +151,7 @@ jobs:
       - name: Prepare public files
         run: |
           mkdir -p _site
-          for file in index.html about.html rashid.html anniversary.html guildhall.html lore.html quests.html admin.html style.css quests-board.js quests-admin.js quests.json .nojekyll; do
+          for file in index.html about.html rashid.html anniversary.html guildhall.html lore.html royal-chamber.html quests.html admin.html style.css quests-board.js quests-admin.js quests.json .nojekyll; do
             test -f "$file"
             cp "$file" _site/
           done
@@ -98,6 +161,15 @@ jobs:
           test -f _site/admin/index.html
           test -f _site/quests.html
           test -f _site/.nojekyll
+          test -s _site/royal-chamber.html
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path('_site/index.html').read_text()
+          assert 'id="hylian-honor"' not in html, 'Old honor section must not be published'
+          assert html.count('id="royal-chamber-gateway"') == 1
+          assert 'Enter the Royal Chamber' in html
+          assert 'href="royal-chamber.html"' in html
+          PY
       - name: Add Guildhall navigation link
         run: |
           python3 - <<'PY'
