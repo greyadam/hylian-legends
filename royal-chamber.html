@@ -71,12 +71,19 @@
             max-height: calc(100% - 32px);
             height: auto;
             object-fit: contain;
-            opacity: 0.28;
+            opacity: 0.3;
             filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.45));
             pointer-events: none;
             user-select: none;
         }
-        .royal-artwork-card { position: relative; z-index: 1; min-width: 0; }
+        .royal-artwork-card {
+            position: relative;
+            z-index: 10;
+            min-width: 0;
+            background-color: rgba(11, 17, 16, 0.65);
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
         .royal-artwork-frame {
             position: relative;
             width: 100%;
@@ -183,7 +190,7 @@
         <div class="royal-watermark-layer absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0" aria-hidden="true"><img class="royal-watermark" src="assets/triforce-graphic.png" alt="" width="750" decoding="async" draggable="false"></div>
         
         <!-- Outer Ornate Chamber Frame -->
-        <div class="royal-artwork-card w-full royal-border bg-sitePanel/80 p-5 sm:p-8 rounded-xl shadow-2xl relative">
+        <div class="royal-artwork-card w-full royal-border p-5 sm:p-8 rounded-xl shadow-2xl relative z-10">
             <div class="corner-ornament corner-tl"></div>
             <div class="corner-ornament corner-tr"></div>
             <div class="corner-ornament corner-bl"></div>
