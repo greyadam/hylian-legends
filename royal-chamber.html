@@ -41,6 +41,18 @@
             overflow-x: hidden;
         }
 
+        /* Centered crest, outside the artwork card, with an antique-gold glow. */
+        .royal-triforce-crest {
+            display: block;
+            flex-shrink: 0;
+            width: clamp(96px, 18vw, 160px);
+            max-width: 60vw;
+            height: auto;
+            margin: 0 auto 28px;
+            object-fit: contain;
+            filter: sepia(1) saturate(2) brightness(1.08) drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+        }
+
         /* Custom Ornate Golden Border Effect */
         .royal-border {
             border: 3px solid #d4af37;
@@ -128,6 +140,7 @@
 
     <!-- Main Central Framed Gallery & Display -->
     <main class="w-full max-w-4xl flex-1 flex flex-col items-center justify-center relative z-20 my-auto py-2">
+        <img class="royal-triforce-crest" src="assets/triforce-graphic.png" alt="Triforce crest" width="160" decoding="async">
         
         <!-- Outer Ornate Chamber Frame -->
         <div class="w-full royal-border bg-sitePanel/95 p-5 sm:p-8 rounded-xl shadow-2xl relative">
@@ -135,17 +148,6 @@
             <div class="corner-ornament corner-tr"></div>
             <div class="corner-ornament corner-bl"></div>
             <div class="corner-ornament corner-br"></div>
-
-            <!-- Top Triforce Insignia -->
-            <div class="text-center mb-4">
-                <div class="inline-flex items-center justify-center space-x-1 text-hylianGold text-xl glow-gold">
-                    <i class="fa-solid fa-caret-up"></i>
-                </div>
-                <div class="flex justify-center space-x-1 text-hylianGold text-2xl glow-gold -mt-2">
-                    <i class="fa-solid fa-caret-up"></i>
-                    <i class="fa-solid fa-caret-up"></i>
-                </div>
-            </div>
 
             <!-- Central Artwork Frame -->
             <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] bg-black rounded-lg overflow-hidden border-2 border-hylianGold/60 shadow-inner group">
