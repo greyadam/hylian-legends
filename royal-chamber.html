@@ -116,6 +116,33 @@
             transform: none;
         }
 
+        /* Twilight-inspired treatment, confined to the artwork. */
+        .twilight-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            vertical-align: top;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            isolation: isolate;
+        }
+
+        .twilight-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(
+                ellipse at 50% 40%,
+                rgba(222, 183, 105, 0.08) 0%,
+                rgba(86, 92, 63, 0.24) 48%,
+                rgba(20, 24, 18, 0.65) 100%
+            );
+            mix-blend-mode: multiply;
+            -webkit-backdrop-filter: sepia(80%) hue-rotate(-20deg) contrast(120%) brightness(85%);
+            backdrop-filter: sepia(80%) hue-rotate(-20deg) contrast(120%) brightness(85%);
+        }
+
         /* Ornate golden borders */
         .royal-border {
             position: relative;
@@ -292,6 +319,7 @@
 
             <!-- Foreground content above the watermark and card background. -->
             <div class="royal-artwork-content" style="position: relative; z-index: 1;">
+            <div class="twilight-container relative inline-block overflow-hidden">
             <!-- Natural image ratio: no cropping or hover zoom -->
             <div class="royal-artwork-frame bg-transparent rounded-lg border-2 border-hylianGold/60 shadow-inner">
 
@@ -310,6 +338,8 @@
                 <div class="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-hylianGold"></div>
                 <div class="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-hylianGold"></div>
                 <div class="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-hylianGold"></div>
+            </div>
+            <div class="twilight-overlay absolute inset-0 pointer-events-none" aria-hidden="true"></div>
             </div>
 
             <!-- Caption -->
