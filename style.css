@@ -73,16 +73,18 @@
 #hylian-honor .honor-frame:focus-visible{outline:3px solid var(--honor-gold);outline-offset:7px}
 #hylian-honor .honor-photo{position:relative;z-index:1;display:block;width:auto;height:auto;max-width:100%;margin:0;padding:0;border:0;border-radius:0;object-fit:contain}
 #hylian-honor .honor-particles{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;pointer-events:none;border-radius:0}
-#hylian-honor .honor-corner{position:absolute;z-index:10;display:block;width:36px;height:36px;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;object-fit:contain;pointer-events:none;user-select:none;image-rendering:crisp-edges;image-rendering:pixelated;filter:none;transform:none;transition:none;opacity:1}
-/* Left-side optical adjustment is independent; preserve the approved right-side anchors. */
-#hylian-honor .honor-top-left{top:-12px;left:-12px;right:auto;bottom:auto;object-position:left top}
-#hylian-honor .honor-top-right{top:-6px;right:-6px;object-position:right top}
-#hylian-honor .honor-bottom-left{bottom:-12px;left:-12px;right:auto;top:auto;object-position:left bottom}
-#hylian-honor .honor-bottom-right{bottom:-6px;right:-6px;object-position:right bottom}
+/* Layered illumination follows each ornament's silhouette, without adding a box or inner gap. */
+#hylian-honor .honor-corner{position:absolute;z-index:10;display:block;width:42px;height:42px;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;object-fit:contain;pointer-events:none;user-select:none;image-rendering:crisp-edges;image-rendering:pixelated;filter:brightness(1.08) saturate(1.12) drop-shadow(0 1px 0 #5a390e) drop-shadow(0 0 2px var(--honor-gold)) drop-shadow(0 0 8px #d4af3759);transform:none;transition:filter .35s ease;opacity:1}
+#hylian-honor .honor-frame:hover .honor-corner,#hylian-honor .honor-frame:focus-visible .honor-corner{filter:brightness(1.22) saturate(1.2) drop-shadow(0 1px 0 #5a390e) drop-shadow(0 0 4px var(--honor-gold)) drop-shadow(0 0 14px #d4af3799)}
+/* Preserve independent optical corrections, proportionally adjusted from 36px to 42px ornaments. */
+#hylian-honor .honor-top-left{top:-14px;left:-14px;right:auto;bottom:auto;object-position:left top}
+#hylian-honor .honor-top-right{top:-7px;right:-7px;object-position:right top}
+#hylian-honor .honor-bottom-left{bottom:-14px;left:-14px;right:auto;top:auto;object-position:left bottom}
+#hylian-honor .honor-bottom-right{bottom:-7px;right:-7px;object-position:right bottom}
 #hylian-honor #honor-caption{margin:26px auto 0;padding:0 12px;text-align:center;color:var(--honor-gold);font:italic clamp(18px,2.8vw,25px)/1.65 Georgia,'Times New Roman',serif;text-shadow:0 0 16px #d4af3722}
 #hylian-honor .honor-controls{text-align:center;margin:22px auto 0;max-width:620px}
 #hylian-honor #honor-sound-toggle{border:1px solid #d4af3766;border-radius:24px;background:#131b17;color:var(--honor-gold);padding:9px 18px;font:12px/1.5 Arial,sans-serif;cursor:pointer}
 #hylian-honor #honor-sound-toggle:focus-visible{outline:2px solid var(--honor-gold);outline-offset:4px}
 #hylian-honor #honor-help{margin:12px 0 0;color:var(--muted,#aca995);font:12px/1.7 Arial,sans-serif}
 @media(max-width:600px){#hylian-honor{padding:50px 0 60px}#hylian-honor .honor-heading{margin-bottom:26px}}
-@media(prefers-reduced-motion:reduce){#hylian-honor .honor-frame{transition:none}#hylian-honor .honor-frame:hover,#hylian-honor .honor-frame:focus-visible{transform:none}#hylian-honor .honor-particles{display:none}}
+@media(prefers-reduced-motion:reduce){#hylian-honor .honor-frame,#hylian-honor .honor-corner{transition:none}#hylian-honor .honor-frame:hover,#hylian-honor .honor-frame:focus-visible{transform:none}#hylian-honor .honor-particles{display:none}}
