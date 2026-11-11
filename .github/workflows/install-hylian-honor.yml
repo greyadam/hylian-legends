@@ -1,0 +1,239 @@
+name: Install framed Hylian Honor card
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/install-hylian-honor.yml']
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: install-hylian-honor
+  cancel-in-progress: false
+jobs:
+  install:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply guarded HTML, stylesheet, and interaction patch
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          expected = {'index.html': '479954995f27655930d919cf1244441e6adc0497', 'style.css': '68b54fbcbf8040aefdaa404678cc50f24d5c0cae'}
+          for name, sha in expected.items():
+              data = Path(name).read_bytes()
+              actual = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              if actual != sha:
+                  raise SystemExit('Source changed; refusing to overwrite ' + name)
+          for name in ['assets/Left-Corner.avif', 'assets/Right-Corner.avif', 'assets/Bottom Left-Corner.avif', 'assets/Bottom Right-Corner.avif', 'assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg']:
+              if not Path(name).is_file():
+                  raise SystemExit('Missing uploaded asset: ' + name)
+          page = Path('index.html')
+          source = page.read_text()
+          if source.count('<section id="ranks">') != 1 or source.count('<body>') != 1 or source.count('<style>') != 1 or source.count('</head>') != 1:
+              raise SystemExit('Homepage anchors changed; no source edits applied')
+          if 'id="hylian-honor"' in source or Path('assets/hylian-honor.js').exists():
+              raise SystemExit('Honor card already exists; refusing duplicate installation')
+          markup = '''<section id="hylian-honor" aria-labelledby="hylian-honor-title">
+          <div class="wrap honor-wrap">
+          <div class="honor-heading"><div class="micro">The Lore Library</div><h2 id="hylian-honor-title">HYLIAN <em>honor</em></h2><div class="honor-divider" aria-hidden="true"><span>◆</span></div></div>
+          <figure class="honor-card">
+          <button type="button" class="honor-frame" aria-label="Illuminate the Link and Zelda artwork" aria-describedby="honor-caption honor-help">
+          <img class="honor-photo" src="assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg" alt="Link and Princess Zelda" loading="lazy" decoding="async">
+          <canvas class="honor-particles" aria-hidden="true"></canvas>
+          <img class="honor-corner honor-top-left" src="assets/Left-Corner.avif" alt="" aria-hidden="true" draggable="false" decoding="async">
+          <img class="honor-corner honor-top-right" src="assets/Right-Corner.avif" alt="" aria-hidden="true" draggable="false" decoding="async">
+          <img class="honor-corner honor-bottom-left" src="assets/Bottom%20Left-Corner.avif" alt="" aria-hidden="true" draggable="false" decoding="async">
+          <img class="honor-corner honor-bottom-right" src="assets/Bottom%20Right-Corner.avif" alt="" aria-hidden="true" draggable="false" decoding="async">
+          </button>
+          <figcaption id="honor-caption">At Your Service, To always Protect You, My princess</figcaption>
+          </figure>
+          <div class="honor-controls"><button id="honor-sound-toggle" type="button" aria-pressed="false">Enable soft sound</button><p id="honor-help">Hover or focus to illuminate. Select the artwork for a golden flourish. Sound is optional.</p></div>
+          </div></section>
+          '''
+          styles = '''
+          /* Hylian Honor: uploaded artwork and four independent corner ornaments. */
+          .guild-home .nav{min-height:0;padding-top:0;padding-bottom:0}
+          .guild-home .brand{flex-shrink:1}
+          .guild-home .virtues{margin:16px 0 0}
+          .guild-home .oath{margin:0;font:inherit;color:inherit;text-align:inherit}
+          .guild-home footer{border-top:0;font-size:14px;color:var(--cream)}
+          .guild-home footer>.wrap{display:block}
+          .guild-home footer a{color:inherit}
+          #hylian-honor{--honor-gold:#d4af37;padding:70px 0 80px;isolation:isolate}
+          #hylian-honor .honor-wrap{max-width:900px}
+          #hylian-honor .honor-heading{text-align:center;margin:0 auto 34px}
+          #hylian-honor .honor-heading h2{margin:12px 0 22px;font:clamp(32px,5vw,48px)/1.2 Georgia,serif;color:var(--cream,#f1e5c5)}
+          #hylian-honor .honor-heading h2 em{color:var(--honor-gold);font-weight:normal}
+          #hylian-honor .honor-divider{display:flex;align-items:center;justify-content:center;gap:18px;color:var(--honor-gold);max-width:580px;margin:auto}
+          #hylian-honor .honor-divider::before,#hylian-honor .honor-divider::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,#d4af3799)}
+          #hylian-honor .honor-divider::after{transform:scaleX(-1)}
+          #hylian-honor .honor-divider span{font-size:14px;text-shadow:0 0 12px #d4af3766}
+          #hylian-honor .honor-card{margin:0 auto;max-width:760px;min-width:0}
+          #hylian-honor .honor-frame{position:relative;isolation:isolate;display:block;width:100%;margin:0;padding:12px;border:1px solid #d4af3755;border-radius:8px;background:#101713;overflow:visible;color:inherit;cursor:pointer;box-shadow:0 8px 28px #0006,0 0 22px #d4af3714;transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;filter:none}
+          #hylian-honor .honor-frame:hover,#hylian-honor .honor-frame:focus-visible{transform:translateY(-7px);border-color:#d4af37a6;box-shadow:0 18px 38px #0008,0 0 35px #d4af3733;filter:none}
+          #hylian-honor .honor-frame:focus-visible{outline:3px solid var(--honor-gold);outline-offset:7px}
+          #hylian-honor .honor-photo{position:relative;z-index:0;display:block;width:100%;height:auto;max-width:100%;border-radius:3px;object-fit:contain}
+          #hylian-honor .honor-particles{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;pointer-events:none;border-radius:8px}
+          #hylian-honor .honor-corner{position:absolute;z-index:2;display:block;width:clamp(48px,16%,110px);height:auto;max-width:25%;pointer-events:none;user-select:none;filter:drop-shadow(0 0 5px #d4af3744)}
+          #hylian-honor .honor-top-left{top:-6px;left:-6px}
+          #hylian-honor .honor-top-right{top:-6px;right:-6px}
+          #hylian-honor .honor-bottom-left{bottom:-6px;left:-6px}
+          #hylian-honor .honor-bottom-right{bottom:-6px;right:-6px}
+          #hylian-honor #honor-caption{margin:26px auto 0;padding:0 12px;text-align:center;color:var(--honor-gold);font:italic clamp(18px,2.8vw,25px)/1.65 Georgia,'Times New Roman',serif;text-shadow:0 0 16px #d4af3722}
+          #hylian-honor .honor-controls{text-align:center;margin:22px auto 0;max-width:620px}
+          #hylian-honor #honor-sound-toggle{border:1px solid #d4af3766;border-radius:24px;background:#131b17;color:var(--honor-gold);padding:9px 18px;font:12px/1.5 Arial,sans-serif;cursor:pointer}
+          #hylian-honor #honor-sound-toggle:focus-visible{outline:2px solid var(--honor-gold);outline-offset:4px}
+          #hylian-honor #honor-help{margin:12px 0 0;color:var(--muted,#aca995);font:12px/1.7 Arial,sans-serif}
+          @media(max-width:600px){#hylian-honor{padding:50px 0 60px}#hylian-honor .honor-frame{padding:8px}#hylian-honor .honor-heading{margin-bottom:26px}}
+          @media(prefers-reduced-motion:reduce){#hylian-honor .honor-frame{transition:none}#hylian-honor .honor-frame:hover,#hylian-honor .honor-frame:focus-visible{transform:none}#hylian-honor .honor-particles{display:none}}
+          '''
+          effects = '''(() => {
+            'use strict';
+            const section = document.getElementById('hylian-honor');
+            if (!section || section.dataset.effectsReady) return;
+            section.dataset.effectsReady = 'true';
+            const frame = section.querySelector('.honor-frame');
+            const canvas = section.querySelector('canvas');
+            const toggle = section.querySelector('#honor-sound-toggle');
+            const context = canvas.getContext('2d');
+            const motion = matchMedia('(prefers-reduced-motion: reduce)');
+            const particles = [];
+            let width = 0, height = 0, raf = 0, lastFrame = 0, burstUntil = 0;
+            let hovered = false, keyboardFocused = false, visible = true;
+            let audio, soundEnabled = false, lastChime = -Infinity;
+            function particle(burst = false) {
+              return {x:burst ? width / 2 + (Math.random() - .5) * width * .25 : Math.random() * width,
+                y:burst ? height * .65 : Math.random() * height,
+                vx:(Math.random() - .5) * (burst ? 55 : 13), vy:18 + Math.random() * (burst ? 70 : 22),
+                radius:.6 + Math.random() * 1.5, phase:Math.random() * Math.PI * 2};
+            }
+            function eligible() {
+              return context && visible && !document.hidden && !motion.matches &&
+                (hovered || keyboardFocused || performance.now() < burstUntil);
+            }
+            function stop() {
+              cancelAnimationFrame(raf); raf = 0; lastFrame = 0;
+              if (context) context.clearRect(0, 0, width, height);
+            }
+            function draw(now) {
+              raf = 0;
+              if (!eligible()) { stop(); return; }
+              const dt = lastFrame ? Math.min((now - lastFrame) / 1000, .04) : .016;
+              lastFrame = now;
+              context.clearRect(0, 0, width, height);
+              context.fillStyle = '#f4d77c';
+              context.shadowColor = '#d4af37'; context.shadowBlur = 8;
+              particles.forEach((p, i) => {
+                p.x += p.vx * dt; p.y -= p.vy * dt;
+                if (p.y < -6 || p.x < -6 || p.x > width + 6) particles[i] = p = particle();
+                context.globalAlpha = .25 + .5 * (1 + Math.sin(now / 800 + p.phase)) / 2;
+                context.beginPath(); context.arc(p.x, p.y, p.radius, 0, Math.PI * 2); context.fill();
+              });
+              context.globalAlpha = 1;
+              raf = requestAnimationFrame(draw);
+            }
+            function update() {
+              if (!eligible()) { stop(); return; }
+              if (!particles.length) for (let i = 0; i < 32; i++) particles.push(particle());
+              if (!raf) raf = requestAnimationFrame(draw);
+            }
+            function resize() {
+              const bounds = frame.getBoundingClientRect();
+              width = bounds.width; height = bounds.height;
+              const ratio = Math.min(devicePixelRatio || 1, 2);
+              canvas.width = Math.max(1, Math.round(width * ratio));
+              canvas.height = Math.max(1, Math.round(height * ratio));
+              if (context) context.setTransform(ratio, 0, 0, ratio, 0, 0);
+              particles.length = 0; update();
+            }
+            async function chime() {
+              if (!soundEnabled || !audio || document.hidden || performance.now() - lastChime < 700) return;
+              lastChime = performance.now();
+              try {
+                if (audio.state !== 'running') await audio.resume();
+                if (!soundEnabled || document.hidden) return;
+                [523.25, 659.25, 783.99].forEach((frequency, index) => {
+                  const start = audio.currentTime + index * .065;
+                  const oscillator = audio.createOscillator();
+                  const gain = audio.createGain();
+                  oscillator.type = 'sine'; oscillator.frequency.value = frequency;
+                  gain.gain.setValueAtTime(.0001, start);
+                  gain.gain.exponentialRampToValueAtTime(.012, start + .045);
+                  gain.gain.exponentialRampToValueAtTime(.0001, start + .65);
+                  oscillator.connect(gain); gain.connect(audio.destination);
+                  oscillator.start(start); oscillator.stop(start + .7);
+                  oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+                });
+              } catch { /* Audio is optional; visual interaction remains available. */ }
+            }
+            toggle.addEventListener('click', async () => {
+              try {
+                if (!audio) {
+                  const Audio = window.AudioContext || window.webkitAudioContext;
+                  if (!Audio) throw new Error('Web Audio unavailable');
+                  audio = new Audio();
+                }
+                soundEnabled = !soundEnabled;
+                toggle.setAttribute('aria-pressed', String(soundEnabled));
+                toggle.textContent = soundEnabled ? 'Mute soft sound' : 'Enable soft sound';
+                if (soundEnabled) { await audio.resume(); chime(); }
+                else await audio.suspend();
+              } catch {
+                soundEnabled = false; toggle.setAttribute('aria-pressed', 'false');
+                toggle.textContent = 'Sound unavailable'; toggle.disabled = true;
+              }
+            });
+            frame.addEventListener('pointerenter', event => {
+              if (event.pointerType === 'touch') return;
+              hovered = true; update(); chime();
+            });
+            frame.addEventListener('pointerleave', () => { hovered = false; update(); });
+            frame.addEventListener('focus', () => { keyboardFocused = frame.matches(':focus-visible'); update(); chime(); });
+            frame.addEventListener('blur', () => { keyboardFocused = false; update(); });
+            frame.addEventListener('click', () => {
+              burstUntil = performance.now() + 1000;
+              particles.length = 0;
+              for (let i = 0; i < 32; i++) particles.push(particle(true));
+              update(); chime();
+            });
+            document.addEventListener('visibilitychange', update);
+            motion.addEventListener('change', update);
+            if ('ResizeObserver' in window) new ResizeObserver(resize).observe(frame);
+            else window.addEventListener('resize', resize);
+            if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
+              visible = entries[0].isIntersecting; update();
+            }).observe(frame);
+            window.addEventListener('pagehide', () => { stop(); if (audio) audio.suspend().catch(() => {}); });
+            section.querySelector('.honor-photo').addEventListener('load', resize);
+            resize();
+          })();
+          '''
+          source = source.replace('<body>', '<body class="guild-home">', 1)
+          source = source.replace('<style>', '<link rel="stylesheet" href="style.css?v=hylian-honor-1"><style>', 1)
+          source = source.replace('<section id="ranks">', markup + '<section id="ranks">', 1)
+          source = source.replace('</head>', '<script src="assets/hylian-honor.js?v=1" defer></script></head>', 1)
+          page.write_text(source)
+          with Path('style.css').open('a') as handle:
+              handle.write(styles)
+          Path('assets/hylian-honor.js').write_text(effects)
+          PY
+      - name: Validate interaction script and patch formatting
+        run: |
+          node --check assets/hylian-honor.js
+          git diff --check
+      - name: Commit the assembled card to main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html style.css assets/hylian-honor.js
+          git commit -m 'Assemble framed Hylian Honor card with gold particles and optional soft audio'
+          git push origin HEAD:main
+      - name: Request existing Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
