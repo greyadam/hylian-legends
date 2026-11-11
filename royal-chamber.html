@@ -57,17 +57,17 @@
             background-image: url('assets/triforce-graphic.png');
             background-position: center;
             background-repeat: no-repeat;
-            background-size: contain;
-            opacity: 0.12;
-            filter: sepia(1) saturate(2) drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+            background-size: min(750px, 100%) auto;
+            opacity: 0.22;
+            filter: sepia(1) saturate(2) brightness(1.12) drop-shadow(0 0 16px rgba(212, 175, 55, 0.65)) drop-shadow(0 0 32px rgba(212, 175, 55, 0.35));
             animation: triforcePulse 6s ease-in-out infinite;
         }
         @keyframes triforcePulse {
-            0%, 100% { opacity: 0.12; }
-            50% { opacity: 0.22; }
+            0%, 100% { opacity: 0.22; }
+            50% { opacity: 0.25; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .royal-watermark-layer::before { animation: none; opacity: 0.17; }
+            .royal-watermark-layer::before { animation: none; opacity: 0.25; }
         }
         .royal-artwork-card { position: relative; z-index: 1; min-width: 0; }
         .royal-artwork-frame {
@@ -191,7 +191,7 @@
         <img class="royal-triforce-crest" src="assets/triforce-graphic.png" alt="Triforce crest" width="160" decoding="async">
         
         <!-- Outer Ornate Chamber Frame -->
-        <div class="royal-artwork-card w-full royal-border bg-sitePanel/95 p-5 sm:p-8 rounded-xl shadow-2xl relative">
+        <div class="royal-artwork-card w-full royal-border bg-sitePanel/80 p-5 sm:p-8 rounded-xl shadow-2xl relative">
             <div class="corner-ornament corner-tl"></div>
             <div class="corner-ornament corner-tr"></div>
             <div class="corner-ornament corner-bl"></div>
