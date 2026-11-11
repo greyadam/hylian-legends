@@ -70,14 +70,33 @@
 
         .royal-crest {
             display: block;
-            width: clamp(110px, 16vw, 140px);
+            width: clamp(140px, 20vw, 180px);
             max-width: 100%;
             height: auto;
             margin: 0 auto 24px;
             object-fit: contain;
             opacity: 1;
             pointer-events: none;
-            filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.5));
+            filter: drop-shadow(0 0 5px rgba(245, 226, 92, 0.6)) brightness(1);
+        }
+
+        @keyframes triforcePulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px rgba(245, 226, 92, 0.6)) brightness(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 14px rgba(255, 235, 120, 0.95)) brightness(1.25);
+            }
+        }
+
+        .triforce-crest {
+            animation: triforcePulse 3s infinite ease-in-out;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .triforce-crest {
+                animation: none;
+            }
         }
 
         .royal-chamber-main {
@@ -318,7 +337,7 @@
             <div class="royal-artwork-content" style="position: relative; z-index: 1;">
             <img
                 id="royal-crest"
-                class="royal-crest"
+                class="royal-crest triforce-crest"
                 src="assets/triforce-graphic.png"
                 alt="Triforce crest"
                 decoding="async"
