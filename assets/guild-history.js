@@ -58,7 +58,7 @@
   }
   const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index)}));
   const section = document.getElementById('guild-memories') || document.createElement('section');
-  if (section.dataset.archiveLayout === 'perspective-stack-v6') return;
+  if (section.dataset.archiveLayout === 'perspective-fan-v7') return;
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() { if (guides.parentElement && guides.nextElementSibling !== section) guides.after(section); }
   section.id = 'guild-memories';
@@ -70,21 +70,23 @@
   const style = document.getElementById('guild-archive-layout-style') || document.createElement('style');
   style.id = 'guild-archive-layout-style';
   style.textContent = `
-#guild-memories{--hylian-gold:#d4af37;padding:95px 0;min-width:0;background:var(--bg,#0b1110);color:var(--cream,#f1e5c5);font-family:Georgia,serif}
+#guild-memories{--hylian-gold:#d4af37;padding:95px 0;min-width:0;background:var(--bg,#0b1110);color:var(--cream,#f1e5c5);font-family:Georgia,serif;overflow:visible}
 #guild-memories,#guild-memories *,#guild-memories *::before,#guild-memories *::after{box-sizing:border-box}
-#guild-memories>.wrap{width:100%;max-width:1120px;margin:auto;padding:0 24px}
+#guild-memories>.wrap{width:100%;max-width:1120px;margin:auto;padding:0 24px;overflow:visible}
 #guild-memories .archive-heading{display:flex;justify-content:space-between;align-items:center;gap:40px;margin:0 0 48px;text-align:left}
 #guild-memories .archive-heading .micro{color:var(--gold,#d4af37);font:10px/1.6 monospace;letter-spacing:4px}
 #guild-memories .archive-heading h2{margin:18px 0 0;font:48px/1.15 Georgia,serif;color:var(--cream,#f1e5c5)}
 #guild-memories .archive-heading h2 em{color:var(--gold,#d4af37);font-weight:normal}
 #guild-memories .archive-heading>p{max-width:350px;color:var(--muted,#aca995);font:14px/1.7 Arial,sans-serif}
-#guild-memories .archive-carousel{min-width:0}
-#guild-memories .memory-stack-stage{position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px}
-#guild-memories .memory-stack-deck{position:absolute;inset:24px 48px;transform-style:preserve-3d}
-#guild-memories .memory-stack-card{position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-160px) scale(.8);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.75)}
+#guild-memories .archive-carousel{min-width:0;overflow:visible}
+#guild-memories .memory-stack-stage{position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px;overflow:visible}
+#guild-memories .memory-stack-deck{position:absolute;inset:24px 48px;transform-style:preserve-3d;overflow:visible}
+#guild-memories .memory-stack-card{position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
 #guild-memories .memory-stack-card.is-active{transform:translate3d(0,0,0) rotateY(0deg) scale(1);z-index:10;opacity:1;pointer-events:auto;filter:brightness(1);border-color:#d4af37;box-shadow:0 0 20px #d4af3733,0 18px 38px #0009}
-#guild-memories .memory-stack-card.is-prev{transform:translate3d(-42px,0,-80px) rotateY(14deg) scale(.9);z-index:5;opacity:1;pointer-events:auto}
-#guild-memories .memory-stack-card.is-next{transform:translate3d(42px,0,-80px) rotateY(-14deg) scale(.9);z-index:5;opacity:1;pointer-events:auto}
+#guild-memories .memory-stack-card.is-prev{transform:translate3d(-220px,0,-90px) rotateY(18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
+#guild-memories .memory-stack-card.is-next{transform:translate3d(220px,0,-90px) rotateY(-18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
+#guild-memories .memory-stack-card.is-prev-2{transform:translate3d(-360px,0,-170px) rotateY(26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
+#guild-memories .memory-stack-card.is-next-2{transform:translate3d(360px,0,-170px) rotateY(-26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
 #guild-memories .memory-stack-card img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#090d0b;border-radius:13px 13px 0 0}
 #guild-memories .memory-stack-caption{display:block;padding:16px 18px;border-top:1px solid #d4af3733;border-radius:0 0 13px 13px;background:linear-gradient(145deg,#20251e,#111712)}
 #guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;color:#d4af37;font:18px/1.3 Georgia,serif}
@@ -93,7 +95,7 @@
 #guild-memories .memory-glass{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;border:1px solid #d4af3766;border-radius:999px;background:rgba(20,28,30,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#f1e5c5;box-shadow:0 5px 18px #0004;font:12px/1.5 Arial,sans-serif}
 #guild-memories .memory-stack-arrow{width:44px;padding:0;color:#d4af37;font-size:16px}
 #guild-memories .memory-stack-counter{min-width:82px;font-variant-numeric:tabular-nums;letter-spacing:1px}
-#guild-memories button:hover{filter:brightness(1.1)}
+#guild-memories .memory-glass:hover{filter:brightness(1.1)}
 #guild-memories button:focus-visible,#guild-memories .memory-stack-stage:focus-visible{outline:3px solid #d4af37;outline-offset:4px}
 #guild-memories .memory-stack-status{margin:12px 0 0;text-align:center;color:#aca995;font:11px/1.5 Arial,sans-serif}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
@@ -123,18 +125,21 @@
   }
   function select(index, announce = true) {
     currentIndex = (index % memories.length + memories.length) % memories.length;
-    const previous = (currentIndex + memories.length - 1) % memories.length;
-    const next = (currentIndex + 1) % memories.length;
+    const wrap = offset => (currentIndex + memories.length + offset) % memories.length;
+    const previous = wrap(-1), next = wrap(1), previous2 = wrap(-2), next2 = wrap(2);
     const focusedCard = cards.includes(document.activeElement);
     cards.forEach((card, i) => {
-      const active = i === currentIndex, visible = active || i === previous || i === next;
+      const active = i === currentIndex, visible = active || i === previous || i === next || i === previous2 || i === next2;
       card.classList.toggle('is-active', active);
       card.classList.toggle('is-prev', i === previous);
       card.classList.toggle('is-next', i === next);
+      card.classList.toggle('is-prev-2', i === previous2);
+      card.classList.toggle('is-next-2', i === next2);
       card.tabIndex = active ? 0 : -1;
       card.setAttribute('aria-hidden', String(!visible));
       card.setAttribute('aria-current', String(active));
-      card.setAttribute('aria-label', (active ? 'Current memory ' : i === previous ? 'Show previous memory ' : 'Show next memory ') + (i + 1) + ' of ' + memories.length + ': ' + memories[i].title);
+      const action = active ? 'Current memory ' : i === previous ? 'Show previous memory ' : i === next ? 'Show next memory ' : i === previous2 ? 'Show memory two positions back ' : i === next2 ? 'Show memory two positions ahead ' : 'Memory ';
+      card.setAttribute('aria-label', action + (i + 1) + ' of ' + memories.length + ': ' + memories[i].title);
       if (visible && !card.querySelector('img').hasAttribute('src')) card.querySelector('img').src = memories[i].src;
     });
     counter.textContent = (currentIndex + 1) + ' / ' + memories.length;
@@ -170,7 +175,7 @@
   motion.addEventListener('change', () => { if (motion.matches) paused = true;scheduleAutoplay(); });
   window.addEventListener('pagehide', () => clearTimeout(timer));
   window.addEventListener('pageshow', scheduleAutoplay);
-  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-stack-v6';section.dataset.memoryCount = String(memories.length);
+  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-fan-v7';section.dataset.memoryCount = String(memories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
