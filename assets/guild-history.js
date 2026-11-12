@@ -58,7 +58,7 @@
   }
   const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index)}));
   const section = document.getElementById('guild-memories') || document.createElement('section');
-  if (section.dataset.archiveLayout === 'perspective-fan-v7') return;
+  if (section.dataset.archiveLayout === 'perspective-framed-v8') return;
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() { if (guides.parentElement && guides.nextElementSibling !== section) guides.after(section); }
   section.id = 'guild-memories';
@@ -81,7 +81,9 @@
 #guild-memories .archive-carousel{min-width:0;overflow:visible}
 #guild-memories .memory-stack-stage{position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px;overflow:visible}
 #guild-memories .memory-stack-deck{position:absolute;inset:24px 48px;transform-style:preserve-3d;overflow:visible}
-#guild-memories .memory-stack-card{position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
+#guild-memories .memory-stack-card{--frame-width:clamp(10px,1.7vw,18px);position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:var(--frame-width);border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
+#guild-memories .memory-stack-card::after{content:'';position:absolute;inset:0;z-index:2;box-sizing:border-box;padding:var(--frame-width);border-radius:inherit;background:url('assets/card-frame.jpeg') center / 100% 100% no-repeat;pointer-events:none;user-select:none;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
+@supports not ((mask-composite:exclude) or (-webkit-mask-composite:xor)){#guild-memories .memory-stack-card::after{display:none}}
 #guild-memories .memory-stack-card.is-active{transform:translate3d(0,0,0) rotateY(0deg) scale(1);z-index:10;opacity:1;pointer-events:auto;filter:brightness(1);border-color:#d4af37;box-shadow:0 0 20px #d4af3733,0 18px 38px #0009}
 #guild-memories .memory-stack-card.is-prev{transform:translate3d(-220px,0,-90px) rotateY(18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
 #guild-memories .memory-stack-card.is-next{transform:translate3d(220px,0,-90px) rotateY(-18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
@@ -175,7 +177,7 @@
   motion.addEventListener('change', () => { if (motion.matches) paused = true;scheduleAutoplay(); });
   window.addEventListener('pagehide', () => clearTimeout(timer));
   window.addEventListener('pageshow', scheduleAutoplay);
-  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-fan-v7';section.dataset.memoryCount = String(memories.length);
+  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-framed-v8';section.dataset.memoryCount = String(memories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
