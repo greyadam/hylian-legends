@@ -19,10 +19,14 @@ body.ambient-glow{background:#0b1110}
 .hyrule-backdrop-landscape{position:absolute;inset:0;isolation:isolate;transform:scale(1.03);animation:horizonDrift 28s infinite alternate ease-in-out}
 .backdrop-sketch,.backdrop-color{position:absolute;inset:0;background-image:url('assets/hyrule-overlook.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
 .backdrop-sketch{z-index:0;background-color:#f5ecd9;filter:url('#parchment-pencil')}
-@property --wipe-progress{syntax:'<percentage>';inherits:false;initial-value:0%}
-.backdrop-color{z-index:1;filter:contrast(110%) blur(3px);--wipe-progress:0%;-webkit-mask-image:linear-gradient(to right,black 0%,black var(--wipe-progress),transparent var(--wipe-progress));mask-image:linear-gradient(to right,black 0%,black var(--wipe-progress),transparent var(--wipe-progress));-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;animation:sketchAwaken 3.2s cubic-bezier(0.25,1,0.5,1) forwards;animation-play-state:paused}
+@property --bloom-left{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --bloom-right{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --bloom-center{syntax:'<percentage>';inherits:false;initial-value:0%}
+.backdrop-color{z-index:1;filter:contrast(110%) blur(3px);--bloom-left:0%;--bloom-right:0%;--bloom-center:0%;-webkit-mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-left) - 7%)),transparent var(--bloom-left)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-right) - 7%)),transparent var(--bloom-right)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-center) - 10%)),transparent var(--bloom-center));mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-left) - 7%)),transparent var(--bloom-left)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-right) - 7%)),transparent var(--bloom-right)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-center) - 10%)),transparent var(--bloom-center));-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-composite:source-over;mask-composite:add;animation:paintLeft 1.5s cubic-bezier(.25,1,.5,1) 0s forwards,paintRight 1.4s cubic-bezier(.25,1,.5,1) .8s forwards,paintCenter 1.4s cubic-bezier(.25,1,.5,1) 1.8s forwards;animation-play-state:paused}
 .hyrule-backdrop.is-ready .backdrop-color{animation-play-state:running}
-@keyframes sketchAwaken{from{--wipe-progress:0%}to{--wipe-progress:100%}}
+@keyframes paintLeft{from{--bloom-left:0%}to{--bloom-left:40%}}
+@keyframes paintRight{from{--bloom-right:0%}to{--bloom-right:45%}}
+@keyframes paintCenter{from{--bloom-center:0%}to{--bloom-center:120%}}
 .hyrule-backdrop::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.45) 100%);box-shadow:inset 0 0 140px rgba(0,0,0,.85)}
 @keyframes horizonDrift{from{transform:translate3d(-4px,2px,0) scale(1.03)}to{transform:translate3d(4px,-2px,0) scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.hyrule-backdrop{animation:none;filter:brightness(.74)}.hyrule-backdrop-landscape{animation:none;transform:scale(1.03)}.backdrop-color{animation:none;-webkit-mask-image:none;mask-image:none}.hyrule-backdrop-parallax{transform:none!important;transition:none}}
