@@ -58,14 +58,14 @@
   }
   const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index)}));
   const section = document.getElementById('guild-memories') || document.createElement('section');
-  if (section.dataset.archiveLayout === 'perspective-framed-v8') return;
+  if (section.dataset.archiveLayout === 'perspective-bracket-v9') return;
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() { if (guides.parentElement && guides.nextElementSibling !== section) guides.after(section); }
   section.id = 'guild-memories';
   section.className = 'guild-memories-section';
   section.setAttribute('aria-labelledby', 'guild-memories-heading');
   section.removeAttribute('aria-roledescription');
-  section.innerHTML = `<div class="wrap"><div class="section-head archive-heading"><div><div class="micro">THE ARCHIVES</div><h2 id="guild-memories-heading">GUILD <em>history</em></h2></div><p>Shared adventures, milestones, and memories from our guild archive.</p></div><div class="archive-carousel" role="region" aria-roledescription="carousel" aria-label="Guild archive memories"><div class="memory-stack-stage" id="memory-stack-stage" tabindex="0" aria-label="Memory deck. Use Left and Right arrows, Home, or End."><div class="memory-stack-deck"></div></div><div class="memory-stack-controls"><button type="button" class="memory-glass memory-stack-arrow" data-step="-1" aria-label="Previous guild memory" aria-controls="memory-stack-stage">&#10094;</button><span class="memory-glass memory-stack-counter" aria-label="Current memory"></span><button type="button" class="memory-glass memory-stack-arrow" data-step="1" aria-label="Next guild memory" aria-controls="memory-stack-stage">&#10095;</button><button type="button" class="memory-glass" id="memory-autoplay-toggle" aria-controls="memory-stack-stage">Pause slideshow</button></div><p id="memory-playback-status" class="memory-stack-status"></p><p class="memory-announcement" role="status" aria-live="polite" aria-atomic="true"></p></div></div>`;
+  section.innerHTML = `<div class="wrap"><div class="section-head archive-heading"><div><div class="micro">THE ARCHIVES</div><h2 id="guild-memories-heading">GUILD <em>history</em></h2></div><p>Shared adventures, milestones, and memories from our guild archive.</p></div><div class="archive-carousel" role="region" aria-roledescription="carousel" aria-label="Guild archive memories"><div class="memory-stack-stage" id="memory-stack-stage" tabindex="0" aria-label="Memory deck. Use Left and Right arrows, Home, or End."><div class="memory-stack-deck"></div><div class="memory-center-bracket" aria-hidden="true"><img src="assets/card-frame.jpeg" alt="" decoding="async" draggable="false"></div></div><div class="memory-stack-controls"><button type="button" class="memory-glass memory-stack-arrow" data-step="-1" aria-label="Previous guild memory" aria-controls="memory-stack-stage">&#10094;</button><span class="memory-glass memory-stack-counter" aria-label="Current memory"></span><button type="button" class="memory-glass memory-stack-arrow" data-step="1" aria-label="Next guild memory" aria-controls="memory-stack-stage">&#10095;</button><button type="button" class="memory-glass" id="memory-autoplay-toggle" aria-controls="memory-stack-stage">Pause slideshow</button></div><p id="memory-playback-status" class="memory-stack-status"></p><p class="memory-announcement" role="status" aria-live="polite" aria-atomic="true"></p></div></div>`;
   enforceArchiveOrder();
   const style = document.getElementById('guild-archive-layout-style') || document.createElement('style');
   style.id = 'guild-archive-layout-style';
@@ -79,11 +79,11 @@
 #guild-memories .archive-heading h2 em{color:var(--gold,#d4af37);font-weight:normal}
 #guild-memories .archive-heading>p{max-width:350px;color:var(--muted,#aca995);font:14px/1.7 Arial,sans-serif}
 #guild-memories .archive-carousel{min-width:0;overflow:visible}
-#guild-memories .memory-stack-stage{position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px;overflow:visible}
-#guild-memories .memory-stack-deck{position:absolute;inset:24px 48px;transform-style:preserve-3d;overflow:visible}
-#guild-memories .memory-stack-card{--frame-width:clamp(10px,1.7vw,18px);position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:var(--frame-width);border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
-#guild-memories .memory-stack-card::after{content:'';position:absolute;inset:0;z-index:2;box-sizing:border-box;padding:var(--frame-width);border-radius:inherit;background:url('assets/card-frame.jpeg') center / 100% 100% no-repeat;pointer-events:none;user-select:none;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
-@supports not ((mask-composite:exclude) or (-webkit-mask-composite:xor)){#guild-memories .memory-stack-card::after{display:none}}
+#guild-memories .memory-stack-stage{--slot-x:48px;--slot-y:24px;position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px;overflow:visible}
+#guild-memories .memory-stack-deck{position:absolute;inset:var(--slot-y) var(--slot-x);transform-style:preserve-3d;overflow:visible}
+#guild-memories .memory-center-bracket{position:absolute;inset:var(--slot-y) var(--slot-x);width:min(calc(100% - 2 * var(--slot-x)),420px);height:calc(100% - 2 * var(--slot-y));margin:auto;z-index:20;pointer-events:none;user-select:none;mix-blend-mode:screen;border-radius:14px}
+#guild-memories .memory-center-bracket img{display:block;width:100%;height:100%;max-width:none;object-fit:fill;border-radius:inherit;pointer-events:none;user-select:none}
+#guild-memories .memory-stack-card{position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
 #guild-memories .memory-stack-card.is-active{transform:translate3d(0,0,0) rotateY(0deg) scale(1);z-index:10;opacity:1;pointer-events:auto;filter:brightness(1);border-color:#d4af37;box-shadow:0 0 20px #d4af3733,0 18px 38px #0009}
 #guild-memories .memory-stack-card.is-prev{transform:translate3d(-220px,0,-90px) rotateY(18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
 #guild-memories .memory-stack-card.is-next{transform:translate3d(220px,0,-90px) rotateY(-18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
@@ -102,7 +102,7 @@
 #guild-memories .memory-stack-status{margin:12px 0 0;text-align:center;color:#aca995;font:11px/1.5 Arial,sans-serif}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:760px){#guild-memories{padding:65px 0}#guild-memories>.wrap{padding:0 20px}#guild-memories .archive-heading{flex-direction:column;align-items:flex-start;gap:15px;margin-bottom:28px}#guild-memories .archive-heading h2{font-size:37px}}
-@media(max-width:440px){#guild-memories .memory-stack-deck{inset:20px 36px}#guild-memories .memory-stack-caption{padding:12px}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
+@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{padding:12px}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .memory-stack-card{transition:none}}
 `;
   if (!style.isConnected) document.head.append(style);
@@ -177,7 +177,7 @@
   motion.addEventListener('change', () => { if (motion.matches) paused = true;scheduleAutoplay(); });
   window.addEventListener('pagehide', () => clearTimeout(timer));
   window.addEventListener('pageshow', scheduleAutoplay);
-  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-framed-v8';section.dataset.memoryCount = String(memories.length);
+  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-bracket-v9';section.dataset.memoryCount = String(memories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
