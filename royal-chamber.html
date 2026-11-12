@@ -14,22 +14,20 @@ body{font-family:'Cinzel',serif;background-color:#0b1110;color:#f5e5c5;overflow-
 body.ambient-glow{background:#0b1110}
 .hyrule-backdrop{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;background:#f5ecd9;isolation:isolate;filter:brightness(1);animation:twilightSettle 1.2s ease-out 3.2s forwards;animation-play-state:paused}
 .hyrule-backdrop.is-ready{animation-play-state:running}
+.hyrule-backdrop.is-complete{animation:none;filter:brightness(.74)}
+.hyrule-backdrop.is-complete .backdrop-color{-webkit-mask-image:none;mask-image:none}
 @keyframes twilightSettle{from{filter:brightness(1)}to{filter:brightness(.74)}}
 .hyrule-backdrop-parallax{position:absolute;inset:-32px;transform:translate3d(0,0,0);transition:transform .35s ease-out}
 .hyrule-backdrop-landscape{position:absolute;inset:0;isolation:isolate;transform:scale(1.03);animation:horizonDrift 28s infinite alternate ease-in-out}
 .backdrop-sketch,.backdrop-color{position:absolute;inset:0;background-image:url('assets/hyrule-overlook.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
 .backdrop-sketch{z-index:0;background-color:#f5ecd9;filter:url('#parchment-pencil')}
-@property --bloom-left{syntax:'<percentage>';inherits:false;initial-value:0%}
-@property --bloom-right{syntax:'<percentage>';inherits:false;initial-value:0%}
-@property --bloom-center{syntax:'<percentage>';inherits:false;initial-value:0%}
-.backdrop-color{z-index:1;filter:contrast(110%) blur(3px);--bloom-left:0%;--bloom-right:0%;--bloom-center:0%;-webkit-mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-left) - 7%)),transparent var(--bloom-left)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-right) - 7%)),transparent var(--bloom-right)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-center) - 10%)),transparent var(--bloom-center));mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-left) - 7%)),transparent var(--bloom-left)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-right) - 7%)),transparent var(--bloom-right)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-center) - 10%)),transparent var(--bloom-center));-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-composite:source-over;mask-composite:add;animation:paintLeft 1.5s cubic-bezier(.25,1,.5,1) 0s forwards,paintRight 1.4s cubic-bezier(.25,1,.5,1) .8s forwards,paintCenter 1.4s cubic-bezier(.25,1,.5,1) 1.8s forwards;animation-play-state:paused}
-.hyrule-backdrop.is-ready .backdrop-color{animation-play-state:running}
-@keyframes paintLeft{from{--bloom-left:0%}to{--bloom-left:40%}}
-@keyframes paintRight{from{--bloom-right:0%}to{--bloom-right:45%}}
-@keyframes paintCenter{from{--bloom-center:0%}to{--bloom-center:120%}}
+@property --bloom-link{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --bloom-castle{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --bloom-valley{syntax:'<percentage>';inherits:false;initial-value:0%}
+.backdrop-color{z-index:1;filter:contrast(110%) blur(3px);--bloom-link:0%;--bloom-castle:0%;--bloom-valley:0%;-webkit-mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-link) - 7%)),transparent var(--bloom-link)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-castle) - 7%)),transparent var(--bloom-castle)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-valley) - 10%)),transparent var(--bloom-valley));mask-image:radial-gradient(circle farthest-corner at left center,#000 max(0%,calc(var(--bloom-link) - 7%)),transparent var(--bloom-link)),radial-gradient(circle farthest-corner at right center,#000 max(0%,calc(var(--bloom-castle) - 7%)),transparent var(--bloom-castle)),radial-gradient(circle farthest-corner at center,#000 max(0%,calc(var(--bloom-valley) - 10%)),transparent var(--bloom-valley));-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-composite:source-over;mask-composite:add}
 .hyrule-backdrop::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.45) 100%);box-shadow:inset 0 0 140px rgba(0,0,0,.85)}
 @keyframes horizonDrift{from{transform:translate3d(-4px,2px,0) scale(1.03)}to{transform:translate3d(4px,-2px,0) scale(1.08)}}
-@media(prefers-reduced-motion:reduce){.hyrule-backdrop{animation:none;filter:brightness(.74)}.hyrule-backdrop-landscape{animation:none;transform:scale(1.03)}.backdrop-color{animation:none;-webkit-mask-image:none;mask-image:none}.hyrule-backdrop-parallax{transform:none!important;transition:none}}
+@media(prefers-reduced-motion:reduce){.hyrule-backdrop{animation:none;filter:brightness(.74)}.hyrule-backdrop-landscape{animation:none;transform:scale(1.03)}.backdrop-color{-webkit-mask-image:none;mask-image:none}.hyrule-backdrop-parallax{transform:none!important;transition:none}}
 #particles{position:fixed;inset:0;display:block;width:100%;height:100%;z-index:30;pointer-events:none}
 .royal-crest{display:block;width:clamp(140px,20vw,180px);max-width:100%;height:auto;margin:0 auto 24px;object-fit:contain;opacity:1;pointer-events:none;filter:drop-shadow(0 0 5px rgba(245,226,92,.6)) brightness(1)}
 @keyframes triforcePulse{0%,100%{filter:drop-shadow(0 0 5px rgba(245,226,92,.6)) brightness(1)}50%{filter:drop-shadow(0 0 14px rgba(255,235,120,.95)) brightness(1.25)}}
@@ -66,13 +64,61 @@ body.ambient-glow{background:#0b1110}
 (() => {
  const backdrop=document.querySelector('.hyrule-backdrop');
  const layer=backdrop.querySelector('.hyrule-backdrop-parallax');
+ const color=backdrop.querySelector('.backdrop-color');
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const fine=matchMedia('(hover: hover) and (pointer: fine)');
- let frame=0,x=0,y=0;
+ const key='playedIntro';
+ const beats=[['--bloom-link',0,1500,40],['--bloom-castle',800,1400,45],['--bloom-valley',1800,1400,120]];
+ let frame=0,x=0,y=0,introFrame=0,holdTimer=0,token=0;
+ let played=false;
+ try{played=sessionStorage.getItem(key)==='true'}catch(e){}
+ const navigation=performance.getEntriesByType('navigation')[0];
+ const isReload=navigation?navigation.type==='reload':performance.navigation&&performance.navigation.type===1;
+ const shouldPlay=!played||!isReload;
+ function markPlayed(){try{sessionStorage.setItem(key,'true')}catch(e){}}
+ function cancelIntro(){token++;cancelAnimationFrame(introFrame);clearTimeout(holdTimer);introFrame=0;holdTimer=0}
+ function complete(){cancelIntro();backdrop.classList.remove('is-ready');backdrop.classList.add('is-complete');beats.forEach(([name,,,end])=>color.style.setProperty(name,end+'%'));markPlayed()}
+ const pageReady=new Promise(resolve=>{if(document.readyState==='complete')resolve();else window.addEventListener('load',resolve,{once:true})});
  const image=new Image();
- image.onload=()=>backdrop.classList.add('is-ready');
- image.onerror=()=>backdrop.classList.add('is-ready');
+ const imageReady=new Promise(resolve=>{image.onload=()=>resolve(true);image.onerror=()=>resolve(false)});
  image.src='assets/hyrule-overlook.jpg';
+ const ready=Promise.all([pageReady,imageReady]);
+ function ease(progress){
+  if(progress<=0)return 0;if(progress>=1)return 1;
+  let low=0,high=1,t=.5;
+  for(let i=0;i<14;i++){t=(low+high)/2;const u=1-t;const bx=3*u*u*t*.25+3*u*t*t*.5+t*t*t;if(bx<progress)low=t;else high=t}
+  return 1-Math.pow(1-t,3);
+ }
+ function beginIntro(){
+  cancelIntro();
+  if(reduced.matches){complete();return}
+  backdrop.classList.remove('is-ready','is-complete');
+  beats.forEach(([name])=>color.style.setProperty(name,'0%'));
+  const current=token;
+  ready.then(([,loaded])=>{
+   if(current!==token)return;
+   if(!loaded){complete();return}
+   holdTimer=setTimeout(()=>{
+    introFrame=requestAnimationFrame(()=>{
+     if(current!==token)return;
+     introFrame=requestAnimationFrame(start=>{
+      if(current!==token)return;
+      backdrop.classList.add('is-ready');markPlayed();
+      function tick(now){
+       if(current!==token)return;
+       const elapsed=now-start;
+       beats.forEach(([name,delay,duration,end])=>{const progress=Math.max(0,Math.min(1,(elapsed-delay)/duration));color.style.setProperty(name,(ease(progress)*end).toFixed(4)+'%')});
+       if(elapsed<4400)introFrame=requestAnimationFrame(tick);else complete();
+      }
+      tick(start);
+     });
+    });
+   },120);
+  });
+ }
+ if(shouldPlay&&!reduced.matches)beginIntro();else complete();
+ window.addEventListener('pageshow',event=>{if(event.persisted)beginIntro()});
+ window.addEventListener('pagehide',cancelIntro);
  function paint(){frame=0;layer.style.transform=`translate3d(${x}px,${y}px,0)`}
  function reset(){x=0;y=0;if(frame)cancelAnimationFrame(frame);frame=0;layer.style.removeProperty('transform')}
  document.addEventListener('mousemove',event=>{
@@ -84,7 +130,7 @@ body.ambient-glow{background:#0b1110}
  document.addEventListener('mouseout',event=>{if(!event.relatedTarget)reset()},{passive:true});
  window.addEventListener('blur',reset);
  window.addEventListener('resize',reset,{passive:true});
- reduced.addEventListener('change',reset);
+ reduced.addEventListener('change',()=>{reset();if(reduced.matches)complete()});
  fine.addEventListener('change',reset);
 })();
 </script>
