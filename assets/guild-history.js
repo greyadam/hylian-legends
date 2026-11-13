@@ -192,6 +192,9 @@
   const section = document.getElementById('guild-memories');
   const carousel = section?.querySelector('.archive-carousel');
   if (!carousel || document.getElementById('engraved-guild-lore')) return;
+  const font = document.createElement('link');
+  font.rel = 'stylesheet';font.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap';
+  document.head.append(font);
   const style = document.createElement('style');
   style.id = 'engraved-guild-lore-style';
   style.textContent = `
@@ -201,17 +204,17 @@
 #guild-memories .homepage-showcase{display:flex;flex-direction:row;align-items:center;gap:72px}
 #guild-memories .homepage-showcase>.archive-carousel{flex:1 1 1000px;min-width:0}
 #guild-memories .engraved-lore{position:relative;flex:0 0 300px;min-width:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;perspective:700px}
-#guild-memories .engraved-lore-copy{display:flow-root;margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Triforce',Georgia,serif;letter-spacing:.08em;text-align:center}
+#guild-memories .engraved-lore-copy{display:flow-root;margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Cinzel',Georgia,serif;letter-spacing:.025em;text-align:center}
 #guild-memories .lore-word{display:inline-block;white-space:nowrap}
 #guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%;text-shadow:0 -1px 1px #000,0 1px 0 #fff1be66,0 2px 1px #684015,0 3px 3px #000b}
 #guild-memories .lore-letter.is-carved{opacity:1}
-#guild-memories .lore-term{font-weight:600}
+#guild-memories .lore-term{font-family:'Triforce',Georgia,serif;font-weight:400;letter-spacing:.04em}
 #guild-memories .lore-term .lore-letter{color:#fff0bb}
 #guild-memories .lore-term.is-awakened .lore-letter{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 6px #e6c66755}
 @supports ((background-clip:text) or (-webkit-background-clip:text)){
 #guild-memories .lore-letter{background-image:radial-gradient(circle,#fff4cb40 .3px,transparent .7px),linear-gradient(180deg,#fff3c6 0%,#e6c667 28%,#d4af37 48%,#a57425 75%,#78501f 100%);background-size:3px 3px,100% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 #guild-memories .lore-term .lore-letter{background-image:linear-gradient(180deg,#fffbea,#fff0b5 45%,#e6c667 75%,#b58835);background-size:100% 100%}}
-#guild-memories .engraved-lore-copy>.lore-drop-cap{float:left;position:relative;height:108px;margin:0 2px 0 0;padding:0;font-size:108px;line-height:1;letter-spacing:0;filter:drop-shadow(0 0 8px #e6c66766);text-shadow:0 -1px 1px #000,0 2px 0 #fff0ab88,0 3px 2px #684015}
+#guild-memories .engraved-lore-copy>.lore-drop-cap{float:left;position:relative;height:108px;margin:0 2px 0 0;padding:0;font-family:'Triforce',Georgia,serif;font-size:108px;line-height:1;letter-spacing:0;filter:drop-shadow(0 0 8px #e6c66766);text-shadow:0 -1px 1px #000,0 2px 0 #fff0ab88,0 3px 2px #684015}
 #guild-memories .lore-ornament{display:flex;align-items:center;justify-content:center;gap:14px;width:90%;height:18px;margin:0 auto 22px;pointer-events:none}
 #guild-memories .lore-ornament.is-bottom{margin:22px auto 0}
 #guild-memories .lore-ornament::before,#guild-memories .lore-ornament::after{content:'';flex:1;height:3px;background:linear-gradient(90deg,transparent,#d4af3780,#e6c667b3);clip-path:polygon(0 50%,85% 0,100% 50%,85% 100%)}
