@@ -103,3 +103,26 @@
 body :is(h1,h2,h3,.card-title,.memory-stack-title):not(#engraved-guild-lore *),body header nav>a:not(.button),body header .brand{font-family:'CinzelCustom',serif!important;font-weight:600!important;text-shadow:0 -1px 1px #000c,0 1px 0 #f1e5c526,0 2px 3px #0008}
 body h1:not(#engraved-guild-lore *){font-weight:900!important;letter-spacing:.08em!important;text-shadow:0 -1px 1px #000,0 1px 0 #fff0ba40,0 3px 2px #533a19,0 5px 12px #0008}
 body :is(h1,h2,h3):not(#engraved-guild-lore *) em{font-family:inherit;font-weight:inherit!important}
+
+/* Specialty accents are opt-in, never a body or global heading replacement. */
+@font-face{font-family:'GerudoTypography';src:url('assets/fonts/Gerudo-Typography.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Ravenna';src:url('assets/fonts/Ravenna.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'SSAncientHylian';src:url('assets/fonts/SS-Ancient-Hylian.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Sherwood';src:url('assets/fonts/Sherwood-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'WildBreathOfZelda';src:url('assets/fonts/The-Wild-Breath-of-Zelda.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'AncientHylian';src:url('assets/fonts/Ancient-Hylian.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+body .font-gerudo:not(#engraved-guild-lore *){font-family:'GerudoTypography',serif!important;font-weight:400!important}
+body .font-ss-hylian:not(#engraved-guild-lore *){font-family:'SSAncientHylian',serif!important;font-weight:400!important}
+body .font-sherwood:not(#engraved-guild-lore *){font-family:'Sherwood',serif!important;font-weight:400!important}
+body .font-ravenna:not(#engraved-guild-lore *){font-family:'Ravenna',serif!important;font-weight:400!important}
+body .font-wild-zelda:not(#engraved-guild-lore *){font-family:'WildBreathOfZelda',serif!important;font-weight:400!important}
+body .font-ancient-hylian:not(#engraved-guild-lore *){font-family:'AncientHylian',serif!important;font-weight:400!important}
+.guild-home #codex>.wrap,.triforce-lore-section>.lore-hero{position:relative;isolation:isolate}
+.guild-home #codex>.wrap::after,.triforce-lore-section>.lore-hero::after{content:'Courage Wisdom Power' / '';position:absolute;top:12px;right:24px;z-index:-1;max-width:calc(100% - 48px);height:64px;overflow:hidden;color:var(--gold,#d4af37);opacity:.08;font:400 clamp(28px,4vw,52px)/1.2 'SSAncientHylian',serif;letter-spacing:.16em;white-space:nowrap;text-shadow:0 -1px 1px #000,0 1px 0 #f1e5c533;pointer-events:none;user-select:none}
+body .rune-surface:not(#engraved-guild-lore):not(#engraved-guild-lore *){position:relative;isolation:isolate}
+body .rune-surface:not(#engraved-guild-lore):not(#engraved-guild-lore *)::after{content:attr(data-runes) / '';position:absolute;inset:12px 12px auto;z-index:-1;max-height:3em;overflow:hidden;color:var(--gold,#d4af37);opacity:.08;font:400 36px/1.4 'SSAncientHylian',serif;letter-spacing:.14em;pointer-events:none;user-select:none}
+body .rune-surface:is(.theme-gerudo,.theme-desert,[data-region='gerudo'],[data-region='desert']):not(#engraved-guild-lore):not(#engraved-guild-lore *)::after{font-family:'GerudoTypography',serif}
+body :is(.era-badge,.era-label,.timeline-label):is([data-era='n64'],[data-era='classic'],[data-era='oot'],[data-era='mm']):not(#engraved-guild-lore *){font-family:'Sherwood',serif!important;font-weight:400!important;letter-spacing:.04em}
+body .era-spotlight:is([data-era='n64'],[data-era='classic'],[data-era='oot'],[data-era='mm']):not(#engraved-guild-lore *){font-family:'Ravenna',serif!important;font-weight:400!important}
+body :is(.era-badge,.era-label,.timeline-label,.era-spotlight):is([data-era='botw'],[data-era='totk'],[data-era='wild']):not(#engraved-guild-lore *){font-family:'WildBreathOfZelda',serif!important;font-weight:400!important;letter-spacing:.03em}
+@media(forced-colors:active){.guild-home #codex>.wrap::after,.triforce-lore-section>.lore-hero::after,body .rune-surface::after{display:none}}
