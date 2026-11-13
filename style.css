@@ -138,11 +138,12 @@ body>header>.wrap.nav>nav>.button{flex:0 0 auto;align-items:center;justify-conte
 @media(max-width:1199px){body>header>.wrap.nav{flex-wrap:wrap;justify-content:center;gap:8px 16px}body>header>.wrap.nav>nav{flex-wrap:wrap;justify-content:center;max-width:100%}}
 
 /* Spiritual Stone icons only; existing image dimensions, cards and typography are unchanged. */
-#codex .virtues .virtue-stone{--stone-glow:rgba(46,204,113,.6);transform-origin:50% 50%;backface-visibility:hidden;animation:stoneGlow 3.6s ease-in-out infinite,stoneSpin 6s ease-in-out infinite;animation-play-state:running,paused}
+#codex .virtues .panel{perspective:1000px}
+#codex .virtues .virtue-stone{--stone-glow:rgba(46,204,113,.6);transform-origin:50% 50%;transform-style:preserve-3d;backface-visibility:visible;animation:stoneGlow 3.6s ease-in-out infinite,stoneSpin 6s ease-in-out infinite;animation-play-state:running,paused}
 #codex .virtues .virtue-stone[alt="Kokiri's Emerald"]{--stone-glow:rgba(46,204,113,.6)}
 #codex .virtues .virtue-stone[alt="Zora's Sapphire"]{--stone-glow:rgba(52,152,219,.6)}
 #codex .virtues .virtue-stone[alt="Goron's Ruby"]{--stone-glow:rgba(231,76,60,.6)}
 @keyframes stoneGlow{0%,100%{filter:drop-shadow(0 0 5px var(--stone-glow))}50%{filter:drop-shadow(0 0 11px var(--stone-glow))}}
-@keyframes stoneSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes stoneSpin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
 @media(hover:hover) and (pointer:fine){#codex .virtues .panel:hover .virtue-stone{animation-play-state:running,running;will-change:transform}}
 @media(prefers-reduced-motion:reduce){#codex .virtues .virtue-stone,#codex .virtues .panel:hover .virtue-stone{animation:none;transform:none;will-change:auto;filter:drop-shadow(0 0 7px var(--stone-glow))!important}}
