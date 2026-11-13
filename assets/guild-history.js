@@ -186,3 +186,117 @@
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
 })();
+
+(() => {
+  'use strict';
+  const section = document.getElementById('guild-memories');
+  const carousel = section?.querySelector('.archive-carousel');
+  if (!carousel || document.getElementById('engraved-guild-lore')) return;
+  const font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap';
+  document.head.append(font);
+  const style = document.createElement('style');
+  style.id = 'engraved-guild-lore-style';
+  style.textContent = `
+#guild-memories>.wrap{max-width:1640px}
+#guild-memories .archive-heading{max-width:1072px;margin-left:auto;margin-right:auto}
+#guild-memories .homepage-showcase{display:flex;flex-direction:row;align-items:center;gap:72px}
+#guild-memories .homepage-showcase>.archive-carousel{flex:1 1 1000px;min-width:0}
+#guild-memories .engraved-lore{position:relative;flex:0 0 300px;min-width:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;perspective:700px}
+#guild-memories .engraved-lore-copy{margin:0;padding:0;color:#d4af37;font:400 15px/1.95 'Cinzel',Georgia,serif;letter-spacing:.2px;text-align:left;text-shadow:0 -2px 1px #000,1px -1px 2px #000,0 1px 0 rgba(230,198,103,.28)}
+#guild-memories .lore-term{color:#e6c667;font-weight:600;text-shadow:0 -2px 1px #000,0 1px 0 #ffe7a655,0 0 9px #e6c66755}
+#guild-memories .lore-word{display:inline-block;white-space:nowrap}
+#guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%}
+#guild-memories .lore-letter.is-carved{opacity:1}
+#guild-memories .lore-readable{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#guild-memories .lore-debris{position:absolute;inset:0;pointer-events:none;overflow:visible}
+#guild-memories .lore-speck{position:absolute;display:block;width:2px;height:2px;border-radius:50%;background:#ffe39a;box-shadow:0 0 5px #efc65c;pointer-events:none}
+#guild-memories .lore-speck.is-dust{width:1px;height:1px;background:#a88c55;box-shadow:none}
+@media(max-width:1439px){#guild-memories .homepage-showcase{flex-direction:column;gap:48px}#guild-memories .homepage-showcase>.archive-carousel{flex:0 1 auto;width:100%}#guild-memories .engraved-lore{flex:0 1 auto;width:100%;max-width:460px}#guild-memories>.wrap{max-width:1120px}}
+@media(prefers-reduced-motion:reduce){#guild-memories .lore-letter{opacity:1}#guild-memories .lore-debris{display:none}}
+`;
+  document.head.append(style);
+  const wrapper = document.createElement('div');
+  wrapper.className = 'homepage-showcase';
+  carousel.before(wrapper);
+  const lore = document.createElement('aside');
+  lore.id = 'engraved-guild-lore';
+  lore.className = 'engraved-lore';
+  lore.setAttribute('aria-label', 'The legend of the Sacred Realm');
+  const text = 'In a forgotten temple, a sealed door awaits, locked by the power of three Sacred Stones. Beyond this threshold lies a smaller room, where an ancient, rusty sword stands firmly in a pedestal. Legends whisper that whoever dares to pull the sword from its resting place will be transported to the Sacred Realm, where the three golden triangles unite to form the legendary Triforce. As guardians of mystical power, we stand united to protect the Triforce and the wishes it grants.';
+  const readable = document.createElement('p');
+  readable.className = 'lore-readable';
+  readable.textContent = text;
+  const visual = document.createElement('p');
+  visual.className = 'engraved-lore-copy';
+  visual.setAttribute('aria-hidden', 'true');
+  const letters = [];
+  for (const part of text.split(/(Sacred Stones|Sacred Realm|Triforce)/g)) {
+    const group = document.createElement('span');
+    if (['Sacred Stones', 'Sacred Realm', 'Triforce'].includes(part)) group.className = 'lore-term';
+    for (const word of part.split(/(\s+)/)) {
+      if (/^\s+$/.test(word)) { group.append(document.createTextNode(word)); continue; }
+      const unit = document.createElement('span');
+      unit.className = 'lore-word';
+      for (const letter of word) {
+        const span = document.createElement('span');
+        span.className = 'lore-letter';span.textContent = letter;
+        letters.push(span);unit.append(span);
+      }
+      group.append(unit);
+    }
+    visual.append(group);
+  }
+  const debris = document.createElement('span');
+  debris.className = 'lore-debris';debris.setAttribute('aria-hidden', 'true');
+  lore.append(readable, visual, debris);wrapper.append(carousel, lore);
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let index = 0, frame = 0, last = 0, visible = false, finished = false;
+  const animations = new Set();
+  function animate(node, keys, options, remove = false) {
+    const animation = node.animate(keys, options);animations.add(animation);
+    const clean = () => { animations.delete(animation);if (remove) node.remove(); };
+    animation.onfinish = clean;animation.oncancel = clean;
+  }
+  function strike(letter) {
+    animate(letter, [{transform:'translate3d(.6px,-.5px,3px) rotateX(12deg)'},{transform:'translate3d(-.4px,.3px,0) rotateX(-4deg)'},{transform:'none'}], {duration:120,easing:'ease-out'});
+    const r = letter.getBoundingClientRect(), origin = debris.getBoundingClientRect();
+    for (let i = 0; i < 3; i++) {
+      const speck = document.createElement('i');
+      speck.className = 'lore-speck' + (i === 2 ? ' is-dust' : '');
+      speck.style.left = (r.left + r.width / 2 - origin.left) + 'px';
+      speck.style.top = (r.top + r.height * .65 - origin.top) + 'px';
+      debris.append(speck);
+      const dx = (Math.random() - .5) * 24;
+      animate(speck, [{opacity:.85,transform:'translate(0,0)'},{opacity:.45,transform:'translate(' + dx * .5 + 'px,' + (i === 2 ? 5 : -7) + 'px)'},{opacity:0,transform:'translate(' + dx + 'px,' + (i === 2 ? 30 : 15) + 'px)'}], {duration:i === 2 ? 650 : 360,easing:'ease-out'}, true);
+    }
+  }
+  function finish() {
+    finished = true;cancelAnimationFrame(frame);frame = 0;
+    letters.forEach(letter => letter.classList.add('is-carved'));
+    for (const animation of animations) animation.cancel();
+    debris.replaceChildren();observer?.disconnect();
+  }
+  function tick(now) {
+    frame = 0;
+    if (finished || !visible || document.hidden) return;
+    if (!last || now - last >= 38) {
+      last = now;const letter = letters[index++];
+      letter.classList.add('is-carved');strike(letter);
+      if (index === letters.length) { finished = true;observer?.disconnect();return; }
+    }
+    frame = requestAnimationFrame(tick);
+  }
+  function resume() { if (!finished && visible && !document.hidden && !frame) {last = 0;frame = requestAnimationFrame(tick);} }
+  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    if (!visible) {cancelAnimationFrame(frame);frame = 0;} else resume();
+  }, {threshold:.15}) : null;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {cancelAnimationFrame(frame);frame = 0;} else resume();
+  });
+  motion.addEventListener('change', () => {if (motion.matches) finish();});
+  window.addEventListener('pagehide', finish, {once:true});
+  if (motion.matches || !observer || !Element.prototype.animate) finish();else observer.observe(lore);
+})();
