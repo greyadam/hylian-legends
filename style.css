@@ -126,3 +126,13 @@ body :is(.era-badge,.era-label,.timeline-label):is([data-era='n64'],[data-era='c
 body .era-spotlight:is([data-era='n64'],[data-era='classic'],[data-era='oot'],[data-era='mm']):not(#engraved-guild-lore *){font-family:'Ravenna',serif!important;font-weight:400!important}
 body :is(.era-badge,.era-label,.timeline-label,.era-spotlight):is([data-era='botw'],[data-era='totk'],[data-era='wild']):not(#engraved-guild-lore *){font-family:'WildBreathOfZelda',serif!important;font-weight:400!important;letter-spacing:.03em}
 @media(forced-colors:active){.guild-home #codex>.wrap::after,.triforce-lore-section>.lore-hero::after,body .rune-surface::after{display:none}}
+
+/* Header-only sizing overrides: allow Cinzel ascenders and prevent desktop wrapping. */
+body>header{overflow:visible}
+body>header>.wrap.nav{display:flex;width:100%;max-width:1440px;height:auto;min-height:84px;align-items:center;justify-content:space-between;gap:16px;padding:12px 24px;overflow:visible}
+body>header>.wrap.nav>.brand{display:flex;align-items:center;gap:10px;min-height:48px;line-height:1.4;overflow:visible}
+body>header>.wrap.nav>nav{display:flex;align-items:center;column-gap:12px;row-gap:4px;height:auto;min-height:48px;overflow:visible}
+body>header>.wrap.nav>nav>a:not(.button){display:inline-flex;align-items:center;min-height:40px;padding:7px 0;font-family:'CinzelCustom',serif;font-size:.78rem;line-height:1.6;letter-spacing:.045em;white-space:nowrap;overflow:visible}
+body>header>.wrap.nav>nav>.button{flex:0 0 auto;align-items:center;justify-content:center;min-height:40px;padding:10px 14px;font-family:'CinzelCustom',serif;font-size:.78rem;line-height:1.4;letter-spacing:.04em;white-space:nowrap;overflow:visible}
+@media(min-width:1200px){body>header>.wrap.nav{flex-wrap:nowrap}body>header>.wrap.nav>.brand{flex:0 0 auto;font-size:15px;letter-spacing:.08em;white-space:nowrap}body>header>.wrap.nav>.brand .brand-logo{width:40px;height:40px}body>header>.wrap.nav>.brand small{line-height:1.5;letter-spacing:.12em}body>header>.wrap.nav>nav{flex:0 1 auto;min-width:0;flex-wrap:nowrap;justify-content:flex-end;gap:clamp(8px,1vw,14px)}body>header>.wrap.nav>nav>*{flex-shrink:0}body>header>.wrap.nav>nav>.button{display:inline-flex}}
+@media(max-width:1199px){body>header>.wrap.nav{flex-wrap:wrap;justify-content:center;gap:8px 16px}body>header>.wrap.nav>nav{flex-wrap:wrap;justify-content:center;max-width:100%}}
