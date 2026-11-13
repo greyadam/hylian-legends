@@ -192,19 +192,24 @@
   const section = document.getElementById('guild-memories');
   const carousel = section?.querySelector('.archive-carousel');
   if (!carousel || document.getElementById('engraved-guild-lore')) return;
-  const font = document.createElement('link');
-  font.rel = 'stylesheet';font.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap';
-  document.head.append(font);
   const style = document.createElement('style');
   style.id = 'engraved-guild-lore-style';
   style.textContent = `
 @font-face{font-family:'Triforce';src:url('assets/fonts/Triforce.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic;font-display:swap}
 #guild-memories>.wrap{max-width:1640px}
 #guild-memories .archive-heading{max-width:1072px;margin-left:auto;margin-right:auto}
 #guild-memories .homepage-showcase{display:flex;flex-direction:row;align-items:center;gap:72px}
 #guild-memories .homepage-showcase>.archive-carousel{flex:1 1 1000px;min-width:0}
 #guild-memories .engraved-lore{position:relative;flex:0 0 300px;min-width:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;perspective:700px}
-#guild-memories .engraved-lore-copy{display:flow-root;margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Cinzel',Georgia,serif;letter-spacing:.025em;text-align:center}
+#guild-memories .engraved-lore-copy{display:flow-root;margin:0;padding:0;color:#d4af37;font:500 22px/1.65 'Cormorant Garamond',Georgia,serif;letter-spacing:.012em;text-align:center}
 #guild-memories .lore-word{display:inline-block;white-space:nowrap}
 #guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%;text-shadow:0 -1px 1px #000,0 1px 0 #fff1be66,0 2px 1px #684015,0 3px 3px #000b}
 #guild-memories .lore-letter.is-carved{opacity:1}
