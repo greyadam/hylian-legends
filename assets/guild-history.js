@@ -56,9 +56,9 @@
     if (file.startsWith('picasion.com_')) return 'Guild Memory ' + (index + 1);
     return file.replace(/\.[^.]+$/, '').replace(/_webp|_unedited/g, '').replace(/(\d{4}-\d{2}-\d{2})_\d+_/, '$1 — ').replace(/LevelUp/g, 'Level Up').replace(/midFlood/g, 'Mid Flood').replace(/House2/g, 'House 2').replace(/_/g, ' ').replace(/\s+/g, ' ').trim().replace(/^./, c => c.toUpperCase());
   }
-  const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index)}));
+  const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index), format: file.split('.').pop().toUpperCase(), date: file.match(/^\d{4}-\d{2}-\d{2}/)?.[0] || ''}));
   const section = document.getElementById('guild-memories') || document.createElement('section');
-  if (section.dataset.archiveLayout === 'perspective-bracket-v9') return;
+  if (section.dataset.archiveLayout === 'perspective-overlay-v10') return;
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() { if (guides.parentElement && guides.nextElementSibling !== section) guides.after(section); }
   section.id = 'guild-memories';
@@ -82,18 +82,19 @@
 #guild-memories .memory-stack-stage{--slot-x:48px;--slot-y:24px;position:relative;max-width:720px;width:100%;height:clamp(390px,52vw,500px);margin:0 auto;perspective:1100px;transform-style:preserve-3d;outline-offset:8px;overflow:visible}
 #guild-memories .memory-stack-deck{position:absolute;inset:var(--slot-y) var(--slot-x);transform-style:preserve-3d;overflow:visible}
 #guild-memories .memory-center-bracket{position:absolute;inset:var(--slot-y) var(--slot-x);width:min(calc(100% - 2 * var(--slot-x)),420px);height:calc(100% - 2 * var(--slot-y));margin:auto;z-index:20;pointer-events:none;user-select:none;mix-blend-mode:screen;border-radius:14px}
-/* With scaleY 1.11, reducing height 4px and lowering 4.22px fixes the bottom and lowers the top 4.44px total. */
-#guild-memories .memory-center-bracket img{position:relative;top:4.22px;display:block;width:100%;height:calc(100% - 4px);max-width:none;object-fit:fill;border-radius:inherit;pointer-events:none;user-select:none;transform:scale(1.13,1.11);transform-origin:center center}
-#guild-memories .memory-stack-card{position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
+#guild-memories .memory-center-bracket img{display:block;width:100%;height:100%;max-width:none;object-fit:fill;border-radius:inherit;pointer-events:none;user-select:none;transform:scale(1.12);transform-origin:center center}
+#guild-memories .memory-stack-card{position:absolute;inset:0;display:block;width:min(100%,420px);height:100%;margin:auto;padding:0;border:1px solid rgba(212,175,55,.35);border-radius:14px;background:#111a15;color:#f1e5c5;box-shadow:0 14px 28px #0008;transform-origin:center;transform:translate3d(0,0,-250px) scale(.6);opacity:0;pointer-events:none;z-index:1;backface-visibility:hidden;text-align:left;cursor:pointer;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),filter .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);filter:brightness(.55)}
 #guild-memories .memory-stack-card.is-active{transform:translate3d(0,0,0) rotateY(0deg) scale(1);z-index:10;opacity:1;pointer-events:auto;filter:brightness(1);border-color:#d4af37;box-shadow:0 0 20px #d4af3733,0 18px 38px #0009}
 #guild-memories .memory-stack-card.is-prev{transform:translate3d(-220px,0,-90px) rotateY(18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
 #guild-memories .memory-stack-card.is-next{transform:translate3d(220px,0,-90px) rotateY(-18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
 #guild-memories .memory-stack-card.is-prev-2{transform:translate3d(-360px,0,-170px) rotateY(26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
 #guild-memories .memory-stack-card.is-next-2{transform:translate3d(360px,0,-170px) rotateY(-26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
-#guild-memories .memory-stack-card img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#090d0b;border-radius:13px 13px 0 0}
-#guild-memories .memory-stack-caption{display:block;padding:16px 18px;border-top:1px solid #d4af3733;border-radius:0 0 13px 13px;background:linear-gradient(145deg,#20251e,#111712)}
+#guild-memories .memory-stack-image-area{position:relative;display:block;width:100%;height:100%;border-radius:13px;background:#090d0b}
+#guild-memories .memory-stack-card img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#090d0b;border-radius:13px}
+#guild-memories .memory-stack-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;display:block;width:max-content;max-width:calc(100% - 48px);padding:8px 16px;border:1px solid rgba(212,175,55,.25);border-radius:4px;background:rgba(0,0,0,.7);text-align:center;pointer-events:none;text-shadow:0 2px 4px #000}
 #guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;color:#d4af37;font:18px/1.3 Georgia,serif}
-#guild-memories .memory-stack-description{display:block;margin-top:7px;color:#aca995;font:11px/1.5 Arial,sans-serif}
+#guild-memories .memory-stack-description{display:block;margin-top:7px;color:#ddd;font:11px/1.5 Arial,sans-serif}
+#guild-memories .memory-stack-metadata{display:block;margin-top:5px;color:#f1e5c5;font:10px/1.5 monospace;overflow-wrap:anywhere}
 #guild-memories .memory-stack-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin:18px auto 0}
 #guild-memories .memory-glass{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;border:1px solid #d4af3766;border-radius:999px;background:rgba(20,28,30,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#f1e5c5;box-shadow:0 5px 18px #0004;font:12px/1.5 Arial,sans-serif}
 #guild-memories .memory-stack-arrow{width:44px;padding:0;color:#d4af37;font-size:16px}
@@ -103,7 +104,7 @@
 #guild-memories .memory-stack-status{margin:12px 0 0;text-align:center;color:#aca995;font:11px/1.5 Arial,sans-serif}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:760px){#guild-memories{padding:65px 0}#guild-memories>.wrap{padding:0 20px}#guild-memories .archive-heading{flex-direction:column;align-items:flex-start;gap:15px;margin-bottom:28px}#guild-memories .archive-heading h2{font-size:37px}}
-@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{padding:12px}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
+@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{padding:8px 12px;max-width:calc(100% - 32px)}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .memory-stack-card{transition:none}}
 `;
   if (!style.isConnected) document.head.append(style);
@@ -154,11 +155,13 @@
   memories.forEach((memory, index) => {
     const card = document.createElement('button');
     card.type = 'button';card.className = 'memory-stack-card';
+    const imageArea = document.createElement('span');imageArea.className = 'memory-stack-image-area';
     const image = document.createElement('img');image.alt = memory.title;image.decoding = 'async';
     const captionBox = document.createElement('span');captionBox.className = 'memory-stack-caption';
     const title = document.createElement('span');title.className = 'memory-stack-title';title.textContent = memory.title;
     const description = document.createElement('span');description.className = 'memory-stack-description';description.textContent = 'Preserved in the Hylian Legends guild archive.';
-    captionBox.append(title, description);card.append(image, captionBox);
+    const metadata = document.createElement('span');metadata.className = 'memory-stack-metadata';metadata.textContent = memory.format + (memory.date ? ' · Date in filename: ' + memory.date : '');
+    captionBox.append(title, description, metadata);imageArea.append(image, captionBox);card.append(imageArea);
     card.addEventListener('click', () => { if (index !== currentIndex) { select(index); cards[currentIndex].focus({preventScroll:true}); } });
     cards.push(card);deck.append(card);
   });
@@ -178,7 +181,7 @@
   motion.addEventListener('change', () => { if (motion.matches) paused = true;scheduleAutoplay(); });
   window.addEventListener('pagehide', () => clearTimeout(timer));
   window.addEventListener('pageshow', scheduleAutoplay);
-  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-bracket-v9';section.dataset.memoryCount = String(memories.length);
+  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-overlay-v10';section.dataset.memoryCount = String(memories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
