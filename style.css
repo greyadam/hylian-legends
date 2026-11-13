@@ -92,3 +92,14 @@
 #hylian-honor #honor-help{margin:12px 0 0;color:var(--muted,#aca995);font:12px/1.7 Arial,sans-serif}
 @media(max-width:600px){#hylian-honor{padding:50px 0 60px}#hylian-honor .honor-heading{margin-bottom:26px}}
 @media(prefers-reduced-motion:reduce){#hylian-honor .honor-frame,#hylian-honor .honor-corner,#hylian-honor .honor-frame::before,#hylian-honor .honor-frame::after{transition:none}#hylian-honor .honor-frame:hover,#hylian-honor .honor-frame:focus-visible{transform:none}#hylian-honor .honor-particles{display:none}}
+
+/* Local Cinzel display typography; the homepage inscription is excluded. */
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-ExtraBold.ttf') format('truetype');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:'CinzelCustom';src:url('assets/fonts/Cinzel-Black.ttf') format('truetype');font-weight:900;font-style:normal;font-display:swap}
+body :is(h1,h2,h3,.card-title,.memory-stack-title):not(#engraved-guild-lore *),body header nav>a:not(.button),body header .brand{font-family:'CinzelCustom',serif!important;font-weight:600!important;text-shadow:0 -1px 1px #000c,0 1px 0 #f1e5c526,0 2px 3px #0008}
+body h1:not(#engraved-guild-lore *){font-weight:900!important;letter-spacing:.08em!important;text-shadow:0 -1px 1px #000,0 1px 0 #fff0ba40,0 3px 2px #533a19,0 5px 12px #0008}
+body :is(h1,h2,h3):not(#engraved-guild-lore *) em{font-family:inherit;font-weight:inherit!important}
