@@ -91,10 +91,10 @@
 #guild-memories .memory-stack-card.is-next-2{transform:translate3d(360px,0,-170px) rotateY(-26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
 #guild-memories .memory-stack-image-area{position:relative;display:block;width:100%;height:100%;border-radius:13px;background:#090d0b}
 #guild-memories .memory-stack-card img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#090d0b;border-radius:13px}
-#guild-memories .memory-stack-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;display:block;width:max-content;max-width:calc(100% - 48px);padding:8px 16px;border:1px solid rgba(212,175,55,.25);border-radius:4px;background:rgba(0,0,0,.7);text-align:center;pointer-events:none;text-shadow:0 2px 4px #000}
-#guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;color:#d4af37;font:18px/1.3 Georgia,serif}
-#guild-memories .memory-stack-description{display:block;margin-top:7px;color:#ddd;font:11px/1.5 Arial,sans-serif}
-#guild-memories .memory-stack-metadata{display:block;margin-top:5px;color:#f1e5c5;font:10px/1.5 monospace;overflow-wrap:anywhere}
+#guild-memories .memory-stack-caption{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:2;display:block;width:calc(100% - 64px);max-width:360px;padding:12px 18px;border:1px solid rgba(212,175,55,.45);border-radius:7px;background:linear-gradient(145deg,rgba(19,27,23,.92),rgba(5,9,8,.84));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 10px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(245,229,197,.1);text-align:center;pointer-events:none;text-shadow:0 2px 5px rgba(0,0,0,.9)}
+#guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;color:#e7c76c;font:600 18px/1.35 Georgia,serif;letter-spacing:.2px}
+#guild-memories .memory-stack-description{display:block;margin-top:7px;color:#f5f0e5;font:11px/1.55 Arial,sans-serif}
+#guild-memories .memory-stack-metadata{display:block;margin-top:8px;padding-top:7px;border-top:1px solid rgba(212,175,55,.24);color:#e2d2a5;font:10px/1.5 monospace;letter-spacing:.4px;overflow-wrap:anywhere}
 #guild-memories .memory-stack-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin:18px auto 0}
 #guild-memories .memory-glass{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;border:1px solid #d4af3766;border-radius:999px;background:rgba(20,28,30,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#f1e5c5;box-shadow:0 5px 18px #0004;font:12px/1.5 Arial,sans-serif}
 #guild-memories .memory-stack-arrow{width:44px;padding:0;color:#d4af37;font-size:16px}
@@ -104,7 +104,7 @@
 #guild-memories .memory-stack-status{margin:12px 0 0;text-align:center;color:#aca995;font:11px/1.5 Arial,sans-serif}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:760px){#guild-memories{padding:65px 0}#guild-memories>.wrap{padding:0 20px}#guild-memories .archive-heading{flex-direction:column;align-items:flex-start;gap:15px;margin-bottom:28px}#guild-memories .archive-heading h2{font-size:37px}}
-@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{padding:8px 12px;max-width:calc(100% - 32px)}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
+@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{width:calc(100% - 40px);padding:10px 12px}#guild-memories .memory-stack-title{font-size:16px}#guild-memories .memory-stack-description{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .memory-stack-card{transition:none}}
 `;
   if (!style.isConnected) document.head.append(style);
