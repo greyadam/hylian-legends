@@ -1,14 +1,23 @@
 (() => {
+  if (!document.getElementById('spiritual-stone-spheres-style')) {
+    const stylesheet = document.createElement('link');
+    stylesheet.id = 'spiritual-stone-spheres-style';
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'assets/spiritual-stone-spheres.css';
+    document.head.append(stylesheet);
+  }
   const stones = {
-    COURAGE: {file:'Small Kokiri Emerald.png',name:"Kokiri's Emerald",glow:'drop-shadow(0 0 7px #39af7780)'},
-    WISDOM: {file:'Small Zora Sapphire.png',name:"Zora's Sapphire",glow:'drop-shadow(0 0 7px #75abff80)'},
-    POWER: {file:'Small Goron Ruby.png',name:"Goron's Ruby",glow:'drop-shadow(0 0 4px #dc453580) drop-shadow(0 0 8px #e9b34d60)'}
+    COURAGE: {file:'Small Kokiri Emerald.png',name:"Kokiri's Emerald",sphere:'stone-emerald',glow:'drop-shadow(0 0 7px #39af7780)'},
+    WISDOM: {file:'Small Zora Sapphire.png',name:"Zora's Sapphire",sphere:'stone-sapphire',glow:'drop-shadow(0 0 7px #75abff80)'},
+    POWER: {file:'Small Goron Ruby.png',name:"Goron's Ruby",sphere:'stone-ruby',glow:'drop-shadow(0 0 4px #dc453580) drop-shadow(0 0 8px #e9b34d60)'}
   };
   document.querySelectorAll('#codex .virtues .panel').forEach(card => {
     const virtue = card.querySelector('h3')?.textContent.trim().toUpperCase();
     const stone = stones[virtue];
     const diamond = card.querySelector('.diamond');
     if (!stone || !diamond) return;
+    const sphere = document.createElement('span');
+    sphere.className = 'spiritual-stone-icon ' + stone.sphere;
     const image = new Image();
     image.alt = stone.name;
     image.title = stone.name + ' — ' + virtue.charAt(0) + virtue.slice(1).toLowerCase();
@@ -16,7 +25,8 @@
     image.height = 40;
     image.className = 'virtue-stone';
     image.style.cssText = 'display:block;width:40px;height:40px;object-fit:contain;filter:' + stone.glow;
-    image.onload = () => diamond.replaceWith(image);
+    sphere.append(image);
+    image.onload = () => diamond.replaceWith(sphere);
     image.src = 'assets/' + encodeURIComponent(stone.file);
   });
 })();
