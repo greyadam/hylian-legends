@@ -144,3 +144,8 @@
   const status=document.createElement('p');status.id='quest-load-status';status.setAttribute('role','status');quests.append(status);
   const script=document.createElement('script');script.src='quests-board.js?v=quest-layout-4';document.head.append(script);
 })();
+
+(() => {
+  if (!document.body.classList.contains('guild-home') || document.getElementById('temple-accents-loader')) return;
+  const script = document.createElement('script');script.id = 'temple-accents-loader';script.src = 'assets/temple-accents.js';document.head.append(script);
+})();
