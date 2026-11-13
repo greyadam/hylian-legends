@@ -58,7 +58,7 @@
   }
   const memories = files.map((file, index) => ({src: 'assets/images/' + encodeURIComponent(file), title: caption(file, index), format: file.split('.').pop().toUpperCase(), date: file.match(/^\d{4}-\d{2}-\d{2}/)?.[0] || ''}));
   const section = document.getElementById('guild-memories') || document.createElement('section');
-  if (section.dataset.archiveLayout === 'perspective-overlay-v10') return;
+  if (section.dataset.archiveLayout === 'perspective-glass-v11') return;
   document.getElementById('guild-history')?.remove();
   function enforceArchiveOrder() { if (guides.parentElement && guides.nextElementSibling !== section) guides.after(section); }
   section.id = 'guild-memories';
@@ -89,12 +89,12 @@
 #guild-memories .memory-stack-card.is-next{transform:translate3d(220px,0,-90px) rotateY(-18deg) scale(.86);z-index:7;opacity:.85;pointer-events:auto;filter:brightness(.75)}
 #guild-memories .memory-stack-card.is-prev-2{transform:translate3d(-360px,0,-170px) rotateY(26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
 #guild-memories .memory-stack-card.is-next-2{transform:translate3d(360px,0,-170px) rotateY(-26deg) scale(.74);z-index:4;opacity:.5;pointer-events:auto;filter:brightness(.55)}
-#guild-memories .memory-stack-image-area{position:relative;display:block;width:100%;height:100%;border-radius:13px;background:#090d0b}
-#guild-memories .memory-stack-card img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#090d0b;border-radius:13px}
-#guild-memories .memory-stack-caption{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:2;display:block;width:75%;max-width:280px;padding:7px 10px;border:1px solid rgba(212,175,55,.38);border-radius:5px;background:linear-gradient(145deg,rgba(19,27,23,.74),rgba(5,9,8,.66));-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(245,229,197,.08);text-align:center;pointer-events:none;text-shadow:0 2px 5px rgba(0,0,0,.9)}
-#guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;color:#e7c76c;font:600 clamp(13px,1.6vw,16px)/1.3 Georgia,serif;letter-spacing:.1px}
-#guild-memories .memory-stack-description{display:block;margin-top:4px;color:#f5f0e5;font:clamp(9px,1vw,10px)/1.4 Arial,sans-serif}
-#guild-memories .memory-stack-metadata{display:block;margin-top:5px;padding-top:4px;border-top:1px solid rgba(212,175,55,.2);color:#e2d2a5;font:9px/1.4 monospace;letter-spacing:.1px;overflow-wrap:anywhere}
+#guild-memories .memory-stack-image-area{position:absolute;inset:0;display:block;width:100%;height:100%;border-radius:13px;overflow:hidden}
+#guild-memories .memory-stack-card img{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;object-fit:cover;object-position:center;border-radius:13px}
+#guild-memories .memory-stack-caption{position:absolute;bottom:16px;left:16px;right:16px;transform:none;z-index:2;display:block;width:auto;max-width:none;padding:7px 12px;border:1px solid rgba(212,175,55,.3);border-radius:5px;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);box-shadow:0 4px 12px rgba(0,0,0,.25);text-align:center;pointer-events:none;text-shadow:0 2px 5px rgba(0,0,0,.9)}
+#guild-memories .memory-stack-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere;color:#e7c76c;font:600 clamp(13px,1.6vw,16px)/1.3 Georgia,serif;letter-spacing:.1px}
+#guild-memories .memory-stack-description{display:block;margin-top:3px;color:#f5f0e5;font:9px/1.35 Arial,sans-serif}
+#guild-memories .memory-stack-metadata{display:block;margin-top:3px;color:#e2d2a5;font:9px/1.35 monospace;letter-spacing:.1px;overflow-wrap:anywhere}
 #guild-memories .memory-stack-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin:18px auto 0}
 #guild-memories .memory-glass{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;border:1px solid #d4af3766;border-radius:999px;background:rgba(20,28,30,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#f1e5c5;box-shadow:0 5px 18px #0004;font:12px/1.5 Arial,sans-serif}
 #guild-memories .memory-stack-arrow{width:44px;padding:0;color:#d4af37;font-size:16px}
@@ -104,7 +104,7 @@
 #guild-memories .memory-stack-status{margin:12px 0 0;text-align:center;color:#aca995;font:11px/1.5 Arial,sans-serif}
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:760px){#guild-memories{padding:65px 0}#guild-memories>.wrap{padding:0 20px}#guild-memories .archive-heading{flex-direction:column;align-items:flex-start;gap:15px;margin-bottom:28px}#guild-memories .archive-heading h2{font-size:37px}}
-@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{width:75%;padding:6px 8px}#guild-memories .memory-stack-title{font-size:13px}#guild-memories .memory-stack-description{font-size:9px}}
+@media(max-width:440px){#guild-memories .memory-stack-stage{--slot-y:20px;--slot-x:36px}#guild-memories .memory-stack-caption{bottom:12px;left:12px;right:12px;padding:6px 8px}#guild-memories .memory-stack-title{font-size:13px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .memory-stack-card{transition:none}}
 `;
   if (!style.isConnected) document.head.append(style);
@@ -181,7 +181,7 @@
   motion.addEventListener('change', () => { if (motion.matches) paused = true;scheduleAutoplay(); });
   window.addEventListener('pagehide', () => clearTimeout(timer));
   window.addEventListener('pageshow', scheduleAutoplay);
-  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-overlay-v10';section.dataset.memoryCount = String(memories.length);
+  section.dataset.archiveReady = 'true';section.dataset.archiveLayout = 'perspective-glass-v11';section.dataset.memoryCount = String(memories.length);
   select(0, false);
   new MutationObserver(enforceArchiveOrder).observe(guides.parentElement, {childList:true});
   window.addEventListener('load', enforceArchiveOrder, {once:true});
