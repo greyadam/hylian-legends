@@ -192,19 +192,16 @@
   const section = document.getElementById('guild-memories');
   const carousel = section?.querySelector('.archive-carousel');
   if (!carousel || document.getElementById('engraved-guild-lore')) return;
-  const font = document.createElement('link');
-  font.rel = 'stylesheet';
-  font.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap';
-  document.head.append(font);
   const style = document.createElement('style');
   style.id = 'engraved-guild-lore-style';
   style.textContent = `
+@font-face{font-family:'Triforce';src:url('assets/fonts/Triforce.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 #guild-memories>.wrap{max-width:1640px}
 #guild-memories .archive-heading{max-width:1072px;margin-left:auto;margin-right:auto}
 #guild-memories .homepage-showcase{display:flex;flex-direction:row;align-items:center;gap:72px}
 #guild-memories .homepage-showcase>.archive-carousel{flex:1 1 1000px;min-width:0}
 #guild-memories .engraved-lore{position:relative;flex:0 0 300px;min-width:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;perspective:700px}
-#guild-memories .engraved-lore-copy{margin:0;padding:0;color:#d4af37;font:400 19px/1.8 'Cinzel',Georgia,serif;letter-spacing:.2px;text-align:left;text-shadow:0 -2px 1px #000,1px -1px 2px #000,0 1px 0 rgba(230,198,103,.28)}
+#guild-memories .engraved-lore-copy{margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Triforce',Georgia,serif;letter-spacing:.2px;text-align:left;text-shadow:0 -2px 1px #000,1px -1px 2px #000,0 1px 0 rgba(230,198,103,.28)}
 #guild-memories .lore-term{color:#e6c667;font-weight:600;text-shadow:0 -2px 1px #000,0 1px 0 #ffe7a655,0 0 9px #e6c66755}
 #guild-memories .lore-word{display:inline-block;white-space:nowrap}
 #guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%}
