@@ -201,147 +201,139 @@
 #guild-memories .homepage-showcase{display:flex;flex-direction:row;align-items:center;gap:72px}
 #guild-memories .homepage-showcase>.archive-carousel{flex:1 1 1000px;min-width:0}
 #guild-memories .engraved-lore{position:relative;flex:0 0 300px;min-width:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;perspective:700px}
-#guild-memories .engraved-lore-copy{margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Triforce',Georgia,serif;letter-spacing:.2px;text-align:left;text-shadow:0 -2px 1px #000,1px -1px 2px #000,0 1px 0 rgba(230,198,103,.28)}
-#guild-memories .lore-term{color:#e6c667;font-weight:600;text-shadow:0 -2px 1px #000,0 1px 0 #ffe7a655,0 0 9px #e6c66755}
+#guild-memories .engraved-lore-copy{display:flow-root;margin:0;padding:0;color:#d4af37;font:400 20px/1.8 'Triforce',Georgia,serif;letter-spacing:.08em;text-align:center}
 #guild-memories .lore-word{display:inline-block;white-space:nowrap}
-#guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%}
+#guild-memories .lore-letter{display:inline-block;opacity:0;transform-origin:50% 85%;text-shadow:0 -1px 1px #000,0 1px 0 #fff1be66,0 2px 1px #684015,0 3px 3px #000b}
 #guild-memories .lore-letter.is-carved{opacity:1}
-#guild-memories .lore-readable{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-#guild-memories .lore-debris{position:absolute;inset:0;pointer-events:none;overflow:visible}
-#guild-memories .lore-speck{position:absolute;display:block;width:2px;height:2px;border-radius:50%;background:#ffe39a;box-shadow:0 0 5px #efc65c;pointer-events:none}
-#guild-memories .lore-speck.is-dust{width:1px;height:1px;background:#a88c55;box-shadow:none}
-@media(max-width:1439px){#guild-memories .homepage-showcase{flex-direction:column;gap:48px}#guild-memories .homepage-showcase>.archive-carousel{flex:0 1 auto;width:100%}#guild-memories .engraved-lore{flex:0 1 auto;width:100%;max-width:460px}#guild-memories>.wrap{max-width:1120px}}
-@media(prefers-reduced-motion:reduce){#guild-memories .lore-letter{opacity:1}#guild-memories .lore-debris{display:none}}
-`;
-  document.head.append(style);
-  const wrapper = document.createElement('div');
-  wrapper.className = 'homepage-showcase';
-  carousel.before(wrapper);
-  const lore = document.createElement('aside');
-  lore.id = 'engraved-guild-lore';
-  lore.className = 'engraved-lore';
-  lore.setAttribute('aria-label', 'The legend of the Sacred Realm');
-  const text = 'In a forgotten temple, a sealed door awaits, locked by the power of three Sacred Stones. Beyond this threshold lies a smaller room, where an ancient, rusty sword stands firmly in a pedestal. Legends whisper that whoever dares to pull the sword from its resting place will be transported to the Sacred Realm, where the three golden triangles unite to form the legendary Triforce. As guardians of mystical power, we stand united to protect the Triforce and the wishes it grants.';
-  const readable = document.createElement('p');
-  readable.className = 'lore-readable';
-  readable.textContent = text;
-  const visual = document.createElement('p');
-  visual.className = 'engraved-lore-copy';
-  visual.setAttribute('aria-hidden', 'true');
-  const letters = [];
-  for (const part of text.split(/(Sacred Stones|Sacred Realm|Triforce)/g)) {
-    const group = document.createElement('span');
-    if (['Sacred Stones', 'Sacred Realm', 'Triforce'].includes(part)) group.className = 'lore-term';
-    for (const word of part.split(/(\s+)/)) {
-      if (/^\s+$/.test(word)) { group.append(document.createTextNode(word)); continue; }
-      const unit = document.createElement('span');
-      unit.className = 'lore-word';
-      for (const letter of word) {
-        const span = document.createElement('span');
-        span.className = 'lore-letter';span.textContent = letter;
-        letters.push(span);unit.append(span);
-      }
-      group.append(unit);
-    }
-    visual.append(group);
-  }
-  const debris = document.createElement('span');
-  debris.className = 'lore-debris';debris.setAttribute('aria-hidden', 'true');
-  lore.append(readable, visual, debris);wrapper.append(carousel, lore);
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  let index = 0, frame = 0, last = 0, visible = false, finished = false;
-  const animations = new Set();
-  function animate(node, keys, options, remove = false) {
-    const animation = node.animate(keys, options);animations.add(animation);
-    const clean = () => { animations.delete(animation);if (remove) node.remove(); };
-    animation.onfinish = clean;animation.oncancel = clean;
-  }
-  function strike(letter) {
-    animate(letter, [{transform:'translate3d(.6px,-.5px,3px) rotateX(12deg)'},{transform:'translate3d(-.4px,.3px,0) rotateX(-4deg)'},{transform:'none'}], {duration:120,easing:'ease-out'});
-    const r = letter.getBoundingClientRect(), origin = debris.getBoundingClientRect();
-    for (let i = 0; i < 3; i++) {
-      const speck = document.createElement('i');
-      speck.className = 'lore-speck' + (i === 2 ? ' is-dust' : '');
-      speck.style.left = (r.left + r.width / 2 - origin.left) + 'px';
-      speck.style.top = (r.top + r.height * .65 - origin.top) + 'px';
-      debris.append(speck);
-      const dx = (Math.random() - .5) * 24;
-      animate(speck, [{opacity:.85,transform:'translate(0,0)'},{opacity:.45,transform:'translate(' + dx * .5 + 'px,' + (i === 2 ? 5 : -7) + 'px)'},{opacity:0,transform:'translate(' + dx + 'px,' + (i === 2 ? 30 : 15) + 'px)'}], {duration:i === 2 ? 650 : 360,easing:'ease-out'}, true);
-    }
-  }
-  function finish() {
-    finished = true;cancelAnimationFrame(frame);frame = 0;
-    letters.forEach(letter => letter.classList.add('is-carved'));
-    for (const animation of animations) animation.cancel();
-    debris.replaceChildren();observer?.disconnect();
-  }
-  function tick(now) {
-    frame = 0;
-    if (finished || !visible || document.hidden) return;
-    if (!last || now - last >= 38) {
-      last = now;const letter = letters[index++];
-      letter.classList.add('is-carved');strike(letter);
-      if (index === letters.length) { finished = true;observer?.disconnect();return; }
-    }
-    frame = requestAnimationFrame(tick);
-  }
-  function resume() { if (!finished && visible && !document.hidden && !frame) {last = 0;frame = requestAnimationFrame(tick);} }
-  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
-    visible = entries[0].isIntersecting;
-    if (!visible) {cancelAnimationFrame(frame);frame = 0;} else resume();
-  }, {threshold:.15}) : null;
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {cancelAnimationFrame(frame);frame = 0;} else resume();
-  });
-  motion.addEventListener('change', () => {if (motion.matches) finish();});
-  window.addEventListener('pagehide', finish, {once:true});
-  if (motion.matches || !observer || !Element.prototype.animate) finish();else observer.observe(lore);
-})();
-
-(() => {
-  const lore = document.getElementById('engraved-guild-lore');
-  const copy = lore?.querySelector('.engraved-lore-copy');
-  if (!copy || lore.dataset.ceremonial === 'true') return;
-  lore.dataset.ceremonial = 'true';
-  const style = document.createElement('style');
-  style.id = 'ceremonial-lore-style';
-  style.textContent = `
-#guild-memories .engraved-lore-copy{display:flow-root;text-align:center;letter-spacing:.08em}
-#guild-memories .engraved-lore-copy .lore-letter{color:#d4af37;text-shadow:0 -1px 1px #000,0 1px 0 #fff1be66,0 2px 1px #684015,0 3px 3px #000b}
+#guild-memories .lore-term{font-weight:600}
 #guild-memories .lore-term .lore-letter{color:#fff0bb}
+#guild-memories .lore-term.is-awakened .lore-letter{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 6px #e6c66755}
 @supports ((background-clip:text) or (-webkit-background-clip:text)){
-#guild-memories .engraved-lore-copy .lore-letter{background-image:radial-gradient(circle,#fff4cb40 .3px,transparent .7px),linear-gradient(180deg,#fff3c6 0%,#e6c667 28%,#d4af37 48%,#a57425 75%,#78501f 100%);background-size:3px 3px,100% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#guild-memories .lore-letter{background-image:radial-gradient(circle,#fff4cb40 .3px,transparent .7px),linear-gradient(180deg,#fff3c6 0%,#e6c667 28%,#d4af37 48%,#a57425 75%,#78501f 100%);background-size:3px 3px,100% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 #guild-memories .lore-term .lore-letter{background-image:linear-gradient(180deg,#fffbea,#fff0b5 45%,#e6c667 75%,#b58835);background-size:100% 100%}}
-#guild-memories .engraved-lore-copy>.lore-drop-cap{float:left;position:relative;height:108px;margin:0 10px 0 0;font-size:108px;line-height:1;letter-spacing:0;filter:drop-shadow(0 0 8px #e6c66766);text-shadow:0 -1px 1px #000,0 2px 0 #fff0ab88,0 3px 2px #684015}
+#guild-memories .engraved-lore-copy>.lore-drop-cap{float:left;position:relative;height:108px;margin:0 2px 0 0;padding:0;font-size:108px;line-height:1;letter-spacing:0;filter:drop-shadow(0 0 8px #e6c66766);text-shadow:0 -1px 1px #000,0 2px 0 #fff0ab88,0 3px 2px #684015}
 #guild-memories .lore-ornament{display:flex;align-items:center;justify-content:center;gap:14px;width:90%;height:18px;margin:0 auto 22px;pointer-events:none}
 #guild-memories .lore-ornament.is-bottom{margin:22px auto 0}
 #guild-memories .lore-ornament::before,#guild-memories .lore-ornament::after{content:'';flex:1;height:3px;background:linear-gradient(90deg,transparent,#d4af3780,#e6c667b3);clip-path:polygon(0 50%,85% 0,100% 50%,85% 100%)}
 #guild-memories .lore-ornament::after{transform:scaleX(-1)}
 #guild-memories .lore-ornament>span{position:relative;width:7px;height:7px;transform:rotate(45deg);background:#e6c667;border:1px solid #fff0b980;box-shadow:0 0 8px #d4af3744}
 #guild-memories .lore-ornament>span::after{content:'';position:absolute;inset:-4px;border:1px solid #d4af3755}
-#guild-memories .lore-term.is-awakened .lore-letter{animation:loreSacredPulse 5s ease-in-out infinite}
-@keyframes loreSacredPulse{0%,100%{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 5px #e6c66744}50%{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc99,0 2px 1px #684015,0 0 10px #ffdf8580}}
-@media(prefers-reduced-motion:reduce){#guild-memories .lore-term.is-awakened .lore-letter{animation:none;text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 5px #e6c66744}}
+#guild-memories .lore-readable{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#guild-memories .lore-particles{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
+@media(max-width:1439px){#guild-memories .homepage-showcase{flex-direction:column;gap:48px}#guild-memories .homepage-showcase>.archive-carousel{flex:0 1 auto;width:100%}#guild-memories .engraved-lore{flex:0 1 auto;width:100%;max-width:460px}#guild-memories>.wrap{max-width:1120px}}
+@media(prefers-reduced-motion:reduce){#guild-memories .lore-letter{opacity:1}#guild-memories .lore-particles{display:none}}
 `;
   document.head.append(style);
-  const initial = copy.querySelector('.lore-letter');
-  if (initial?.textContent === 'I') {initial.classList.add('lore-drop-cap');copy.prepend(initial);}
-  function ornament(bottom = false) {
-    const divider = document.createElement('div');
-    divider.className = 'lore-ornament' + (bottom ? ' is-bottom' : '');
-    divider.setAttribute('aria-hidden', 'true');
-    divider.append(document.createElement('span'));
-    return divider;
-  }
-  copy.before(ornament());copy.after(ornament(true));
-  const terms = [...copy.querySelectorAll('.lore-term')];
-  function awaken() {
-    for (const term of terms) {
-      if (!term.querySelector('.lore-letter:not(.is-carved)')) term.classList.add('is-awakened');
+  const wrapper = document.createElement('div');wrapper.className = 'homepage-showcase';
+  carousel.before(wrapper);
+  const lore = document.createElement('aside');
+  lore.id = 'engraved-guild-lore';lore.className = 'engraved-lore';
+  lore.dataset.ceremonial = 'true';lore.setAttribute('aria-label', 'The legend of the Sacred Realm');
+  const text = 'In a forgotten temple, a sealed door awaits, locked by the power of three Sacred Stones. Beyond this threshold lies a smaller room, where an ancient, rusty sword stands firmly in a pedestal. Legends whisper that whoever dares to pull the sword from its resting place will be transported to the Sacred Realm, where the three golden triangles unite to form the legendary Triforce. As guardians of mystical power, we stand united to protect the Triforce and the wishes it grants.';
+  const readable = document.createElement('p');readable.className = 'lore-readable';readable.textContent = text;
+  const visual = document.createElement('p');visual.className = 'engraved-lore-copy';visual.setAttribute('aria-hidden', 'true');
+  const letters = [], termEnds = new Map(), terms = [];
+  for (const part of text.split(/(Sacred Stones|Sacred Realm|Triforce)/g)) {
+    const group = document.createElement('span');
+    const sacred = ['Sacred Stones', 'Sacred Realm', 'Triforce'].includes(part);
+    if (sacred) {group.className = 'lore-term';terms.push(group);}
+    for (const word of part.split(/(\s+)/)) {
+      if (/^\s+$/.test(word)) {group.append(document.createTextNode(word));continue;}
+      const unit = document.createElement('span');unit.className = 'lore-word';
+      for (const letter of word) {
+        const span = document.createElement('span');span.className = 'lore-letter';span.textContent = letter;
+        letters.push(span);unit.append(span);
+      }
+      group.append(unit);
     }
-    return terms.every(term => term.classList.contains('is-awakened'));
+    visual.append(group);
+    if (sacred) termEnds.set(letters.length, group);
   }
-  const observer = new MutationObserver(() => {if (awaken()) observer.disconnect();});
-  if (!awaken()) observer.observe(copy, {attributes:true,attributeFilter:['class'],subtree:true});
-  window.addEventListener('pagehide', () => observer.disconnect(), {once:true});
+  letters[0].classList.add('lore-drop-cap');visual.prepend(letters[0]);
+  function ornament(bottom = false) {
+    const divider = document.createElement('div');divider.className = 'lore-ornament' + (bottom ? ' is-bottom' : '');
+    divider.setAttribute('aria-hidden', 'true');divider.append(document.createElement('span'));return divider;
+  }
+  const canvas = document.createElement('canvas');canvas.className = 'lore-particles';canvas.setAttribute('aria-hidden', 'true');
+  lore.append(readable, ornament(), visual, ornament(true), canvas);wrapper.append(carousel, lore);
+  const ctx = canvas.getContext('2d');
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const animations = new Set();
+  let positions = [], particles = [], index = 0, frame = 0, measureFrame = 0;
+  let last = 0, previous = 0, width = 0, height = 0, visible = false, ready = false, done = false, disposed = false;
+  let observer = null, resizeObserver = null;
+  function clearParticles() {particles.length = 0;if (ctx) ctx.clearRect(0, 0, width, height);}
+  function pause() {cancelAnimationFrame(frame);frame = 0;last = 0;previous = 0;clearParticles();}
+  function schedule() {
+    if (!disposed && ready && visible && !document.hidden && !motion.matches && (!done || particles.length) && !frame) frame = requestAnimationFrame(tick);
+  }
+  function measure() {
+    measureFrame = 0;if (disposed) return;
+    width = lore.clientWidth;height = lore.clientHeight;
+    positions = letters.map(letter => {
+      let x = 0, y = 0, node = letter;
+      while (node && node !== lore) {x += node.offsetLeft;y += node.offsetTop;node = node.offsetParent;}
+      return {x:x + letter.offsetWidth / 2,y:y + letter.offsetHeight * .65};
+    });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.ceil(width * dpr));canvas.height = Math.max(1, Math.ceil(height * dpr));
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    clearParticles();ready = true;last = 0;previous = 0;schedule();
+  }
+  function queueMeasure() {
+    if (disposed || (done && !particles.length)) return;
+    ready = false;pause();if (!measureFrame) measureFrame = requestAnimationFrame(measure);
+  }
+  function strike(letter) {
+    if (!letter.animate) return;
+    letter.style.willChange = 'transform, opacity';
+    const animation = letter.animate([{transform:'translate3d(.6px,-.5px,3px) rotateX(12deg)'},{transform:'translate3d(-.4px,.3px,0) rotateX(-4deg)'},{transform:'none'}], {duration:120,easing:'ease-out'});
+    animations.add(animation);
+    const clean = () => {animations.delete(animation);letter.style.willChange = '';};
+    animation.onfinish = clean;animation.oncancel = clean;
+  }
+  function spawn(position) {
+    if (!ctx || !position) return;
+    for (let i = 0; i < 3 && particles.length < 15; i++) particles.push({x:position.x,y:position.y,vx:(Math.random() - .5) * 30,vy:i === 2 ? 8 : -20 - Math.random() * 15,age:0,life:i === 2 ? .6 : .36,dust:i === 2});
+  }
+  function paint(dt) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, width, height);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];p.age += dt;
+      if (p.age >= p.life) {particles.splice(i, 1);continue;}
+      p.vy += 90 * dt;p.x += p.vx * dt;p.y += p.vy * dt;
+      ctx.globalAlpha = (1 - p.age / p.life) * .85;ctx.fillStyle = p.dust ? '#a88c55' : '#ffe39a';
+      ctx.fillRect(p.x, p.y, p.dust ? 1 : 2, p.dust ? 1 : 2);
+    }
+    ctx.globalAlpha = 1;
+  }
+  function finish() {
+    done = true;pause();cancelAnimationFrame(measureFrame);measureFrame = 0;
+    letters.forEach(letter => letter.classList.add('is-carved'));terms.forEach(term => term.classList.add('is-awakened'));
+    for (const animation of animations) animation.cancel();
+    observer?.disconnect();resizeObserver?.disconnect();
+  }
+  function tick(now) {
+    frame = 0;
+    if (disposed || !ready || !visible || document.hidden || motion.matches) return;
+    const dt = previous ? Math.min((now - previous) / 1000, .05) : 0;previous = now;
+    if (!done && (!last || now - last >= 38)) {
+      last = now;const letter = letters[index];letter.classList.add('is-carved');strike(letter);index++;
+      const term = termEnds.get(index);if (term) term.classList.add('is-awakened');
+      if (index % 3 === 0) spawn(positions[index - 1]);
+      if (index === letters.length) {done = true;observer?.disconnect();resizeObserver?.disconnect();}
+    }
+    paint(dt);schedule();
+  }
+  observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;if (visible) schedule();else pause();
+  }, {threshold:.15}) : null;
+  if ('ResizeObserver' in window) {resizeObserver = new ResizeObserver(queueMeasure);resizeObserver.observe(lore);}
+  window.addEventListener('resize', queueMeasure, {passive:true});
+  document.fonts?.addEventListener('loadingdone', queueMeasure);
+  document.addEventListener('visibilitychange', () => {if (document.hidden) pause();else schedule();});
+  motion.addEventListener('change', () => {if (motion.matches) finish();});
+  window.addEventListener('pagehide', () => {finish();disposed = true;window.removeEventListener('resize', queueMeasure);document.fonts?.removeEventListener('loadingdone', queueMeasure);}, {once:true});
+  if (motion.matches || !observer) finish();else {observer.observe(lore);queueMeasure();}
 })();
