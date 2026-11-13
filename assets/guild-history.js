@@ -297,3 +297,51 @@
   window.addEventListener('pagehide', finish, {once:true});
   if (motion.matches || !observer || !Element.prototype.animate) finish();else observer.observe(lore);
 })();
+
+(() => {
+  const lore = document.getElementById('engraved-guild-lore');
+  const copy = lore?.querySelector('.engraved-lore-copy');
+  if (!copy || lore.dataset.ceremonial === 'true') return;
+  lore.dataset.ceremonial = 'true';
+  const style = document.createElement('style');
+  style.id = 'ceremonial-lore-style';
+  style.textContent = `
+#guild-memories .engraved-lore-copy{display:flow-root;text-align:center;letter-spacing:.08em}
+#guild-memories .engraved-lore-copy .lore-letter{color:#d4af37;text-shadow:0 -1px 1px #000,0 1px 0 #fff1be66,0 2px 1px #684015,0 3px 3px #000b}
+#guild-memories .lore-term .lore-letter{color:#fff0bb}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+#guild-memories .engraved-lore-copy .lore-letter{background-image:radial-gradient(circle,#fff4cb40 .3px,transparent .7px),linear-gradient(180deg,#fff3c6 0%,#e6c667 28%,#d4af37 48%,#a57425 75%,#78501f 100%);background-size:3px 3px,100% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#guild-memories .lore-term .lore-letter{background-image:linear-gradient(180deg,#fffbea,#fff0b5 45%,#e6c667 75%,#b58835);background-size:100% 100%}}
+#guild-memories .engraved-lore-copy>.lore-drop-cap{float:left;position:relative;height:108px;margin:0 10px 0 0;font-size:108px;line-height:1;letter-spacing:0;filter:drop-shadow(0 0 8px #e6c66766);text-shadow:0 -1px 1px #000,0 2px 0 #fff0ab88,0 3px 2px #684015}
+#guild-memories .lore-ornament{display:flex;align-items:center;justify-content:center;gap:14px;width:90%;height:18px;margin:0 auto 22px;pointer-events:none}
+#guild-memories .lore-ornament.is-bottom{margin:22px auto 0}
+#guild-memories .lore-ornament::before,#guild-memories .lore-ornament::after{content:'';flex:1;height:3px;background:linear-gradient(90deg,transparent,#d4af3780,#e6c667b3);clip-path:polygon(0 50%,85% 0,100% 50%,85% 100%)}
+#guild-memories .lore-ornament::after{transform:scaleX(-1)}
+#guild-memories .lore-ornament>span{position:relative;width:7px;height:7px;transform:rotate(45deg);background:#e6c667;border:1px solid #fff0b980;box-shadow:0 0 8px #d4af3744}
+#guild-memories .lore-ornament>span::after{content:'';position:absolute;inset:-4px;border:1px solid #d4af3755}
+#guild-memories .lore-term.is-awakened .lore-letter{animation:loreSacredPulse 5s ease-in-out infinite}
+@keyframes loreSacredPulse{0%,100%{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 5px #e6c66744}50%{text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc99,0 2px 1px #684015,0 0 10px #ffdf8580}}
+@media(prefers-reduced-motion:reduce){#guild-memories .lore-term.is-awakened .lore-letter{animation:none;text-shadow:0 -1px 1px #000,0 1px 0 #fff5cc77,0 2px 1px #684015,0 0 5px #e6c66744}}
+`;
+  document.head.append(style);
+  const initial = copy.querySelector('.lore-letter');
+  if (initial?.textContent === 'I') {initial.classList.add('lore-drop-cap');copy.prepend(initial);}
+  function ornament(bottom = false) {
+    const divider = document.createElement('div');
+    divider.className = 'lore-ornament' + (bottom ? ' is-bottom' : '');
+    divider.setAttribute('aria-hidden', 'true');
+    divider.append(document.createElement('span'));
+    return divider;
+  }
+  copy.before(ornament());copy.after(ornament(true));
+  const terms = [...copy.querySelectorAll('.lore-term')];
+  function awaken() {
+    for (const term of terms) {
+      if (!term.querySelector('.lore-letter:not(.is-carved)')) term.classList.add('is-awakened');
+    }
+    return terms.every(term => term.classList.contains('is-awakened'));
+  }
+  const observer = new MutationObserver(() => {if (awaken()) observer.disconnect();});
+  if (!awaken()) observer.observe(copy, {attributes:true,attributeFilter:['class'],subtree:true});
+  window.addEventListener('pagehide', () => observer.disconnect(), {once:true});
+})();
