@@ -136,3 +136,13 @@ body>header>.wrap.nav>nav>a:not(.button){display:inline-flex;align-items:center;
 body>header>.wrap.nav>nav>.button{flex:0 0 auto;align-items:center;justify-content:center;min-height:40px;padding:10px 14px;font-family:'CinzelCustom',serif;font-size:.78rem;line-height:1.4;letter-spacing:.04em;white-space:nowrap;overflow:visible}
 @media(min-width:1200px){body>header>.wrap.nav{flex-wrap:nowrap}body>header>.wrap.nav>.brand{flex:0 0 auto;font-size:15px;letter-spacing:.08em;white-space:nowrap}body>header>.wrap.nav>.brand .brand-logo{width:40px;height:40px}body>header>.wrap.nav>.brand small{line-height:1.5;letter-spacing:.12em}body>header>.wrap.nav>nav{flex:0 1 auto;min-width:0;flex-wrap:nowrap;justify-content:flex-end;gap:clamp(8px,1vw,14px)}body>header>.wrap.nav>nav>*{flex-shrink:0}body>header>.wrap.nav>nav>.button{display:inline-flex}}
 @media(max-width:1199px){body>header>.wrap.nav{flex-wrap:wrap;justify-content:center;gap:8px 16px}body>header>.wrap.nav>nav{flex-wrap:wrap;justify-content:center;max-width:100%}}
+
+/* Spiritual Stone icons only; existing image dimensions, cards and typography are unchanged. */
+#codex .virtues .virtue-stone{--stone-glow:rgba(46,204,113,.6);transform-origin:50% 50%;backface-visibility:hidden;animation:stoneGlow 3.6s ease-in-out infinite,stoneSpin 6s ease-in-out infinite;animation-play-state:running,paused}
+#codex .virtues .virtue-stone[alt="Kokiri's Emerald"]{--stone-glow:rgba(46,204,113,.6)}
+#codex .virtues .virtue-stone[alt="Zora's Sapphire"]{--stone-glow:rgba(52,152,219,.6)}
+#codex .virtues .virtue-stone[alt="Goron's Ruby"]{--stone-glow:rgba(231,76,60,.6)}
+@keyframes stoneGlow{0%,100%{filter:drop-shadow(0 0 5px var(--stone-glow))}50%{filter:drop-shadow(0 0 11px var(--stone-glow))}}
+@keyframes stoneSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(hover:hover) and (pointer:fine){#codex .virtues .panel:hover .virtue-stone{animation-play-state:running,running;will-change:transform}}
+@media(prefers-reduced-motion:reduce){#codex .virtues .virtue-stone,#codex .virtues .panel:hover .virtue-stone{animation:none;transform:none;will-change:auto;filter:drop-shadow(0 0 7px var(--stone-glow))!important}}
