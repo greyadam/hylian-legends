@@ -259,6 +259,7 @@
   const ctx = canvas.getContext('2d');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const animations = new Set();
+  const impacts = new WeakMap();
   let positions = [], particles = [], index = 0, frame = 0, measureFrame = 0;
   let last = 0, previous = 0, width = 0, height = 0, visible = false, ready = false, done = false, disposed = false;
   let observer = null, resizeObserver = null;
@@ -285,16 +286,18 @@
     ready = false;pause();if (!measureFrame) measureFrame = requestAnimationFrame(measure);
   }
   function strike(letter) {
-    if (!letter.animate) return;
-    letter.style.willChange = 'transform, opacity';
-    const animation = letter.animate([{transform:'translate3d(.6px,-.5px,3px) rotateX(12deg)'},{transform:'translate3d(-.4px,.3px,0) rotateX(-4deg)'},{transform:'none'}], {duration:120,easing:'ease-out'});
-    animations.add(animation);
-    const clean = () => {animations.delete(animation);letter.style.willChange = '';};
+    const target = letter.closest('.lore-word') || letter;
+    if (!target.animate) return;
+    impacts.get(target)?.cancel();
+    target.style.willChange = 'transform, opacity';
+    const animation = target.animate([{transform:'translate3d(1.8px,-1.2px,4px) rotateX(16deg)',opacity:1},{transform:'translate3d(-1.1px,.6px,0) rotateX(-6deg)',opacity:.88},{transform:'translate3d(.4px,-.2px,0)',opacity:1},{transform:'none',opacity:1}], {duration:150,easing:'cubic-bezier(.16,1,.3,1)'});
+    animations.add(animation);impacts.set(target, animation);
+    const clean = () => {animations.delete(animation);if (impacts.get(target) === animation) {impacts.delete(target);target.style.willChange = '';}};
     animation.onfinish = clean;animation.oncancel = clean;
   }
   function spawn(position) {
     if (!ctx || !position) return;
-    for (let i = 0; i < 3 && particles.length < 15; i++) particles.push({x:position.x,y:position.y,vx:(Math.random() - .5) * 30,vy:i === 2 ? 8 : -20 - Math.random() * 15,age:0,life:i === 2 ? .6 : .36,dust:i === 2});
+    for (let i = 0; i < 3 && particles.length < 15; i++) particles.push({x:position.x,y:position.y,vx:(Math.random() - .5) * (i === 2 ? 65 : 130),vy:i === 2 ? -8 : -55 - Math.random() * 45,age:0,life:i === 2 ? .8 : .55,dust:i === 2,size:i === 2 ? 2 : 3});
   }
   function paint(dt) {
     if (!ctx) return;
@@ -302,9 +305,12 @@
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];p.age += dt;
       if (p.age >= p.life) {particles.splice(i, 1);continue;}
-      p.vy += 90 * dt;p.x += p.vx * dt;p.y += p.vy * dt;
-      ctx.globalAlpha = (1 - p.age / p.life) * .85;ctx.fillStyle = p.dust ? '#a88c55' : '#ffe39a';
-      ctx.fillRect(p.x, p.y, p.dust ? 1 : 2, p.dust ? 1 : 2);
+      p.vy += 150 * dt;p.x += p.vx * dt;p.y += p.vy * dt;
+      const alpha = 1 - p.age / p.life;
+      if (!p.dust) {ctx.globalAlpha = alpha * .18;ctx.fillStyle = '#ffd45a';ctx.fillRect(p.x - p.size, p.y - p.size, p.size * 3, p.size * 3);}
+      ctx.globalAlpha = alpha;ctx.fillStyle = p.dust ? '#dfc994' : '#ffe79a';
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+      if (!p.dust) {ctx.fillStyle = '#fffbea';ctx.fillRect(p.x + .75, p.y + .75, 1.5, 1.5);}
     }
     ctx.globalAlpha = 1;
   }
@@ -318,8 +324,8 @@
     frame = 0;
     if (disposed || !ready || !visible || document.hidden || motion.matches) return;
     const dt = previous ? Math.min((now - previous) / 1000, .05) : 0;previous = now;
-    if (!done && (!last || now - last >= 38)) {
-      last = now;const letter = letters[index];letter.classList.add('is-carved');strike(letter);index++;
+    if (!done && (!last || now - last >= 55)) {
+      last = last ? now - ((now - last) % 55) : now;const letter = letters[index];letter.classList.add('is-carved');strike(letter);index++;
       const term = termEnds.get(index);if (term) term.classList.add('is-awakened');
       if (index % 3 === 0) spawn(positions[index - 1]);
       if (index === letters.length) {done = true;observer?.disconnect();resizeObserver?.disconnect();}
