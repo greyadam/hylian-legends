@@ -12,7 +12,11 @@
 @font-face{font-family:TrialCormorant;src:url('assets/fonts/CormorantGaramond-Regular.ttf') format('truetype');font-display:swap}
 @font-face{font-family:TrialSherwood;src:url('assets/fonts/Sherwood-Regular.ttf') format('truetype');font-display:swap}
 @font-face{font-family:TrialRavenna;src:url('assets/fonts/Ravenna.ttf') format('truetype');font-display:swap}
-.trials-page{font:20px/1.7 TrialCormorant,Georgia,serif;background-color:#0c0e12;background-image:linear-gradient(#0b111029,#0b11105c),url('assets/trial-of-sages-wallpaper.png');background-size:100% 100%,contain;background-position:center center;background-attachment:fixed;background-repeat:no-repeat;color:#f1e5c5}
+.trials-page{font:20px/1.7 TrialCormorant,Georgia,serif;background-color:#0c0e12;position:relative;isolation:isolate;color:#f1e5c5}
+/* Only the decorative wallpaper is masked. Its box follows the contained image bounds. */
+.trials-page::before{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(100vw,calc(100vh * var(--trial-wallpaper-ratio,1)));height:auto;aspect-ratio:var(--trial-wallpaper-ratio,1);z-index:-1;pointer-events:none;opacity:var(--trial-wallpaper-ready,0);background-image:linear-gradient(#0c0e1229,#0c0e125c),url('assets/trial-of-sages-wallpaper.png');background-size:100% 100%,contain;background-position:center center;background-repeat:no-repeat;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.15) 2%,rgba(0,0,0,.65) 5%,#000 8%,#000 92%,rgba(0,0,0,.65) 95%,rgba(0,0,0,.15) 98%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.15) 2%,rgba(0,0,0,.65) 5%,#000 8%,#000 92%,rgba(0,0,0,.65) 95%,rgba(0,0,0,.15) 98%,transparent 100%);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+/* Matching-color overlay fallback where CSS masking is unavailable. */
+@supports not ((mask-image:linear-gradient(to right,transparent,#000)) or (-webkit-mask-image:linear-gradient(to right,transparent,#000))){.trials-page::before{background-image:linear-gradient(to right,#0c0e12 0%,#0c0e12d9 2%,#0c0e1259 5%,#0c0e1200 8%,#0c0e1200 92%,#0c0e1259 95%,#0c0e12d9 98%,#0c0e12 100%),linear-gradient(#0c0e1229,#0c0e125c),url('assets/trial-of-sages-wallpaper.png');background-size:100% 100%,100% 100%,contain}}
 .trials-page [hidden]{display:none!important}
 .trials-page header,.trials-page footer{font:14px/1.7 Arial,sans-serif}
 .trials-page header .nav{height:auto;min-height:76px;flex-wrap:wrap}
@@ -114,6 +118,17 @@
 <script>
 (() => {
 'use strict';
+// Use the actual image ratio so the CSS fade follows its edges even on ultra-wide screens.
+// CSS handles viewport resizing; this loader does not interact with the trial timer.
+const wallpaper = new Image();
+wallpaper.onload = () => {
+ if (wallpaper.naturalWidth > 0 && wallpaper.naturalHeight > 0) {
+  document.body.style.setProperty('--trial-wallpaper-ratio',String(wallpaper.naturalWidth / wallpaper.naturalHeight));
+  document.body.style.setProperty('--trial-wallpaper-ready','1');
+ }
+};
+wallpaper.onerror = () => document.body.style.setProperty('--trial-wallpaper-ready','0');
+wallpaper.src = 'assets/trial-of-sages-wallpaper.png';
 const questions = [
 ['Who awakens as the Sage of Forest?', ['Ruto','Nabooru','Impa','Saria'],3,'Saria, Link’s childhood friend from Kokiri Forest, awakens as the Sage of Forest.'],
 ['Who is the Sage of Fire?', ['Darunia','Rauru','Saria','Ruto'],0,'Darunia, leader of the Gorons, awakens as the Sage of Fire and grants the Fire Medallion.'],
