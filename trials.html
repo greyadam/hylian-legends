@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Take the Trial of the Sages: ten Ocarina of Time lore questions, immediate explanations, and your Hylian rank.">
+<meta name="description" content="Take the timed Trial of the Sages: ten Ocarina of Time questions, Hylian ranks, and a browser-local Hall of Sages.">
 <meta name="theme-color" content="#0b1110">
 <title>Lore Trials | Hylian Legends</title>
 <link rel="stylesheet" href="style.css">
@@ -12,7 +12,7 @@
 @font-face{font-family:TrialCormorant;src:url('assets/fonts/CormorantGaramond-Regular.ttf') format('truetype');font-display:swap}
 @font-face{font-family:TrialSherwood;src:url('assets/fonts/Sherwood-Regular.ttf') format('truetype');font-display:swap}
 @font-face{font-family:TrialRavenna;src:url('assets/fonts/Ravenna.ttf') format('truetype');font-display:swap}
-.trials-page{font:20px/1.7 TrialCormorant,Georgia,serif;background:#0b1110 linear-gradient(#0b1110ed,#0b1110f5),url('assets/card-frame.jpeg');color:#f1e5c5}
+.trials-page{font:20px/1.7 TrialCormorant,Georgia,serif;background-color:#0b1110;background-image:linear-gradient(#0b1110ed,#0b1110f5),url('assets/card-frame.jpeg');color:#f1e5c5}
 .trials-page [hidden]{display:none!important}
 .trials-page header,.trials-page footer{font:14px/1.7 Arial,sans-serif}
 .trials-page header .nav{height:auto;min-height:76px;flex-wrap:wrap}
@@ -40,15 +40,46 @@
 #trial-feedback{padding:18px;border-left:3px solid #d4af37;background:#0b1110;margin:20px 0;color:#f1e5c5}
 #trial-feedback:empty{display:none}
 .trial-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1px solid #d4af37;border-radius:28px;background:#d4af37;color:#171608;font:14px/1.6 TrialCinzel,serif;cursor:pointer}
-.trials-page button:focus-visible,.trials-page [tabindex='-1']:focus-visible{outline:3px solid #fff0ba;outline-offset:5px}
+.trials-page button:focus-visible,.trials-page input:focus-visible,.trials-page [tabindex='-1']:focus-visible{outline:3px solid #fff0ba;outline-offset:5px}
+.trial-button:disabled{opacity:.65;cursor:default}
 .trial-review{padding-left:24px}
 .trial-review li{padding:14px 0;border-bottom:1px solid #d4af3733}
 .trial-review p{color:#d5cfb9;margin:6px 0}
 #trial-rank{font-size:clamp(26px,5vw,42px)}
 .trial-sources{margin-top:28px}
 .trial-sources a{color:#e9c976;text-decoration:underline;text-underline-offset:3px}
+.trial-clock{margin:12px 0 24px;padding:14px;border:1px solid #d4af3766;background:#0b1110;border-radius:6px;color:#efd77e}
+.trial-clock-label{display:flex;align-items:center;gap:12px;font:14px/1.5 TrialCinzel,serif}
+.trial-clock svg{width:30px;height:40px;flex-shrink:0;filter:drop-shadow(0 0 5px #d4af3766)}
+.hourglass-top,.hourglass-bottom{transform-box:fill-box;transform-origin:center bottom}
+.trial-clock.running .hourglass-top{animation:sand-empty 20s linear forwards}
+.trial-clock.running .hourglass-bottom{animation:sand-fill 20s linear forwards}
+.trial-clock.running .hourglass-stream{animation:sand-shimmer .7s ease-in-out infinite alternate}
+@keyframes sand-empty{to{transform:scaleY(0)}}
+@keyframes sand-fill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes sand-shimmer{from{opacity:.35}to{opacity:1}}
+.trials-page #trial-sand{margin:10px 0 0;height:7px}
+.trial-clock.urgent{border-color:#f39488;color:#ffb2a6}
+.trial-clock.urgent #trial-sand{accent-color:#f39488}
+.trial-result-crest{display:block;width:90px;height:90px;object-fit:contain;margin:12px auto 24px}
+#trial-result.hero-earned .trial-result-crest{filter:drop-shadow(0 0 10px #d4af37) drop-shadow(0 0 26px #f2cd6277);animation:hero-crest-glow 3s ease-in-out infinite alternate}
+@keyframes hero-crest-glow{to{filter:drop-shadow(0 0 15px #ffe192) drop-shadow(0 0 38px #d4af3799)}}
+#trial-result.hero-earned #trial-rank{color:#ffe192;text-shadow:0 0 18px #d4af3766}
+.trial-save-form{display:grid;gap:12px;margin:26px 0;padding:20px;border:1px solid #d4af3766;border-radius:6px;background:#0b1110}
+.trial-save-form input{width:100%;min-width:0;min-height:48px;padding:10px 12px;border:1px solid #a8925c;border-radius:4px;background:#141c18;color:#f1e5c5;font:20px TrialCormorant,serif}
+.trial-save-form label{color:#efd77e}
+.trial-note{font:16px/1.6 TrialCormorant,Georgia,serif;color:#d5cfb9}
+.hall-panel{margin-top:28px}
+.hall-list{display:grid;gap:12px;padding-left:0;list-style:none;counter-reset:sages}
+.hall-entry{counter-increment:sages;display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:12px;padding:16px;border:1px solid #d4af3744;border-radius:6px;background:#0b1110;align-items:center}
+.hall-entry::before{content:counter(sages);color:#d4af37;font-family:TrialCinzel,serif}
+.hall-entry strong{display:block;color:#f1e5c5;overflow-wrap:anywhere}
+.hall-entry small{display:block;color:#d5cfb9;font-size:16px}
+.hall-score{color:#efd77e;text-align:right;white-space:nowrap}
+.hall-example{color:#d4af37!important;font-style:italic}
+.trial-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:960px){.trials-page header .nav{justify-content:center}.trials-page header nav{justify-content:center}}
-@media(max-width:600px){.trials-page header{position:static}.trials-page main{padding:36px 16px 52px}.trial-options{grid-template-columns:minmax(0,1fr)}.trial-button{width:100%}.trial-option{min-height:56px}.trial-card{padding:20px 16px}}
+@media(max-width:600px){.trials-page header{position:static}.trials-page main{padding:36px 16px 52px}.trial-options{grid-template-columns:minmax(0,1fr)}.trial-button{width:100%}.trial-option{min-height:56px}.trial-card{padding:20px 16px}.hall-entry{grid-template-columns:24px minmax(0,1fr);gap:8px}.hall-score{grid-column:2;text-align:left}.trial-save-form{padding:16px}}
 @media(prefers-reduced-motion:reduce){.trials-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -56,12 +87,18 @@
 <a class="skip" href="#main">Skip to content</a>
 <header><div class="wrap nav"><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="" width="48" height="48"><span>HYLIAN LEGENDS<small>GUILD · HQ</small></span></a><nav aria-label="Main navigation"><a href="about.html">ABOUT</a><a href="guildhall.html">GUILDHALL</a><a href="lore.html">LORE</a><a href="index.html#codex">CODEX</a><a href="index.html#ranks">RANKS</a><a href="index.html#quests">QUESTS</a><a href="index.html#guides">GUIDES</a><a href="trials.html" aria-current="page">LORE TRIALS</a><a href="https://www.tibia.com/community/?subtopic=guilds&amp;page=view&amp;GuildName=Hylian+Legends&amp;character=Linkmupi&amp;action=characters">APPLY TO GUILD</a><a class="button" href="https://discord.gg/avApuUXfN9" target="_blank" rel="noopener noreferrer">JOIN DISCORD</a></nav></div></header>
 <main id="main">
-<div class="trial-intro"><div class="micro">The Lore Library · Lore Trials</div><h1>Trial of the Sages</h1><p class="trial-invocation">Step into the temple. Let knowledge be your guiding light.</p><p>Ten questions await from <em>The Legend of Zelda: Ocarina of Time</em>. Choose one answer to reveal the truth and its story.</p><p class="trial-rules">0–4 correct: Kokiri Initiate · 5–8: Temple Guardian · 9–10: Hero of Time.<br>These are quiz titles, not guild promotions. No timer. Retake as often as you wish.</p></div>
+<div class="trial-intro"><div class="micro">The Lore Library · Lore Trials</div><h1>Trial of the Sages</h1><p class="trial-invocation">Step into the temple. Answer before the golden sands run dry.</p><p>Ten questions await from <em>The Legend of Zelda: Ocarina of Time</em>. You have 20 seconds per question. Each answer reveals the truth and its story.</p><p class="trial-rules">0–4 correct: Kokiri Initiate · 5–8: Temple Guardian · 9–10: Hero of Time.<br>Timed-out questions earn no point and advance automatically after a six-second lore reveal; use Next Question to continue sooner. Answered questions wait for you to continue. Completion time runs from Begin to the final answer or timeout, including reading between questions. Leaving this tab does not pause the clock.<br>These are quiz titles, not guild promotions. Retake as often as you wish.</p></div>
 <section class="trial-card" aria-label="Interactive lore trial">
 <p id="trial-loading">Preparing the trial…</p><noscript><p>Enable JavaScript to take the interactive trial. You can still explore <a href="lore.html">the Lore Library</a>.</p></noscript>
-<div id="trial-play" hidden><div class="trial-meta"><span id="trial-count"></span><span id="trial-score"></span></div><progress id="trial-progress" max="10" value="0" aria-label="Questions answered"></progress><h2 id="trial-question" tabindex="-1"></h2><div id="trial-options" class="trial-options" role="group" aria-labelledby="trial-question"></div><p id="trial-feedback" role="status" aria-live="polite" aria-atomic="true"></p><button id="trial-next" class="trial-button" type="button" hidden>Next Question</button></div>
-<div id="trial-result" hidden><div class="micro">The sages have spoken</div><h2 id="trial-rank" tabindex="-1"></h2><p id="trial-final-score"></p><p id="trial-rank-message"></p><button id="trial-retake" class="trial-button" type="button">Retake Trial</button><h3>Your Trial Reviewed</h3><ol id="trial-review" class="trial-review"></ol></div>
+<div id="trial-ready" hidden><p>The sands will begin when you are ready.</p><button id="trial-start" class="trial-button" type="button">Begin Timed Trial</button></div>
+<div id="trial-play" hidden><div class="trial-meta"><span id="trial-count"></span><span id="trial-score"></span></div><progress id="trial-progress" max="10" value="0" aria-label="Questions answered"></progress>
+<div id="trial-clock" class="trial-clock"><div class="trial-clock-label"><svg viewBox="0 0 32 44" aria-hidden="true" focusable="false"><path d="M5 2h22M5 42h22M8 4v6c0 6 4 9 8 12-4 3-8 6-8 12v6m16-36v6c0 6-4 9-8 12 4 3 8 6 8 12v6" fill="none" stroke="#d4af37" stroke-width="2"/><path class="hourglass-top" d="M10 10h12l-6 9z" fill="#efd77e"/><path class="hourglass-bottom" d="M10 37h12l-6-9z" fill="#d4af37"/><path class="hourglass-stream" d="M16 21v10" stroke="#efd77e" stroke-dasharray="1 2"/></svg><span id="trial-countdown" role="timer" aria-live="off">20 seconds remaining</span></div><progress id="trial-sand" max="20" value="20" aria-label="Time remaining for this question"></progress></div>
+<p id="trial-timer-warning" class="trial-sr-only" role="status" aria-live="polite"></p><h2 id="trial-question" tabindex="-1"></h2><div id="trial-options" class="trial-options" role="group" aria-labelledby="trial-question"></div><p id="trial-feedback" role="status" aria-live="polite" aria-atomic="true"></p><button id="trial-next" class="trial-button" type="button" hidden>Next Question</button></div>
+<div id="trial-result" hidden><div class="micro">The sages have spoken</div><img class="trial-result-crest" src="assets/logo.png" width="90" height="90" alt="Hylian Legends crest"><h2 id="trial-rank" tabindex="-1"></h2><p id="trial-final-score"></p><p id="trial-final-time"></p><p id="trial-rank-message"></p>
+<form id="trial-save-form" class="trial-save-form"><label for="trial-name">Guild Name / Character Name</label><input id="trial-name" name="character" type="text" minlength="2" maxlength="48" required autocomplete="off" aria-describedby="trial-save-help"><p id="trial-save-help" class="trial-note">Save this result to this browser’s Hall of Sages. Use a character or guild name, not private personal information. One submission per completed attempt.</p><button id="trial-save" class="trial-button" type="submit">Inscribe My Legend</button><p id="trial-save-status" class="trial-note" role="status" aria-live="polite"></p></form>
+<button id="trial-retake" class="trial-button" type="button">Retake Trial</button><h3>Your Trial Reviewed</h3><ol id="trial-review" class="trial-review"></ol></div>
 </section>
+<section class="trial-card hall-panel" aria-labelledby="hall-title"><div class="micro">Legends inscribed in this browser</div><h2 id="hall-title">Hall of Sages</h2><p class="trial-note">Highest score first, then fastest completion time. Starter entries marked “Illustrative” are fictional examples, not real guild results. Your submissions are stored only in this browser via localStorage, not shared between members or devices. Local scores are not verified.</p><p id="hall-storage-status" class="trial-note" role="status"></p><ol id="hall-list" class="hall-list" aria-label="Hall of Sages standings"></ol><noscript><p>Enable JavaScript to view the local standings.</p></noscript></section>
 <aside class="trial-sources" aria-label="Lore references"><p>Continue your studies in <a href="lore.html">the Lore Library</a>. Explore the <a href="https://zelda-archive.fandom.com/wiki/Seven_Sages_(Ocarina_of_Time)" target="_blank" rel="noopener noreferrer">Seven Sages of Ocarina of Time</a> and <a href="https://zeldacentral.com/games/ocarina-of-time/guides/medallions-and-spiritual-stones/" target="_blank" rel="noopener noreferrer">Spiritual Stones and Medallions</a>.</p></aside><p class="trial-motto">Courage to begin. Wisdom to learn. Power to persevere.</p><div class="page-actions"><a class="button outline" href="index.html">Return to Guild HQ</a></div>
 </main>
 <footer><div class="wrap"><span>© 2026 Hylian Legends Guild · A fan community. Not affiliated with Nintendo.</span><a href="guildhall.html">Visit Carlin Clanhall</a></div></footer>
@@ -81,60 +118,147 @@ const questions = [
 ['Which Spiritual Stone is associated with the Zora?', ['Water Medallion','Kokiri’s Emerald','Goron’s Ruby','Zora’s Sapphire'],3,'Zora’s Sapphire is the Spiritual Stone of Water. Together with the Emerald and Ruby, it forms the trio collected during child Link’s adventure.']
 ];
 const $ = id => document.getElementById(id);
-let index = 0, score = 0, locked = false, answers = [];
+const LIMIT = 20000, REVEAL = 6000, STORAGE_KEY = 'hylian-legends.hall-of-sages.v1';
+let index = 0, score = 0, locked = false, answers = [], running = false, completed = false, submitted = false;
+let startedAt = 0, deadline = 0, completionSeconds = 0, ticker = null, advanceTimer = null, warned = false;
+const rankFor = points => points >= 9 ? 'Hero of Time' : points >= 5 ? 'Temple Guardian' : 'Kokiri Initiate';
+const sortEntries = entries => entries.sort((a,b) => b.score - a.score || a.time - b.time || a.name.localeCompare(b.name));
+const starters = [
+ {name:'Forest Watch / Emerald Seeker',score:10,time:76.4,example:true},
+ {name:'Temple Wardens / Golden Sentinel',score:9,time:94.8,example:true},
+ {name:'Zora Scholars / Sapphire Keeper',score:8,time:108.2,example:true},
+ {name:'Kokiri Fellowship / Dawn Wanderer',score:4,time:134.6,example:true}
+];
+let sessionEntries = [];
+function validEntries(value) {
+ if (!Array.isArray(value)) return [];
+ return value.filter(e => e && typeof e.name === 'string' && e.name.trim().length >= 2 && e.name.length <= 48 && Number.isInteger(e.score) && e.score >= 0 && e.score <= 10 && Number.isFinite(e.time) && e.time >= 0 && e.time <= 864000).map(e => ({name:e.name.trim(),score:e.score,time:e.time,rank:rankFor(e.score)})).slice(0,100);
+}
+// Cloud hook: replace load/save with authenticated API calls, validate names and scores
+// server-side, and use server-authoritative timing before offering shared rankings.
+// This local adapter intentionally makes no network requests and cannot verify scores.
+const leaderboardStore = {
+ load() {
+  try {
+   const raw = localStorage.getItem(STORAGE_KEY);
+   sessionEntries = raw ? validEntries(JSON.parse(raw)) : sessionEntries;
+   return sessionEntries;
+  } catch (_) {
+   $('hall-storage-status').textContent = 'Persistent storage is unavailable or unreadable. New results will remain in this page session only unless saving becomes available.';
+   return sessionEntries;
+  }
+ },
+ save(entries) {
+  sessionEntries = sortEntries(validEntries(entries)).slice(0,100);
+  try { localStorage.setItem(STORAGE_KEY,JSON.stringify(sessionEntries)); $('hall-storage-status').textContent = ''; return true; }
+  catch (_) { $('hall-storage-status').textContent = 'Storage is blocked or full. This page can show your result for this session, but it may disappear after reload.'; return false; }
+ }
+};
+function renderHall(entries = leaderboardStore.load()) {
+ $('hall-list').replaceChildren();
+ sortEntries([...starters,...entries]).slice(0,100).forEach(entry => {
+  const item = document.createElement('li'), identity = document.createElement('div'), name = document.createElement('strong'), rank = document.createElement('small'), stats = document.createElement('div');
+  item.className = 'hall-entry'; name.textContent = entry.name; rank.textContent = rankFor(entry.score); identity.append(name,rank);
+  if (entry.example) { const mark = document.createElement('small'); mark.className = 'hall-example'; mark.textContent = 'Illustrative starter entry'; identity.append(mark); }
+  stats.className = 'hall-score'; stats.textContent = `${entry.score}/10 · ${entry.time.toFixed(1)} s`; item.append(identity,stats); $('hall-list').append(item);
+ });
+}
+function clearTimers() { clearInterval(ticker); clearTimeout(advanceTimer); ticker = null; advanceTimer = null; $('trial-clock').classList.remove('running'); }
+function paintClock(ms) {
+ const seconds = Math.ceil(ms / 1000);
+ $('trial-countdown').textContent = `${seconds} second${seconds === 1 ? '' : 's'} remaining`;
+ $('trial-sand').value = ms / 1000;
+ $('trial-clock').classList.toggle('urgent',ms <= 5000);
+}
+function tick() {
+ if (!running || locked) return;
+ const remaining = Math.max(0,deadline - performance.now());
+ paintClock(remaining);
+ if (!warned && remaining <= 5000 && remaining > 0) { warned = true; $('trial-timer-warning').textContent = 'Five seconds or less remain for this question.'; }
+ if (remaining === 0) settle(null);
+}
 function render(focus) {
- locked = false;
+ clearTimers(); locked = false; warned = false;
  const q = questions[index];
  $('trial-count').textContent = `Question ${index + 1} of ${questions.length}`;
  $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
- $('trial-progress').value = index;
- $('trial-question').textContent = q[0];
- $('trial-feedback').textContent = '';
- $('trial-options').replaceChildren();
- $('trial-next').hidden = true;
- $('trial-next').textContent = index === questions.length - 1 ? 'Reveal My Rank' : 'Next Question';
- q[1].forEach((text, choice) => {
+ $('trial-progress').value = index; $('trial-question').textContent = q[0];
+ $('trial-feedback').textContent = ''; $('trial-timer-warning').textContent = ''; $('trial-options').replaceChildren();
+ $('trial-next').hidden = true; $('trial-next').textContent = index === questions.length - 1 ? 'Reveal My Rank' : 'Next Question';
+ q[1].forEach((text,choice) => {
   const button = document.createElement('button'), letter = document.createElement('span'), label = document.createElement('span');
-  button.type = 'button'; button.className = 'trial-option';
-  letter.className = 'trial-letter'; letter.textContent = 'ABCD'[choice]; letter.setAttribute('aria-hidden','true');
-  label.textContent = text; button.append(letter,label);
-  button.addEventListener('click', () => answer(choice));
-  $('trial-options').append(button);
+  button.type = 'button'; button.className = 'trial-option'; letter.className = 'trial-letter'; letter.textContent = 'ABCD'[choice]; letter.setAttribute('aria-hidden','true');
+  label.textContent = text; button.append(letter,label); button.addEventListener('click',() => settle(choice)); $('trial-options').append(button);
  });
+ paintClock(LIMIT);
+ void $('trial-clock').offsetWidth;
+ $('trial-clock').classList.add('running'); deadline = performance.now() + LIMIT;
+ ticker = setInterval(tick,100);
  if (focus) $('trial-question').focus();
 }
-function answer(choice) {
- if (locked) return;
- locked = true;
- const q = questions[index], correct = choice === q[2];
+function settle(choice) {
+ if (!running || locked) return;
+ const now = performance.now();
+ if (now >= deadline) choice = null;
+ locked = true; clearTimers();
+ const q = questions[index], timedOut = choice === null, correct = choice === q[2];
  answers.push(choice); if (correct) score++;
- Array.from($('trial-options').children).forEach((button, option) => {
+ paintClock(timedOut ? 0 : Math.max(0,deadline - now));
+ Array.from($('trial-options').children).forEach((button,option) => {
   button.disabled = true;
   if (option === q[2]) { button.classList.add('is-correct'); button.lastChild.textContent += ' — Correct answer'; }
   else if (option === choice) { button.classList.add('is-incorrect'); button.lastChild.textContent += ' — Your answer (incorrect)'; }
  });
- $('trial-feedback').textContent = (correct ? 'Correct. ' : `Incorrect. The correct answer is ${q[1][q[2]]}. `) + q[3];
- $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
- $('trial-progress').value = index + 1;
+ $('trial-feedback').textContent = (timedOut ? `Time ran out. No point awarded. The correct answer is ${q[1][q[2]]}. ` : correct ? 'Correct. ' : `Incorrect. The correct answer is ${q[1][q[2]]}. `) + q[3] + (timedOut ? ' Continuing automatically in six seconds; use the button to continue sooner.' : '');
+ $('trial-score').textContent = `Score: ${score} / ${questions.length}`; $('trial-progress').value = index + 1;
+ if (index === questions.length - 1) completionSeconds = Math.round((now - startedAt) / 100) / 10;
  $('trial-next').hidden = false; $('trial-next').focus();
+ if (timedOut) { const questionIndex = index; advanceTimer = setTimeout(() => { if (running && locked && index === questionIndex) advance(); },REVEAL); }
+}
+function advance() {
+ if (!running || !locked) return;
+ clearTimers();
+ if (index === questions.length - 1) finish(); else { index++; render(true); }
 }
 function finish() {
+ clearTimers(); running = false; completed = true;
  $('trial-play').hidden = true; $('trial-result').hidden = false;
- $('trial-rank').textContent = score >= 9 ? 'Hero of Time' : score >= 5 ? 'Temple Guardian' : 'Kokiri Initiate';
+ $('trial-result').classList.toggle('hero-earned',score >= 9);
+ $('trial-rank').textContent = rankFor(score);
  $('trial-final-score').textContent = `You answered ${score} of ${questions.length} questions correctly (${score * 10}%).`;
- $('trial-rank-message').textContent = score >= 9 ? 'The wisdom of the sages shines within you.' : score >= 5 ? 'You stand watch over the knowledge of Hyrule. Keep studying the ancient tales.' : 'Every legend begins with a first step. Study the lore, then answer the call again.';
+ $('trial-final-time').textContent = `Total completion time: ${completionSeconds.toFixed(1)} seconds. Equal scores are ranked by fastest time.`;
+ $('trial-rank-message').textContent = score >= 9 ? 'You are a true Hero of Time! The golden light of Hyrule answers your wisdom and courage.' : score >= 5 ? 'Steadfast Temple Guardian, you keep the ancient wisdom alive. The next legend is yours to uncover.' : 'Kokiri Initiate, every great hero begins beneath the forest canopy. Let curiosity guide your next journey.';
+ $('trial-save-form').reset(); $('trial-save').disabled = false; $('trial-save-status').textContent = '';
  $('trial-review').replaceChildren();
  questions.forEach((q,i) => {
   const item = document.createElement('li'), title = document.createElement('strong'), detail = document.createElement('p'), explanation = document.createElement('p');
-  title.textContent = q[0];
-  detail.textContent = `${answers[i] === q[2] ? 'Correct' : 'Incorrect'} — Your answer: ${q[1][answers[i]]}. Correct answer: ${q[1][q[2]]}.`;
+  title.textContent = q[0]; const chosen = answers[i];
+  detail.textContent = `${chosen === null ? 'Timed out — no answer selected' : chosen === q[2] ? 'Correct — Your answer: ' + q[1][chosen] : 'Incorrect — Your answer: ' + q[1][chosen]}. Correct answer: ${q[1][q[2]]}.`;
   explanation.textContent = q[3]; item.append(title,detail,explanation); $('trial-review').append(item);
  });
  $('trial-rank').focus();
 }
-$('trial-next').addEventListener('click', () => { if (!locked) return; if (index === questions.length - 1) finish(); else { index++; render(true); } });
-$('trial-retake').addEventListener('click', () => { index = 0; score = 0; locked = false; answers = []; $('trial-result').hidden = true; $('trial-play').hidden = false; render(true); });
-$('trial-loading').hidden = true; $('trial-play').hidden = false; render(false);
+function start() {
+ clearTimers(); index = 0; score = 0; locked = false; answers = []; completed = false; submitted = false; completionSeconds = 0; running = true;
+ $('trial-ready').hidden = true; $('trial-result').hidden = true; $('trial-play').hidden = false; startedAt = performance.now(); render(true);
+}
+$('trial-start').addEventListener('click',start); $('trial-retake').addEventListener('click',start); $('trial-next').addEventListener('click',advance);
+$('trial-save-form').addEventListener('submit',event => {
+ event.preventDefault(); if (!completed || submitted) return;
+ const input = $('trial-name'), name = input.value.trim();
+ input.setCustomValidity(name.length < 2 ? 'Enter at least two non-space characters.' : '');
+ if (!input.reportValidity()) return;
+ const entries = [...leaderboardStore.load(),{name,score,time:completionSeconds,rank:rankFor(score)}];
+ const persisted = leaderboardStore.save(entries); submitted = true; $('trial-save').disabled = true; renderHall(sessionEntries);
+ $('trial-save-status').textContent = persisted ? 'Your legend is saved in this browser’s Hall of Sages.' : 'Your legend is shown for this page session only; persistent storage was unavailable.';
+});
+$('trial-name').addEventListener('input',() => $('trial-name').setCustomValidity(''));
+document.addEventListener('visibilitychange',() => { if (!document.hidden) tick(); });
+window.addEventListener('pageshow',tick);
+window.addEventListener('pagehide',clearTimers);
+window.addEventListener('pageshow',() => { if (running && !locked) { clearInterval(ticker); ticker = setInterval(tick,100); tick(); } else if (running && locked && answers[index] === null) advance(); });
+window.addEventListener('storage',event => { if (event.key === STORAGE_KEY || event.key === null) { sessionEntries = []; renderHall(); } });
+renderHall(); $('trial-loading').hidden = true; $('trial-ready').hidden = false;
 })();
 </script>
 </body>
