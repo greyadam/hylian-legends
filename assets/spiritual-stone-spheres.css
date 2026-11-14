@@ -1,8 +1,10 @@
-/* Artwork-preserving circular stone containers; no typography or grid overrides. */
-#codex .virtues .panel .spiritual-stone-icon{display:grid;place-items:center;flex:0 0 64px;width:64px;height:64px;border-radius:50%;position:relative;transform-origin:50% 50%;transform-style:preserve-3d;perspective:1000px;backface-visibility:visible;will-change:transform;animation:stoneSpin 8s infinite linear}
-#codex .virtues .panel .spiritual-stone-icon::before{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.4) 0%,rgba(0,0,0,.6) 75%);z-index:2;pointer-events:none}
-#codex .virtues .panel .stone-emerald{background:radial-gradient(circle at 30% 30%,#52be80,#196f3d);box-shadow:inset -8px -8px 16px rgba(0,0,0,.7),inset 4px 4px 8px rgba(255,255,255,.4),0 0 20px rgba(46,204,113,.6)}
-#codex .virtues .panel .stone-sapphire{background:radial-gradient(circle at 30% 30%,#5499c7,#1b4f72);box-shadow:inset -8px -8px 16px rgba(0,0,0,.7),inset 4px 4px 8px rgba(255,255,255,.4),0 0 20px rgba(52,152,219,.6)}
-#codex .virtues .panel .stone-ruby{background:radial-gradient(circle at 30% 30%,#ec7063,#943126);box-shadow:inset -8px -8px 16px rgba(0,0,0,.7),inset 4px 4px 8px rgba(255,255,255,.4),0 0 20px rgba(231,76,60,.6)}
-#codex .virtues .panel .spiritual-stone-icon>.virtue-stone{position:relative;z-index:1;transform:none;transform-style:preserve-3d;backface-visibility:visible;will-change:auto;animation:stoneGlow 3.6s ease-in-out infinite;animation-play-state:running}
-@media(prefers-reduced-motion:reduce){#codex .virtues .panel .spiritual-stone-icon,#codex .virtues .panel .spiritual-stone-icon>.virtue-stone{animation:none;transform:none;will-change:auto}#codex .virtues .panel .spiritual-stone-icon>.virtue-stone{filter:drop-shadow(0 0 7px var(--stone-glow))!important}}
+/* Genuine mesh visuals with static CSS fallbacks; scoped to the three Codex icons. */
+#codex .virtues .panel .spiritual-stone-icon{--stone-rgb:46,204,113;--stone-light:#52be80;--stone-dark:#196f3d;display:block;flex:0 0 64px;width:64px;height:64px;border-radius:50%;position:relative;transform:none;transform-style:flat;perspective:none;backface-visibility:visible;will-change:auto;background:radial-gradient(circle at 30% 30%,var(--stone-light),var(--stone-dark));box-shadow:inset -8px -8px 16px rgba(0,0,0,.7),inset 4px 4px 8px rgba(255,255,255,.4),0 0 20px rgba(var(--stone-rgb),.6);animation:none}
+#codex .virtues .panel .stone-sapphire{--stone-rgb:52,152,219;--stone-light:#5499c7;--stone-dark:#1b4f72}
+#codex .virtues .panel .stone-ruby{--stone-rgb:231,76,60;--stone-light:#ec7063;--stone-dark:#943126}
+#codex .virtues .panel .spiritual-stone-icon::before{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.4) 0%,rgba(0,0,0,.6) 75%);pointer-events:none}
+#codex .virtues .panel .spiritual-stone-icon.is-webgl{background:transparent;box-shadow:0 0 20px rgba(var(--stone-rgb),.6);animation:stoneMeshGlow 3.6s ease-in-out infinite}
+#codex .virtues .panel .spiritual-stone-icon.is-webgl::before{content:none}
+#codex .virtues .panel .spiritual-stone-icon>canvas{display:block;width:64px;height:64px;border-radius:50%;pointer-events:none}
+@keyframes stoneMeshGlow{0%,100%{box-shadow:0 0 14px rgba(var(--stone-rgb),.6)}50%{box-shadow:0 0 22px rgba(var(--stone-rgb),.6)}}
+@media(prefers-reduced-motion:reduce){#codex .virtues .panel .spiritual-stone-icon.is-webgl{animation:none}}
