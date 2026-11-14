@@ -1,0 +1,228 @@
+name: Install Lore Trials
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/install-lore-trials.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: install-lore-trials
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Create quiz and update navigation without replacing page content
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import posixpath
+          import json
+          root = Path('.')
+          lore = Path('lore.html').read_text()
+          header = re.search(r'<header\b[^>]*>.*?</header>', lore, re.S).group()
+          header = re.sub(r'\s+aria-current="page"', '', header)
+          footer = re.search(r'<footer\b[^>]*>.*?</footer>', lore, re.S).group()
+          questions = [
+            ['Which goddess is associated with Power?', ['Din', 'Nayru', 'Farore', 'Hylia'], 0, 'Din shaped the land of Hyrule and is associated with the Triforce of Power.'],
+            ['Which goddess gave the world its laws and order?', ['Farore', 'Din', 'Nayru', 'Zelda'], 2, 'Nayru established the laws of the world and is associated with the Triforce of Wisdom.'],
+            ['Which goddess created life and represents Courage?', ['Nayru', 'Farore', 'Din', 'Impa'], 1, 'Farore created living beings to uphold the laws of the world. Her virtue is Courage.'],
+            ['In Ocarina of Time, who is the Sage of Forest?', ['Ruto', 'Nabooru', 'Impa', 'Saria'], 3, 'Saria, Link’s childhood friend from Kokiri Forest, awakens as the Sage of Forest.'],
+            ['In Ocarina of Time, who is the Sage of Fire?', ['Darunia', 'Rauru', 'Saria', 'Ruto'], 0, 'Darunia, leader of the Gorons, awakens as the Sage of Fire and grants the Fire Medallion.'],
+            ['In Ocarina of Time, who is the Sage of Water?', ['Zelda', 'Saria', 'Princess Ruto', 'Nabooru'], 2, 'Princess Ruto of the Zora awakens as the Sage of Water and grants the Water Medallion.'],
+            ['In Ocarina of Time, which sage represents Shadow?', ['Darunia', 'Impa', 'Nabooru', 'Rauru'], 1, 'Impa, Zelda’s Sheikah attendant, awakens as the Sage of Shadow.'],
+            ['In Ocarina of Time, who is the Sage of Spirit?', ['Ruto', 'Saria', 'Zelda', 'Nabooru'], 3, 'Nabooru, the Gerudo who opposes Ganondorf, awakens as the Sage of Spirit.'],
+            ['Which sage gives Link the Light Medallion in Ocarina of Time?', ['Rauru', 'Darunia', 'Impa', 'Nabooru'], 0, 'Rauru is the Sage of Light. He meets Link in the Chamber of Sages and gives him the Light Medallion.'],
+            ['Who leads the sages and reveals that she has been disguised as Sheik?', ['Saria', 'Impa', 'Princess Zelda', 'Princess Ruto'], 2, 'Princess Zelda reveals her identity as Sheik and her role as the seventh sage and leader of the sages.']
+          ]
+          assert len(questions) == 10 and all(len(q[1]) == 4 and 0 <= q[2] < 4 for q in questions)
+          css = '''@font-face{font-family:TrialsCinzel;src:url('fonts/Cinzel-Regular.ttf') format('truetype');font-display:swap}
+          @font-face{font-family:TrialsCormorant;src:url('fonts/CormorantGaramond-Regular.ttf') format('truetype');font-display:swap}
+          @font-face{font-family:TrialsSherwood;src:url('fonts/Sherwood-Regular.ttf') format('truetype');font-display:swap}
+          @font-face{font-family:TrialsRavenna;src:url('fonts/Ravenna.ttf') format('truetype');font-display:swap}
+          body header nav>a:not(.button){font-family:TrialsCinzel,serif!important}
+          body header nav .lore-trials-link[aria-current=page]{color:var(--gold,#d4af37);border-bottom:1px solid currentColor}
+          body header .nav{height:auto!important;min-height:76px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+          body header nav{flex-wrap:wrap;max-width:100%}
+          .trials-page{font:20px/1.65 TrialsCormorant,Georgia,serif;background-color:#0b1110;background-image:linear-gradient(#0b1110e8,#0b1110f5),url('card-frame.jpeg');color:#f1e5c5}
+          .trials-page [hidden]{display:none!important}
+          .trials-page header,.trials-page footer{font:14px/1.7 Arial,sans-serif}
+          .trials-page main{max-width:960px;margin:auto;padding:64px 24px 80px;min-width:0}
+          .trials-page .trial-intro{text-align:center;margin-bottom:32px}
+          .trials-page .trial-intro h1{font-size:clamp(32px,6vw,64px);overflow-wrap:break-word}
+          .trials-page .trial-invocation{font:24px/1.5 TrialsSherwood,serif;color:var(--gold);margin:20px 0}
+          .trials-page .trial-motto{font:22px/1.6 TrialsRavenna,serif;color:#d4af37;margin:24px 0}
+          .trials-page .trial-card{padding:clamp(20px,5vw,44px);border:1px solid #d4af3780;border-top:3px solid #d4af37;background:linear-gradient(#141c18f5,#101512f5),url('card-frame.jpeg') center/cover;box-shadow:0 16px 48px #0007,inset 0 0 45px #d4af3708;border-radius:10px;min-width:0}
+          .trials-page .trial-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:12px/1.6 TrialsCinzel,serif;color:#f1e5c5}
+          .trials-page progress{display:block;width:100%;height:10px;margin:16px 0 28px;accent-color:#d4af37;border:0;border-radius:8px;background:#29322c}
+          .trials-page progress::-webkit-progress-bar{background:#29322c;border-radius:8px}
+          .trials-page progress::-webkit-progress-value{background:#d4af37;border-radius:8px}
+          .trials-page progress::-moz-progress-bar{background:#d4af37;border-radius:8px}
+          .trials-page #trial-question{font-size:clamp(22px,3.5vw,30px);line-height:1.5;letter-spacing:normal;overflow-wrap:break-word}
+          .trials-page .trial-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}
+          .trials-page .trial-option{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:16px;text-align:left;border:1px solid #a8925c80;border-radius:6px;background:#0b1110;color:#f1e5c5;font:20px/1.5 TrialsCormorant,Georgia,serif;cursor:pointer;overflow-wrap:anywhere}
+          .trials-page .trial-option:not(:disabled):hover{border-color:#d4af37;background:#26271b}
+          .trials-page .trial-letter{flex-shrink:0;color:#d4af37;font:13px TrialsCinzel,serif}
+          .trials-page .trial-option:disabled{cursor:default;opacity:1}
+          .trials-page .trial-option.is-correct{border:2px solid #72db9b;background:#132d20}
+          .trials-page .trial-option.is-incorrect{border:2px solid #f39488;background:#351d1b}
+          .trials-page #trial-feedback{padding:18px;border-left:3px solid #d4af37;background:#0b1110;margin:20px 0;color:#f1e5c5;white-space:pre-line}
+          .trials-page #trial-feedback:empty{display:none}
+          .trials-page .trial-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1px solid #d4af37;border-radius:28px;background:#d4af37;color:#171608;font:14px/1.6 TrialsCinzel,serif;cursor:pointer}
+          .trials-page button:focus-visible,.trials-page [tabindex='-1']:focus-visible{outline:3px solid #fff0ba;outline-offset:5px}
+          .trials-page .trial-rules,.trials-page .trial-sources{font-size:18px;color:#d5cfb9}
+          .trials-page .trial-sources{margin-top:28px}
+          .trials-page .trial-sources a{color:#e9c976;text-decoration:underline;text-underline-offset:3px}
+          .trials-page .trial-review{padding-left:24px}
+          .trials-page .trial-review li{padding:14px 0;border-bottom:1px solid #d4af3733}
+          .trials-page .trial-review p{color:#d5cfb9;margin:6px 0}
+          .trials-page #trial-rank{font-size:clamp(26px,5vw,42px)}
+          @media(max-width:960px){body header .nav{justify-content:center}body header nav{justify-content:center}}
+          @media(max-width:600px){.trials-page main{padding:36px 16px 52px}.trials-page .trial-options{grid-template-columns:minmax(0,1fr)}.trials-page .trial-button{width:100%}.trials-page .trial-option{min-height:56px}.trials-page .trial-card{padding:20px 16px}}
+          @media(prefers-reduced-motion:reduce){.trials-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+          '''
+          Path('assets/lore-trials.css').write_text(css)
+          js = '(() => {\n"use strict";\nconst questions = ' + json.dumps(questions, ensure_ascii=False) + ';\n' + '''
+          const $ = id => document.getElementById(id);
+          const panel = $('trial-play'), result = $('trial-result'), next = $('trial-next');
+          if (!panel || !result || !next) return;
+          let index = 0, score = 0, locked = false, answers = [];
+          function rankFor(value) { return value >= 9 ? 'Sage of Hyrule' : value >= 5 ? 'Temple Guardian' : 'Kokiri Initiate'; }
+          function render(focus) {
+            locked = false;
+            const q = questions[index];
+            $('trial-count').textContent = `Question ${index + 1} of ${questions.length}`;
+            $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
+            $('trial-progress').value = index;
+            $('trial-question').textContent = q[0];
+            $('trial-feedback').textContent = '';
+            $('trial-options').replaceChildren();
+            next.hidden = true;
+            next.textContent = index === questions.length - 1 ? 'Reveal My Rank' : 'Next Question';
+            q[1].forEach((text, option) => {
+              const button = document.createElement('button');
+              button.type = 'button'; button.className = 'trial-option';
+              const letter = document.createElement('span');
+              letter.className = 'trial-letter'; letter.textContent = 'ABCD'[option]; letter.setAttribute('aria-hidden', 'true');
+              const label = document.createElement('span'); label.textContent = text;
+              button.append(letter, label);
+              button.addEventListener('click', () => answer(option));
+              $('trial-options').append(button);
+            });
+            if (focus) $('trial-question').focus();
+          }
+          function answer(choice) {
+            if (locked) return;
+            locked = true;
+            const q = questions[index], correct = choice === q[2];
+            answers.push(choice);
+            if (correct) score++;
+            Array.from($('trial-options').children).forEach((button, option) => {
+              button.disabled = true;
+              if (option === q[2]) { button.classList.add('is-correct'); button.lastChild.textContent += ' — Correct answer'; }
+              else if (option === choice) { button.classList.add('is-incorrect'); button.lastChild.textContent += ' — Your answer (incorrect)'; }
+            });
+            $('trial-feedback').textContent = (correct ? 'Correct. ' : `Incorrect. The correct answer is ${q[1][q[2]]}. `) + q[3];
+            $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
+            $('trial-progress').value = index + 1;
+            next.hidden = false;
+            next.focus();
+          }
+          function finish() {
+            panel.hidden = true; result.hidden = false;
+            $('trial-rank').textContent = rankFor(score);
+            $('trial-final-score').textContent = `You answered ${score} of ${questions.length} questions correctly (${score * 10}%).`;
+            $('trial-rank-message').textContent = score >= 9 ? 'The wisdom of the sages shines within you.' : score >= 5 ? 'You stand watch over the knowledge of Hyrule. Keep studying the ancient tales.' : 'Every legend begins with a first step. Study the lore, then answer the call again.';
+            $('trial-review').replaceChildren();
+            questions.forEach((q, i) => {
+              const item = document.createElement('li'), title = document.createElement('strong'), detail = document.createElement('p'), explanation = document.createElement('p');
+              title.textContent = q[0];
+              detail.textContent = `${answers[i] === q[2] ? 'Correct' : 'Incorrect'} — Your answer: ${q[1][answers[i]]}. Correct answer: ${q[1][q[2]]}.`;
+              explanation.textContent = q[3]; item.append(title, detail, explanation); $('trial-review').append(item);
+            });
+            $('trial-rank').focus();
+          }
+          next.addEventListener('click', () => { if (!locked) return; if (index === questions.length - 1) finish(); else { index++; render(true); } });
+          $('trial-retake').addEventListener('click', () => { index = 0; score = 0; answers = []; result.hidden = true; panel.hidden = false; render(true); });
+          $('trial-loading').hidden = true; panel.hidden = false; render(false);
+          })();
+          '''
+          Path('assets/lore-trials.js').write_text(js)
+          page = '''<!doctype html>
+          <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1110"><meta name="description" content="Enter the Trial of the Sages: ten Zelda lore questions, instant explanations and a rank worthy of Hyrule."><title>Lore Trials | Hylian Legends</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="assets/lore-trials.css"><script src="assets/temple-accents.js" defer></script><script src="assets/lore-trials.js" defer></script></head><body class="trials-page"><a class="skip" href="#main">Skip to content</a>''' + header + '''
+          <main id="main"><div class="trial-intro"><div class="micro">The Lore Library · Lore Trials</div><h1>Trial of the Sages</h1><p class="trial-invocation">Step into the temple. Let knowledge be your guiding light.</p><p>Ten questions await: the Three Goddesses and the sages of <em>The Legend of Zelda: Ocarina of Time</em>. Choose one answer to reveal the truth and its story.</p><p class="trial-rules">0–4 correct: Kokiri Initiate · 5–8: Temple Guardian · 9–10: Sage of Hyrule.<br>These are quiz titles, not guild promotions. No timer. Retake as often as you wish.</p></div>
+          <section class="trial-card" aria-label="Interactive lore trial"><p id="trial-loading">Preparing the trial…</p><noscript><p>Enable JavaScript to take the interactive trial. You can still explore <a href="lore.html">the Lore Library</a>.</p></noscript>
+          <div id="trial-play" hidden><div class="trial-meta"><span id="trial-count"></span><span id="trial-score"></span></div><progress id="trial-progress" max="10" value="0" aria-label="Questions answered"></progress><h2 id="trial-question" tabindex="-1"></h2><div id="trial-options" class="trial-options" role="group" aria-labelledby="trial-question"></div><p id="trial-feedback" role="status" aria-live="polite" aria-atomic="true"></p><button id="trial-next" class="trial-button" type="button" hidden>Next Question</button></div>
+          <div id="trial-result" hidden><div class="micro">The sages have spoken</div><h2 id="trial-rank" tabindex="-1"></h2><p id="trial-final-score"></p><p id="trial-rank-message"></p><button id="trial-retake" class="trial-button" type="button">Retake Trial</button><h3>Your Trial Reviewed</h3><ol id="trial-review" class="trial-review"></ol></div></section>
+          <aside class="trial-sources" aria-label="Lore references"><p>Continue your studies in <a href="lore.html">the Lore Library</a>. Sage identities and roles follow <a href="https://zeldawiki.wiki/wiki/Six_Sages" target="_blank" rel="noopener noreferrer">Zelda Wiki’s Six Sages reference</a> and <a href="https://zelda-archive.fandom.com/wiki/Seven_Sages_(Ocarina_of_Time)" target="_blank" rel="noopener noreferrer">the Ocarina of Time Seven Sages overview</a>.</p></aside><p class="trial-motto">Courage to begin. Wisdom to learn. Power to persevere.</p><a class="button outline" href="index.html">Return to Guild HQ</a></main>''' + footer + '</body></html>\n'
+          Path('trials.html').write_text(page)
+          changed = []
+          for path in root.rglob('*.html'):
+              if any(part.startswith('.') or part == '_site' for part in path.parts):
+                  continue
+              html = original = path.read_text()
+              prefix = posixpath.relpath('.', path.parent.as_posix())
+              prefix = '' if prefix == '.' else prefix + '/'
+              def update_header(match):
+                  block = match.group()
+                  def update_nav(nav_match):
+                      nav = nav_match.group()
+                      if re.search(r'href=[\"\'][^\"\']*trials\.html[\"\']', nav):
+                          return nav
+                      current = ' aria-current="page"' if path.as_posix() == 'trials.html' else ''
+                      link = '<a class="lore-trials-link" href="' + prefix + 'trials.html"' + current + '>Lore Trials</a>'
+                      anchor = re.search(r'<a\b[^>]*href=[\"\'][^\"\']*lore\.html[\"\'][^>]*>.*?</a>', nav, re.S)
+                      if anchor:
+                          return nav[:anchor.end()] + link + nav[anchor.end():]
+                      return nav.replace('</nav>', link + '</nav>', 1)
+                  return re.sub(r'<nav\b[^>]*>.*?</nav>', update_nav, block, count=1, flags=re.S)
+              html = re.sub(r'<header\b[^>]*>.*?</header>', update_header, html, flags=re.S)
+              if html != original:
+                  assert '</head>' in html, str(path) + ' has navigation but no document head'
+                  if 'assets/lore-trials.css' not in html:
+                      html = html.replace('</head>', '<link rel="stylesheet" href="' + prefix + 'assets/lore-trials.css"></head>', 1)
+                  path.write_text(html)
+                  changed.append(path.as_posix())
+          assert 'index.html' in changed or 'trials.html' in Path('index.html').read_text()
+          workflow = Path('.github/workflows/pages.yml')
+          deploy = workflow.read_text()
+          old = 'for file in index.html about.html'
+          new = 'for file in index.html trials.html about.html'
+          assert deploy.count(old) == 1 or deploy.count(new) == 1, 'Unexpected Pages file list'
+          deploy = deploy.replace(old, new, 1)
+          workflow.write_text(deploy)
+          for filename in ['Cinzel-Regular.ttf','CormorantGaramond-Regular.ttf','Sherwood-Regular.ttf','Ravenna.ttf']:
+              assert Path('assets/fonts', filename).is_file()
+          assert Path('assets/card-frame.jpeg').is_file()
+          final = Path('trials.html').read_text()
+          assert final.count('aria-current="page"') == 1 and 'Lore Trials</a>' in final
+          for path in root.rglob('*.html'):
+              if any(part.startswith('.') or part == '_site' for part in path.parts):
+                  continue
+              text = path.read_text()
+              for h in re.findall(r'<header\b[^>]*>.*?</header>', text, re.S):
+                  if '<nav' in h:
+                      assert 'trials.html' in h, str(path) + ' missing navigation link'
+          print('Validated 10 questions and updated navigation:', ', '.join(changed))
+          PY
+          node --check assets/lore-trials.js
+          git diff --check
+      - name: Commit generated page, assets, navigation and deployment list
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- ':(glob)**/*.html' assets/lore-trials.css assets/lore-trials.js .github/workflows/pages.yml
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add Trial of the Sages and Lore Trials navigation across site'
+            git push origin HEAD:main
+          fi
+      - name: Request existing Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
