@@ -51,11 +51,3 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});else init();
 })();
-
-(() => {
-  if (!document.body.classList.contains('guild-home') || document.getElementById('stone-webgl-loader')) return;
-  const script = document.createElement('script');
-  script.id = 'stone-webgl-loader';
-  script.src = 'assets/stone-webgl.js';
-  document.head.append(script);
-})();
