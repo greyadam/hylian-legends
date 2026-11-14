@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Take the Trial of the Sages: ten Ocarina of Time lore questions, immediate explanations, and your Hylian rank.">
+<meta name="theme-color" content="#0b1110">
+<title>Lore Trials | Hylian Legends</title>
+<link rel="stylesheet" href="style.css">
+<style>
+@font-face{font-family:TrialCinzel;src:url('assets/fonts/Cinzel-Regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:TrialCormorant;src:url('assets/fonts/CormorantGaramond-Regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:TrialSherwood;src:url('assets/fonts/Sherwood-Regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:TrialRavenna;src:url('assets/fonts/Ravenna.ttf') format('truetype');font-display:swap}
+.trials-page{font:20px/1.7 TrialCormorant,Georgia,serif;background:#0b1110 linear-gradient(#0b1110ed,#0b1110f5),url('assets/card-frame.jpeg');color:#f1e5c5}
+.trials-page [hidden]{display:none!important}
+.trials-page header,.trials-page footer{font:14px/1.7 Arial,sans-serif}
+.trials-page header .nav{height:auto;min-height:76px;flex-wrap:wrap}
+.trials-page header nav>a:not(.button){font-family:TrialCinzel,serif!important;text-transform:uppercase}
+.trials-page main{max-width:960px;margin:auto;padding:64px 24px 80px;min-width:0}
+.trial-intro{text-align:center;margin-bottom:32px}
+.trials-page h1{font-size:clamp(32px,6vw,64px);overflow-wrap:break-word}
+.trial-invocation{font:24px/1.5 TrialSherwood,serif;color:var(--gold);margin:20px 0}
+.trial-motto{font:23px/1.6 TrialRavenna,serif;color:var(--gold);text-align:center;margin:30px 0}
+.trial-rules,.trial-sources{font-size:18px;color:#d5cfb9}
+.trial-card{padding:clamp(20px,5vw,44px);border:1px solid #d4af3780;border-top:3px solid #d4af37;border-radius:10px;background:linear-gradient(#141c18f5,#101512f5),url('assets/card-frame.jpeg') center/cover;box-shadow:0 16px 48px #0007,inset 0 0 45px #d4af3708;min-width:0}
+.trial-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#f1e5c5;font:12px/1.6 TrialCinzel,serif}
+.trials-page progress{display:block;width:100%;height:10px;margin:18px 0 28px;accent-color:#d4af37;border:0;border-radius:8px;background:#29322c}
+.trials-page progress::-webkit-progress-bar{background:#29322c;border-radius:8px}
+.trials-page progress::-webkit-progress-value{background:#d4af37;border-radius:8px}
+.trials-page progress::-moz-progress-bar{background:#d4af37;border-radius:8px}
+.trials-page #trial-question{font-size:clamp(22px,3.5vw,30px);line-height:1.5;overflow-wrap:break-word}
+.trial-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}
+.trial-option{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:16px;text-align:left;border:1px solid #a8925c80;border-radius:6px;background:#0b1110;color:#f1e5c5;font:20px/1.5 TrialCormorant,Georgia,serif;cursor:pointer;overflow-wrap:anywhere}
+.trial-option:not(:disabled):hover{border-color:#d4af37;background:#26271b}
+.trial-letter{flex-shrink:0;color:#d4af37;font:13px TrialCinzel,serif}
+.trial-option:disabled{cursor:default;opacity:1}
+.trial-option.is-correct{border:2px solid #d4af37;background:#143321;box-shadow:inset 4px 0 #78d59d}
+.trial-option.is-incorrect{border:2px solid #f39488;background:#451d26;box-shadow:inset 4px 0 #c84662}
+#trial-feedback{padding:18px;border-left:3px solid #d4af37;background:#0b1110;margin:20px 0;color:#f1e5c5}
+#trial-feedback:empty{display:none}
+.trial-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1px solid #d4af37;border-radius:28px;background:#d4af37;color:#171608;font:14px/1.6 TrialCinzel,serif;cursor:pointer}
+.trials-page button:focus-visible,.trials-page [tabindex='-1']:focus-visible{outline:3px solid #fff0ba;outline-offset:5px}
+.trial-review{padding-left:24px}
+.trial-review li{padding:14px 0;border-bottom:1px solid #d4af3733}
+.trial-review p{color:#d5cfb9;margin:6px 0}
+#trial-rank{font-size:clamp(26px,5vw,42px)}
+.trial-sources{margin-top:28px}
+.trial-sources a{color:#e9c976;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:960px){.trials-page header .nav{justify-content:center}.trials-page header nav{justify-content:center}}
+@media(max-width:600px){.trials-page header{position:static}.trials-page main{padding:36px 16px 52px}.trial-options{grid-template-columns:minmax(0,1fr)}.trial-button{width:100%}.trial-option{min-height:56px}.trial-card{padding:20px 16px}}
+@media(prefers-reduced-motion:reduce){.trials-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="trials-page">
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap nav"><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="" width="48" height="48"><span>HYLIAN LEGENDS<small>GUILD · HQ</small></span></a><nav aria-label="Main navigation"><a href="about.html">ABOUT</a><a href="guildhall.html">GUILDHALL</a><a href="lore.html">LORE</a><a href="index.html#codex">CODEX</a><a href="index.html#ranks">RANKS</a><a href="index.html#quests">QUESTS</a><a href="index.html#guides">GUIDES</a><a href="trials.html" aria-current="page">LORE TRIALS</a><a href="https://www.tibia.com/community/?subtopic=guilds&amp;page=view&amp;GuildName=Hylian+Legends&amp;character=Linkmupi&amp;action=characters">APPLY TO GUILD</a><a class="button" href="https://discord.gg/avApuUXfN9" target="_blank" rel="noopener noreferrer">JOIN DISCORD</a></nav></div></header>
+<main id="main">
+<div class="trial-intro"><div class="micro">The Lore Library · Lore Trials</div><h1>Trial of the Sages</h1><p class="trial-invocation">Step into the temple. Let knowledge be your guiding light.</p><p>Ten questions await from <em>The Legend of Zelda: Ocarina of Time</em>. Choose one answer to reveal the truth and its story.</p><p class="trial-rules">0–4 correct: Kokiri Initiate · 5–8: Temple Guardian · 9–10: Hero of Time.<br>These are quiz titles, not guild promotions. No timer. Retake as often as you wish.</p></div>
+<section class="trial-card" aria-label="Interactive lore trial">
+<p id="trial-loading">Preparing the trial…</p><noscript><p>Enable JavaScript to take the interactive trial. You can still explore <a href="lore.html">the Lore Library</a>.</p></noscript>
+<div id="trial-play" hidden><div class="trial-meta"><span id="trial-count"></span><span id="trial-score"></span></div><progress id="trial-progress" max="10" value="0" aria-label="Questions answered"></progress><h2 id="trial-question" tabindex="-1"></h2><div id="trial-options" class="trial-options" role="group" aria-labelledby="trial-question"></div><p id="trial-feedback" role="status" aria-live="polite" aria-atomic="true"></p><button id="trial-next" class="trial-button" type="button" hidden>Next Question</button></div>
+<div id="trial-result" hidden><div class="micro">The sages have spoken</div><h2 id="trial-rank" tabindex="-1"></h2><p id="trial-final-score"></p><p id="trial-rank-message"></p><button id="trial-retake" class="trial-button" type="button">Retake Trial</button><h3>Your Trial Reviewed</h3><ol id="trial-review" class="trial-review"></ol></div>
+</section>
+<aside class="trial-sources" aria-label="Lore references"><p>Continue your studies in <a href="lore.html">the Lore Library</a>. Explore the <a href="https://zelda-archive.fandom.com/wiki/Seven_Sages_(Ocarina_of_Time)" target="_blank" rel="noopener noreferrer">Seven Sages of Ocarina of Time</a> and <a href="https://zeldacentral.com/games/ocarina-of-time/guides/medallions-and-spiritual-stones/" target="_blank" rel="noopener noreferrer">Spiritual Stones and Medallions</a>.</p></aside><p class="trial-motto">Courage to begin. Wisdom to learn. Power to persevere.</p><div class="page-actions"><a class="button outline" href="index.html">Return to Guild HQ</a></div>
+</main>
+<footer><div class="wrap"><span>© 2026 Hylian Legends Guild · A fan community. Not affiliated with Nintendo.</span><a href="guildhall.html">Visit Carlin Clanhall</a></div></footer>
+<script>
+(() => {
+'use strict';
+const questions = [
+['Who awakens as the Sage of Forest?', ['Ruto','Nabooru','Impa','Saria'],3,'Saria, Link’s childhood friend from Kokiri Forest, awakens as the Sage of Forest.'],
+['Who is the Sage of Fire?', ['Darunia','Rauru','Saria','Ruto'],0,'Darunia, leader of the Gorons, awakens as the Sage of Fire and grants the Fire Medallion.'],
+['Who awakens as the Sage of Water?', ['Zelda','Saria','Princess Ruto','Nabooru'],2,'Princess Ruto of the Zora awakens as the Sage of Water and grants the Water Medallion.'],
+['Which sage represents Shadow?', ['Darunia','Impa','Nabooru','Rauru'],1,'Impa, Zelda’s Sheikah attendant, awakens as the Sage of Shadow.'],
+['Who is the Sage of Spirit?', ['Ruto','Saria','Zelda','Nabooru'],3,'Nabooru, the Gerudo who opposes Ganondorf, awakens as the Sage of Spirit.'],
+['Which sage gives Link the Light Medallion?', ['Rauru','Darunia','Impa','Nabooru'],0,'Rauru is the Sage of Light. He meets Link in the Chamber of Sages and gives him the Light Medallion.'],
+['Who leads the sages and reveals that she has been disguised as Sheik?', ['Saria','Impa','Princess Zelda','Princess Ruto'],2,'Princess Zelda reveals her identity as Sheik and her role as the seventh sage and leader of the sages.'],
+['Which Spiritual Stone is associated with the Kokiri?', ['Goron’s Ruby','Kokiri’s Emerald','Zora’s Sapphire','Forest Medallion'],1,'Kokiri’s Emerald is the Spiritual Stone of the Forest. Spiritual Stones belong to child Link’s quest; the Forest Medallion is a different relic.'],
+['Which Spiritual Stone is associated with the Gorons?', ['Goron’s Ruby','Kokiri’s Emerald','Zora’s Sapphire','Fire Medallion'],0,'Goron’s Ruby is the Spiritual Stone of Fire. It is one of the three Spiritual Stones, not the Fire Medallion.'],
+['Which Spiritual Stone is associated with the Zora?', ['Water Medallion','Kokiri’s Emerald','Goron’s Ruby','Zora’s Sapphire'],3,'Zora’s Sapphire is the Spiritual Stone of Water. Together with the Emerald and Ruby, it forms the trio collected during child Link’s adventure.']
+];
+const $ = id => document.getElementById(id);
+let index = 0, score = 0, locked = false, answers = [];
+function render(focus) {
+ locked = false;
+ const q = questions[index];
+ $('trial-count').textContent = `Question ${index + 1} of ${questions.length}`;
+ $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
+ $('trial-progress').value = index;
+ $('trial-question').textContent = q[0];
+ $('trial-feedback').textContent = '';
+ $('trial-options').replaceChildren();
+ $('trial-next').hidden = true;
+ $('trial-next').textContent = index === questions.length - 1 ? 'Reveal My Rank' : 'Next Question';
+ q[1].forEach((text, choice) => {
+  const button = document.createElement('button'), letter = document.createElement('span'), label = document.createElement('span');
+  button.type = 'button'; button.className = 'trial-option';
+  letter.className = 'trial-letter'; letter.textContent = 'ABCD'[choice]; letter.setAttribute('aria-hidden','true');
+  label.textContent = text; button.append(letter,label);
+  button.addEventListener('click', () => answer(choice));
+  $('trial-options').append(button);
+ });
+ if (focus) $('trial-question').focus();
+}
+function answer(choice) {
+ if (locked) return;
+ locked = true;
+ const q = questions[index], correct = choice === q[2];
+ answers.push(choice); if (correct) score++;
+ Array.from($('trial-options').children).forEach((button, option) => {
+  button.disabled = true;
+  if (option === q[2]) { button.classList.add('is-correct'); button.lastChild.textContent += ' — Correct answer'; }
+  else if (option === choice) { button.classList.add('is-incorrect'); button.lastChild.textContent += ' — Your answer (incorrect)'; }
+ });
+ $('trial-feedback').textContent = (correct ? 'Correct. ' : `Incorrect. The correct answer is ${q[1][q[2]]}. `) + q[3];
+ $('trial-score').textContent = `Score: ${score} / ${questions.length}`;
+ $('trial-progress').value = index + 1;
+ $('trial-next').hidden = false; $('trial-next').focus();
+}
+function finish() {
+ $('trial-play').hidden = true; $('trial-result').hidden = false;
+ $('trial-rank').textContent = score >= 9 ? 'Hero of Time' : score >= 5 ? 'Temple Guardian' : 'Kokiri Initiate';
+ $('trial-final-score').textContent = `You answered ${score} of ${questions.length} questions correctly (${score * 10}%).`;
+ $('trial-rank-message').textContent = score >= 9 ? 'The wisdom of the sages shines within you.' : score >= 5 ? 'You stand watch over the knowledge of Hyrule. Keep studying the ancient tales.' : 'Every legend begins with a first step. Study the lore, then answer the call again.';
+ $('trial-review').replaceChildren();
+ questions.forEach((q,i) => {
+  const item = document.createElement('li'), title = document.createElement('strong'), detail = document.createElement('p'), explanation = document.createElement('p');
+  title.textContent = q[0];
+  detail.textContent = `${answers[i] === q[2] ? 'Correct' : 'Incorrect'} — Your answer: ${q[1][answers[i]]}. Correct answer: ${q[1][q[2]]}.`;
+  explanation.textContent = q[3]; item.append(title,detail,explanation); $('trial-review').append(item);
+ });
+ $('trial-rank').focus();
+}
+$('trial-next').addEventListener('click', () => { if (!locked) return; if (index === questions.length - 1) finish(); else { index++; render(true); } });
+$('trial-retake').addEventListener('click', () => { index = 0; score = 0; locked = false; answers = []; $('trial-result').hidden = true; $('trial-play').hidden = false; render(true); });
+$('trial-loading').hidden = true; $('trial-play').hidden = false; render(false);
+})();
+</script>
+</body>
+</html>

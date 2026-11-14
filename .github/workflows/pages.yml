@@ -151,7 +151,7 @@ jobs:
       - name: Prepare public files
         run: |
           mkdir -p _site
-          for file in index.html about.html rashid.html anniversary.html guildhall.html lore.html royal-chamber.html quests.html admin.html style.css quests-board.js quests-admin.js quests.json .nojekyll; do
+          for file in index.html trials.html about.html rashid.html anniversary.html guildhall.html lore.html royal-chamber.html quests.html admin.html style.css quests-board.js quests-admin.js quests.json .nojekyll; do
             test -f "$file"
             cp "$file" _site/
           done
