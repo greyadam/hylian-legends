@@ -1,0 +1,103 @@
+name: Fix Trials navigation
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fix-trials-navigation.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: fix-trials-navigation
+  cancel-in-progress: false
+jobs:
+  navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Patch existing header navigation only
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import posixpath
+          from html import unescape
+          anchor_pattern = r'<a\b[^>]*>.*?</a>'
+          def label(anchor):
+              return re.sub(r'\s+', ' ', unescape(re.sub(r'<[^>]+>', '', anchor))).strip().upper()
+          def href(anchor):
+              match = re.search(r'\bhref\s*=\s*([\"\'])(.*?)\1', anchor, re.S | re.I)
+              return unescape(match.group(2)) if match else ''
+          checked = []
+          for path in Path('.').rglob('*.html'):
+              if any(part.startswith('.') or part == '_site' for part in path.parts):
+                  continue
+              original = path.read_text()
+              prefix = posixpath.relpath('.', path.parent.as_posix())
+              prefix = '' if prefix == '.' else prefix + '/'
+              touched = [False]
+              def update_header(header_match):
+                  def update_nav(nav_match):
+                      nav = nav_match.group()
+                      anchors = re.findall(anchor_pattern, nav, re.S | re.I)
+                      if not anchors:
+                          return nav
+                      nav = re.sub(anchor_pattern, lambda m: '' if href(m.group()).split('#')[0].split('?')[0].endswith('trials.html') or label(m.group()) in ('TRIALS', 'LORE TRIALS') else m.group(), nav, flags=re.S | re.I)
+                      anchors = re.findall(anchor_pattern, nav, re.S | re.I)
+                      guides = next((a for a in anchors if label(a) == 'GUIDES'), None)
+                      apply = next((a for a in anchors if label(a) == 'APPLY TO GUILD'), None)
+                      lore = next((a for a in anchors if label(a) == 'LORE'), None)
+                      example = guides or lore or next((a for a in anchors if 'button' not in a and 'btn' not in a), '')
+                      classes = re.search(r'\bclass\s*=\s*([\"\'])(.*?)\1', example, re.S | re.I)
+                      class_value = (classes.group(2) + ' ') if classes else ''
+                      class_value += 'trials-nav-link'
+                      current = ' aria-current="page"' if path.name == 'trials.html' else ''
+                      link = '<a class="' + class_value + '" href="' + prefix + 'trials.html"' + current + '>TRIALS</a>'
+                      if apply and guides and nav.index(guides) < nav.index(apply):
+                          position = nav.index(apply)
+                      elif guides:
+                          position = nav.index(guides) + len(guides)
+                      elif lore:
+                          position = nav.index(lore) + len(lore)
+                      elif apply:
+                          position = nav.index(apply)
+                      else:
+                          position = nav.lower().rindex('</nav>')
+                      nav = nav[:position] + link + nav[position:]
+                      matches = [a for a in re.findall(anchor_pattern, nav, re.S | re.I) if href(a) == prefix + 'trials.html']
+                      assert len(matches) == 1 and label(matches[0]) == 'TRIALS', str(path)
+                      touched[0] = True
+                      return nav
+                  return re.sub(r'<nav\b[^>]*>.*?</nav>', update_nav, header_match.group(), count=1, flags=re.S | re.I)
+              updated = re.sub(r'<header\b[^>]*>.*?</header>', update_header, original, flags=re.S | re.I)
+              if not touched[0]:
+                  continue
+              css = '<style id="trials-navigation-font">@font-face{font-family:HylianTrialsNav;src:url("' + prefix + 'assets/fonts/Cinzel-Regular.ttf") format("truetype");font-display:swap}body header nav a.trials-nav-link{font-family:HylianTrialsNav,serif!important;text-transform:uppercase}</style>'
+              if 'id="trials-navigation-font"' in updated:
+                  updated = re.sub(r'<style id="trials-navigation-font">.*?</style>', lambda _: css, updated, flags=re.S)
+              else:
+                  assert '</head>' in updated, str(path) + ' missing document head'
+                  updated = updated.replace('</head>', css + '</head>', 1)
+              path.write_text(updated)
+              checked.append(path.as_posix())
+          assert 'index.html' in checked, 'Homepage navigation was not found'
+          assert Path('assets/fonts/Cinzel-Regular.ttf').is_file()
+          print('Validated TRIALS navigation in:', ', '.join(checked))
+          print('Trials destination present:', Path('trials.html').is_file())
+          PY
+          git diff --check
+      - name: Commit HTML navigation changes to main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- ':(glob)**/*.html'
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add uppercase Cinzel TRIALS link to top navigation headers'
+            git push origin HEAD:main
+          fi
+      - name: Request existing Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
