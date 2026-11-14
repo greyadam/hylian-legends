@@ -7,9 +7,9 @@
     document.head.append(stylesheet);
   }
   const stones = {
-    COURAGE: {file:'Small Kokiri Emerald.png',name:"Kokiri's Emerald",sphere:'stone-emerald',glow:'drop-shadow(0 0 7px #39af7780)'},
-    WISDOM: {file:'Small Zora Sapphire.png',name:"Zora's Sapphire",sphere:'stone-sapphire',glow:'drop-shadow(0 0 7px #75abff80)'},
-    POWER: {file:'Small Goron Ruby.png',name:"Goron's Ruby",sphere:'stone-ruby',glow:'drop-shadow(0 0 4px #dc453580) drop-shadow(0 0 8px #e9b34d60)'}
+    COURAGE: {file:'Kokiri-Emerald.gif',name:"Kokiri's Emerald",sphere:'stone-emerald',glow:'drop-shadow(0 0 7px #39af7780)'},
+    WISDOM: {file:'Zora-Sapphire.gif',name:"Zora's Sapphire",sphere:'stone-sapphire',glow:'drop-shadow(0 0 7px #75abff80)'},
+    POWER: {file:'Goron-Ruby.gif',name:"Goron's Ruby",sphere:'stone-ruby',glow:'drop-shadow(0 0 4px #dc453580) drop-shadow(0 0 8px #e9b34d60)'}
   };
   document.querySelectorAll('#codex .virtues .panel').forEach(card => {
     const virtue = card.querySelector('h3')?.textContent.trim().toUpperCase();
