@@ -29,11 +29,41 @@
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:600px){#guild-memories{padding:36px 16px}#guild-memories .carousel-image-stage{height:340px}#guild-memories .carousel-caption-box{padding:56px 18px 20px}#guild-memories .memory-thumbnail-navigation{grid-template-columns:44px minmax(0,1fr) 44px;gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
-.codex-motto-banner{display:flex;justify-content:center;margin:0 0 48px}
-.codex-motto-banner img{display:block;width:100%;max-width:360px;height:auto;mix-blend-mode:lighten;image-rendering:pixelated}
-@media(max-width:760px){
-  .codex-motto-banner{margin:0 0 32px}
-  .codex-motto-banner img{max-width:min(320px,calc(100% - 32px))}
+/* Chiseled Stone Triforce Motto */
+.codex-motto-chiseled {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 44px;
+  max-width: 420px;
+  padding: 12px;
+}
+
+.codex-motto-chiseled svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 2px 1px rgba(255, 223, 128, 0.22))
+          drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.95));
+}
+
+.chisel-gold-fill {
+  fill: url(#chiseledGoldGrad);
+}
+
+.chisel-text {
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+  fill: url(#chiseledGoldGrad);
+}
+
+@media (max-width: 760px) {
+  .codex-motto-chiseled {
+    max-width: min(340px, calc(100% - 32px));
+    margin-bottom: 32px;
+  }
 }
 </style><script src="assets/sage-roster.js" defer></script><style id="royal-gateway-styles">
 #royal-chamber-gateway{--gateway-gold:#d4af37;padding:48px 0;background:#0b1110}
@@ -53,10 +83,51 @@
 <main><section class="hero" id="home"><div class="wrap"><div class="micro">— Est. in the Temple of Time</div><h1>HYLIAN<span>LEGENDS</span></h1><div class="tagline">— a guild sworn to courage, wisdom &amp; power.</div><div style="text-align:right;margin:-16px 0 34px"><p style="color:var(--gold);font:clamp(20px,3vw,28px)/1.4 Georgia,serif;margin:0 0 8px">Protectors of the Triforce</p><p style="color:var(--cream);font-size:14px;letter-spacing:1px;margin:0">Menera's 2nd oldest Guild</p></div><div class="hero-bottom"><div class="actions"><button class="button discord">♧ Enter the Discord</button><a class="button outline" href="#quests">View quest board ↓</a></div><div><div class="micro green">Next quest</div><h3>Forest Temple Night Raid</h3><small>Tue, Nov 3, 11:00 AM</small></div></div></div></section>
 <section id="anniversary" aria-label="Hylian Legends anniversary recognition" style="padding:32px 0 0"><div class="wrap"><iframe id="anniversary-frame" src="anniversary.html" title="Hylian Legends second-oldest guild recognition during Tibia’s 25th anniversary" height="700" style="display:block;width:100%;border:0;background:#0b1110"></iframe></div></section><script>window.addEventListener('message',function(event){const frame=document.getElementById('anniversary-frame');if(!frame||event.origin!==location.origin||event.source!==frame.contentWindow||!event.data||event.data.type!=='hylian-anniversary-height')return;const height=Number(event.data.height);if(Number.isFinite(height))frame.style.height=Math.min(3000,Math.max(300,Math.ceil(height)))+'px';});</script>
 <section id="rashid-tracker" aria-label="Rashid location finder" style="padding:32px 0 0"><div class="wrap"><iframe id="rashid-frame" src="rashid.html" title="Rashid location finder and server-save countdown" height="440" style="display:block;width:100%;border:0;background:#0b1110"></iframe><p style="font-size:11px;text-align:right"><a href="rashid.html" target="_blank" rel="noopener noreferrer">Open Rashid tracker in a new tab ↗</a></p></div></section><script>window.addEventListener('message',function(event){const frame=document.getElementById('rashid-frame');if(!frame||event.origin!==location.origin||event.source!==frame.contentWindow||!event.data||event.data.type!=='hylian-rashid-height')return;const height=Number(event.data.height);if(Number.isFinite(height))frame.style.height=Math.min(1600,Math.max(300,height))+'px';});</script>
-<section id="codex"><div class="wrap"><figure class="codex-motto-banner">
-  <img src="assets/triforce-motto-banner.png"
-       alt="Pixel-art Hylian Legends Triforce motto banner"
-       loading="lazy" decoding="async">
+<section id="codex"><div class="wrap"><figure class="codex-motto-chiseled" aria-label="Have the Courage to Seek the Wisdom that will Grant you Power">
+  <svg viewBox="0 0 360 390" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="chiseledGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#9e7b2f" />
+        <stop offset="45%" stop-color="#e5c158" />
+        <stop offset="100%" stop-color="#fff0a6" />
+      </linearGradient>
+
+      <filter id="stoneCarve" x="-10%" y="-10%" width="120%" height="120%">
+        <feOffset dx="0" dy="2" in="SourceAlpha" result="offsetShadow"/>
+        <feGaussianBlur stdDeviation="1.5" in="offsetShadow" result="blurShadow"/>
+        <feComposite operator="out" in="SourceAlpha" in2="blurShadow" result="innerShadow"/>
+        <feFlood flood-color="#000000" flood-opacity="0.92" result="shadowColor"/>
+        <feComposite operator="in" in="shadowColor" in2="innerShadow" result="finalInnerShadow"/>
+
+        <feOffset dx="0" dy="-1.2" in="SourceAlpha" result="offsetHighlight"/>
+        <feComposite operator="out" in="SourceAlpha" in2="offsetHighlight" result="innerHighlight"/>
+        <feFlood flood-color="#ffe699" flood-opacity="0.45" result="highlightColor"/>
+        <feComposite operator="in" in="highlightColor" in2="innerHighlight" result="finalInnerHighlight"/>
+
+        <feMerge>
+          <feMergeNode in="SourceGraphic"/>
+          <feMergeNode in="finalInnerShadow"/>
+          <feMergeNode in="finalInnerHighlight"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <g filter="url(#stoneCarve)" class="chisel-gold-fill">
+      <polygon points="180,18 128,106 232,106" />
+      <polygon points="128,106 76,194 180,194" />
+      <polygon points="232,106 180,194 284,194" />
+    </g>
+
+    <g filter="url(#stoneCarve)">
+      <text x="180" y="226" font-size="18" class="chisel-text">HAVE THE</text>
+      <text x="180" y="256" font-size="30" class="chisel-text">COURAGE</text>
+      <text x="180" y="280" font-size="17" class="chisel-text">TO SEEK THE</text>
+      <text x="180" y="310" font-size="30" class="chisel-text">WISDOM</text>
+      <text x="180" y="334" font-size="17" class="chisel-text">THAT WILL</text>
+      <text x="180" y="356" font-size="17" class="chisel-text">GRANT YOU</text>
+      <text x="180" y="384" font-size="30" class="chisel-text">POWER</text>
+    </g>
+  </svg>
 </figure>
 <div class="section-head"><div><div class="micro">01 — The Codex</div><h2>SACRED <em>decrees</em></h2></div><p>Five laws keep the hearth warm. Learn them before your first quest — every rank is earned on top of them.</p></div><div class="two"><div class="panel" id="decrees"></div><div class="panel"><div class="oath"><div class="micro">The oath</div><blockquote>“We draw the blade together, or not at all.”</blockquote></div></div></div><div class="virtues"><div class="panel" style="--accent:#39af77"><span class="diamond">◆</span><h3>COURAGE</h3><p>Lead the raid. Try the risky skip. Welcome the newcomer first.</p></div><div class="panel" style="--accent:#75abff"><span class="diamond">◆</span><h3>WISDOM</h3><p>Write the guide. Explain the strat. Remember the lore.</p></div><div class="panel" style="--accent:#e9b34d"><span class="diamond">◆</span><h3>POWER</h3><p>Train hard. Compete fair. Lift the whole guild with you.</p></div></div></div></section>
 <section id="royal-chamber-gateway" aria-labelledby="royal-gateway-title"><div class="wrap"><article class="royal-gateway-card"><img class="royal-gateway-preview" src="assets/images/At-Your-Service,-To-always-Protect-You,-My-Princess.jpg" alt="Link and Princess Zelda" loading="lazy" decoding="async"><div><div class="micro">A sanctuary of honor</div><h2 id="royal-gateway-title">The Royal <em>Chamber</em></h2><p>Step beyond the guild hall into a tribute to loyalty, courage, and timeless devotion.</p><a class="royal-gateway-enter" href="royal-chamber.html">Enter the Royal Chamber <span aria-hidden="true">&#8594;</span></a></div></article></div></section>
