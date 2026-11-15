@@ -1,26 +1,17 @@
-(function () {
-  'use strict';
+document.addEventListener("DOMContentLoaded", () => {
+  const codexBanner = document.querySelector(".codex-motto-chiseled");
+  if (!codexBanner) return;
 
-  var banner = document.querySelector('.codex-motto-chiseled');
+  codexBanner.classList.add("carve-ready");
 
-  if (!banner) return;
-
-  if (!('IntersectionObserver' in window)) {
-    banner.classList.add('is-carved');
-    return;
-  }
-
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-
-      entry.target.classList.add('is-carved');
-      observer.unobserve(entry.target);
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        codexBanner.classList.add("is-carving");
+        observer.unobserve(entry.target);
+      }
     });
-  }, {
-    rootMargin: '0px 0px -18% 0px',
-    threshold: 0.25
-  });
+  }, { threshold: 0.3 });
 
-  observer.observe(banner);
-})();
+  observer.observe(codexBanner);
+});
