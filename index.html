@@ -29,34 +29,37 @@
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:600px){#guild-memories{padding:36px 16px}#guild-memories .carousel-image-stage{height:340px}#guild-memories .carousel-caption-box{padding:56px 18px 20px}#guild-memories .memory-thumbnail-navigation{grid-template-columns:44px minmax(0,1fr) 44px;gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
-/* Chiseled Stone Triforce Motto */
+/* True Stone-Carved Triforce Motto */
 .codex-motto-chiseled {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto 44px;
   max-width: 420px;
-  padding: 12px;
+  padding: 16px;
 }
 
 .codex-motto-chiseled svg {
   width: 100%;
   height: auto;
   overflow: visible;
-  filter: drop-shadow(0 2px 1px rgba(255, 223, 128, 0.22))
-          drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.95));
 }
 
-.chisel-gold-fill {
-  fill: url(#chiseledGoldGrad);
+/* Carves a deep 3D recess into the dark background */
+.chisel-trench {
+  fill: #0c0d10; /* Matches your dark stone background */
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.9))
+          drop-shadow(0 -1.5px 1px rgba(255, 225, 140, 0.35));
 }
 
-.chisel-text {
+.chisel-text-carved {
   font-family: 'Courier New', monospace;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-anchor: middle;
-  fill: url(#chiseledGoldGrad);
+  fill: #0c0d10; /* Cutout trench color */
+  filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 -1px 0.5px rgba(255, 225, 140, 0.4));
 }
 
 @media (max-width: 760px) {
@@ -85,47 +88,22 @@
 <section id="rashid-tracker" aria-label="Rashid location finder" style="padding:32px 0 0"><div class="wrap"><iframe id="rashid-frame" src="rashid.html" title="Rashid location finder and server-save countdown" height="440" style="display:block;width:100%;border:0;background:#0b1110"></iframe><p style="font-size:11px;text-align:right"><a href="rashid.html" target="_blank" rel="noopener noreferrer">Open Rashid tracker in a new tab ↗</a></p></div></section><script>window.addEventListener('message',function(event){const frame=document.getElementById('rashid-frame');if(!frame||event.origin!==location.origin||event.source!==frame.contentWindow||!event.data||event.data.type!=='hylian-rashid-height')return;const height=Number(event.data.height);if(Number.isFinite(height))frame.style.height=Math.min(1600,Math.max(300,height))+'px';});</script>
 <section id="codex"><div class="wrap"><figure class="codex-motto-chiseled" aria-label="Have the Courage to Seek the Wisdom that will Grant you Power">
   <svg viewBox="0 0 360 390" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="chiseledGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#9e7b2f" />
-        <stop offset="45%" stop-color="#e5c158" />
-        <stop offset="100%" stop-color="#fff0a6" />
-      </linearGradient>
-
-      <filter id="stoneCarve" x="-10%" y="-10%" width="120%" height="120%">
-        <feOffset dx="0" dy="2" in="SourceAlpha" result="offsetShadow"/>
-        <feGaussianBlur stdDeviation="1.5" in="offsetShadow" result="blurShadow"/>
-        <feComposite operator="out" in="SourceAlpha" in2="blurShadow" result="innerShadow"/>
-        <feFlood flood-color="#000000" flood-opacity="0.92" result="shadowColor"/>
-        <feComposite operator="in" in="shadowColor" in2="innerShadow" result="finalInnerShadow"/>
-
-        <feOffset dx="0" dy="-1.2" in="SourceAlpha" result="offsetHighlight"/>
-        <feComposite operator="out" in="SourceAlpha" in2="offsetHighlight" result="innerHighlight"/>
-        <feFlood flood-color="#ffe699" flood-opacity="0.45" result="highlightColor"/>
-        <feComposite operator="in" in="highlightColor" in2="innerHighlight" result="finalInnerHighlight"/>
-
-        <feMerge>
-          <feMergeNode in="SourceGraphic"/>
-          <feMergeNode in="finalInnerShadow"/>
-          <feMergeNode in="finalInnerHighlight"/>
-        </feMerge>
-      </filter>
-    </defs>
-
-    <g filter="url(#stoneCarve)" class="chisel-gold-fill">
+    <!-- Carved Triforce Outlines -->
+    <g class="chisel-trench">
       <polygon points="180,18 128,106 232,106" />
       <polygon points="128,106 76,194 180,194" />
       <polygon points="232,106 180,194 284,194" />
     </g>
 
-    <g filter="url(#stoneCarve)">
-      <text x="180" y="226" font-size="18" class="chisel-text">HAVE THE</text>
-      <text x="180" y="256" font-size="30" class="chisel-text">COURAGE</text>
-      <text x="180" y="280" font-size="17" class="chisel-text">TO SEEK THE</text>
-      <text x="180" y="310" font-size="30" class="chisel-text">WISDOM</text>
-      <text x="180" y="334" font-size="17" class="chisel-text">THAT WILL</text>
-      <text x="180" y="356" font-size="17" class="chisel-text">GRANT YOU</text>
-      <text x="180" y="384" font-size="30" class="chisel-text">POWER</text>
+    <!-- Carved Motto Typography -->
+    <g>
+      <text x="180" y="226" font-size="18" class="chisel-text-carved">HAVE THE</text>
+      <text x="180" y="256" font-size="30" class="chisel-text-carved">COURAGE</text>
+      <text x="180" y="280" font-size="17" class="chisel-text-carved">TO SEEK THE</text>
+      <text x="180" y="310" font-size="30" class="chisel-text-carved">WISDOM</text>
+      <text x="180" y="334" font-size="17" class="chisel-text-carved">THAT WILL</text>
+      <text x="180" y="356" font-size="17" class="chisel-text-carved">GRANT YOU</text>
+      <text x="180" y="384" font-size="30" class="chisel-text-carved">POWER</text>
     </g>
   </svg>
 </figure>
