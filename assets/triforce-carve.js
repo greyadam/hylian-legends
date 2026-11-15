@@ -4,6 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   codexBanner.classList.add("carve-ready");
 
+  const svg = codexBanner.querySelector("svg");
+  const textGroup = codexBanner.querySelector(".chisel-text");
+
+  if (svg && textGroup && !codexBanner.querySelector(".codex-triforce-side")) {
+    const triforceSide = document.createElement("div");
+    triforceSide.className = "codex-triforce-side";
+
+    const textSide = document.createElement("div");
+    textSide.className = "codex-text-side";
+
+    codexBanner.insertBefore(triforceSide, svg);
+    triforceSide.appendChild(svg);
+
+    textSide.appendChild(textGroup);
+    codexBanner.appendChild(textSide);
+  }
+
   codexBanner.querySelector(".text-courage")?.classList.add("chisel-courage");
   codexBanner.querySelector(".text-wisdom")?.classList.add("chisel-wisdom");
   codexBanner.querySelector(".text-power")?.classList.add("chisel-power");
