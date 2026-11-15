@@ -4,20 +4,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   codexBanner.classList.add("carve-ready");
 
-  const svg = codexBanner.querySelector("svg");
+  const originalSvg = codexBanner.querySelector("svg");
   const textGroup = codexBanner.querySelector(".chisel-text");
 
-  if (svg && textGroup && !codexBanner.querySelector(".codex-triforce-side")) {
+  if (originalSvg && textGroup && !codexBanner.querySelector(".codex-triforce-side")) {
     const triforceSide = document.createElement("div");
     triforceSide.className = "codex-triforce-side";
 
     const textSide = document.createElement("div");
     textSide.className = "codex-text-side";
 
-    codexBanner.insertBefore(triforceSide, svg);
-    triforceSide.appendChild(svg);
+    const textSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    textSvg.setAttribute("viewBox", "0 0 400 170");
+    textSvg.setAttribute("aria-hidden", "true");
 
-    textSide.appendChild(textGroup);
+    codexBanner.insertBefore(triforceSide, originalSvg);
+    triforceSide.appendChild(originalSvg);
+
+    textSvg.appendChild(textGroup);
+    textSide.appendChild(textSvg);
     codexBanner.appendChild(textSide);
   }
 

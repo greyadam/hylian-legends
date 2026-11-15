@@ -4,14 +4,14 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 32px;
+  gap: 30px;
   margin: 0 auto 44px;
   max-width: 760px;
   padding: 16px;
 }
 
 .codex-triforce-side {
-  flex: 0 1 300px;
+  flex: 0 1 280px;
   min-width: 0;
 }
 
@@ -25,6 +25,10 @@
   max-width: 480px;
   height: auto;
   overflow: visible;
+}
+
+.codex-text-side svg {
+  max-width: none;
 }
 
 /* Hide and prep strokes for drawing animation */
