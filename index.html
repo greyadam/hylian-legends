@@ -29,7 +29,7 @@
 #guild-memories .memory-announcement{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:600px){#guild-memories{padding:36px 16px}#guild-memories .carousel-image-stage{height:340px}#guild-memories .carousel-caption-box{padding:56px 18px 20px}#guild-memories .memory-thumbnail-navigation{grid-template-columns:44px minmax(0,1fr) 44px;gap:6px}#guild-memories .thumb-card{flex-basis:140px;width:140px}#guild-memories .thumb-card img{height:80px}}
 @media(prefers-reduced-motion:reduce){#guild-memories .thumb-card,#guild-memories .memory-strip-arrow{transition:none}#guild-memories .thumbnail-strip{scroll-snap-type:none}}
-/* Chiseled Stone & Color-Coded Triforce Motto */
+/* Deeply Recessed Chiseled Triforce Motto */
 .codex-motto-chiseled {
   display: flex;
   justify-content: center;
@@ -46,7 +46,7 @@
 }
 
 .chisel-path {
-  fill: none;
+  fill: #0b1110;
   stroke: url(#chiseledGoldGrad);
   stroke-width: 3;
   stroke-linejoin: round;
@@ -59,20 +59,41 @@
   font-weight: 900;
   letter-spacing: 0.14em;
   text-anchor: middle;
-  fill: url(#chiseledGoldGrad);
+  fill: #0b1110;
+  stroke: url(#chiseledGoldGrad);
+  stroke-width: 1.1;
+  paint-order: stroke;
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95))
           drop-shadow(0 -1px 1px rgba(255, 225, 140, 0.4));
 }
 
-/* Individual Triforce triangle colors & respective text highlights */
+/* Color-coded recessed Triforce triangles and motto words */
 .tri-power { stroke: url(#powerGrad) !important; }
-.text-power { fill: url(#powerGrad) !important; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.95)) drop-shadow(0 -1px 1px rgba(255,160,140,0.5)); }
+.text-power {
+  fill: #0b1110 !important;
+  stroke: url(#powerGrad) !important;
+  paint-order: stroke;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 -1px 1px rgba(255, 160, 140, 0.5));
+}
 
 .tri-wisdom { stroke: url(#wisdomGrad) !important; }
-.text-wisdom { fill: url(#wisdomGrad) !important; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.95)) drop-shadow(0 -1px 1px rgba(140,210,255,0.5)); }
+.text-wisdom {
+  fill: #0b1110 !important;
+  stroke: url(#wisdomGrad) !important;
+  paint-order: stroke;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 -1px 1px rgba(140, 210, 255, 0.5));
+}
 
 .tri-courage { stroke: url(#courageGrad) !important; }
-.text-courage { fill: url(#courageGrad) !important; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.95)) drop-shadow(0 -1px 1px rgba(140,255,160,0.5)); }
+.text-courage {
+  fill: #0b1110 !important;
+  stroke: url(#courageGrad) !important;
+  paint-order: stroke;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 -1px 1px rgba(140, 255, 160, 0.5));
+}
 
 @media (max-width: 760px) {
   .codex-motto-chiseled {
