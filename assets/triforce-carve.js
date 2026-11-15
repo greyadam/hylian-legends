@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   codexBanner.classList.add("carve-ready");
 
+  codexBanner.querySelector(".text-courage")?.classList.add("chisel-courage");
+  codexBanner.querySelector(".text-wisdom")?.classList.add("chisel-wisdom");
+  codexBanner.querySelector(".text-power")?.classList.add("chisel-power");
+
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
