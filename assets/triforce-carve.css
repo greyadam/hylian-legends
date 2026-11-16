@@ -174,3 +174,47 @@
     transition: none !important;
   }
 }
+
+/* Decorative royal banners: empty pseudo-elements have no accessible text.
+   Dedicated grid columns reserve space instead of overlaying the content. */
+@media(min-width: 901px) {
+  #codex > .wrap {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 120px;
+    column-gap: 24px;
+    max-width: 1408px;
+  }
+  #codex > .wrap > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+  #codex > .wrap > .codex-motto-chiseled { grid-row: 1; }
+  #codex > .wrap > .section-head { grid-row: 2; flex-wrap: wrap; }
+  #codex > .wrap > .two { grid-row: 3; }
+  #codex > .wrap > .virtues { grid-row: 4; }
+  #codex > .wrap::before,
+  #codex > .wrap::after {
+    content: '';
+    display: block;
+    grid-row: 2 / 4;
+    align-self: start;
+    justify-self: center;
+    width: 120px;
+    height: 240px;
+    background: url('Hyrule_Emblem.png') center top / contain no-repeat;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .65))
+            drop-shadow(0 0 4px rgba(212, 175, 55, .12));
+    pointer-events: none;
+    user-select: none;
+  }
+  #codex > .wrap::before { grid-column: 1; }
+  #codex > .wrap::after { grid-column: 3; }
+}
+
+@media(max-width: 900px) {
+  #codex > .wrap::before,
+  #codex > .wrap::after {
+    content: none;
+    display: none;
+  }
+}
