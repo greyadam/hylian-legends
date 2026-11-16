@@ -4,20 +4,21 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 30px;
-  margin: 0 auto 44px;
-  max-width: 760px;
-  padding: 16px;
+  gap: 24px;
+  margin: 40px auto;
+  max-width: 700px;
+  padding: 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .codex-triforce-side {
-  flex: 0 1 280px;
-  min-width: 0;
+  flex-shrink: 0;
+  width: 130px;
 }
 
 .codex-text-side {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex-grow: 1;
 }
 
 .codex-motto-chiseled svg {
@@ -67,17 +68,15 @@
   opacity: 1;
 }
 
-@media(max-width:700px) {
+@media(max-width: 768px) {
   .codex-motto-chiseled {
     flex-direction: column;
     text-align: center;
-    padding: 36px 16px;
+    gap: 16px;
+    margin: 20px auto;
   }
-
-  .codex-triforce-side,
-  .codex-text-side {
-    flex: 0 0 auto;
-    width: 100%;
+  .codex-triforce-side {
+    width: 100px;
   }
 }
 
