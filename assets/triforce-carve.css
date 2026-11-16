@@ -4,21 +4,17 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
   margin: 40px auto;
-  max-width: 700px;
+  max-width: 750px;
   padding: 20px;
-  position: relative;
-  z-index: 2;
 }
 
 .codex-triforce-side {
-  flex-shrink: 0;
-  width: 130px;
-}
-
-.codex-text-side {
-  flex-grow: 1;
+  flex: 0 0 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .codex-motto-chiseled svg {
@@ -28,7 +24,20 @@
   overflow: visible;
 }
 
+.codex-triforce-side svg {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+}
+
+.codex-text-side {
+  flex: 1;
+  text-align: left;
+}
+
 .codex-text-side svg {
+  width: 100%;
+  height: auto;
   max-width: none;
 }
 
@@ -72,11 +81,15 @@
   .codex-motto-chiseled {
     flex-direction: column;
     text-align: center;
-    gap: 16px;
-    margin: 20px auto;
+    gap: 20px;
   }
   .codex-triforce-side {
-    width: 100px;
+    flex: unset;
+    width: 120px;
+    margin: 0 auto;
+  }
+  .codex-text-side {
+    text-align: center;
   }
 }
 
