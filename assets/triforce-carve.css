@@ -11,7 +11,7 @@
 }
 
 .codex-triforce-side {
-  flex: 0 0 160px;
+  flex: 0 0 140px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,8 +26,9 @@
 
 .codex-triforce-side svg {
   width: 100%;
-  max-width: 150px;
+  max-width: 130px;
   height: auto;
+  overflow: visible;
 }
 
 .codex-text-side {
@@ -38,6 +39,7 @@
 .codex-text-side svg {
   width: 100%;
   height: auto;
+  overflow: visible;
   max-width: none;
 }
 
@@ -85,7 +87,7 @@
   }
   .codex-triforce-side {
     flex: unset;
-    width: 120px;
+    width: 110px;
     margin: 0 auto;
   }
   .codex-text-side {
