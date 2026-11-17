@@ -1,0 +1,87 @@
+/* Isolated manuscript component; no global layout or atmosphere overrides. */
+.triforce-lore-section .lore-manuscript {
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  align-items: start;
+  gap: clamp(24px, 3vw, 40px);
+  min-width: 0;
+  margin: 30px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--line, #8b71342e);
+}
+.triforce-lore-section .lore-manuscript > .triforce-summary {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+}
+.lore-manuscript .lore-scroll-relic { min-width: 0; margin: 0; }
+.lore-manuscript .lore-scroll-trigger {
+  display: block;
+  border: 1px solid var(--gold, #d4af37);
+  border-radius: 6px;
+  background: #131b17;
+  overflow: hidden;
+  box-shadow: 0 16px 36px #000b, 0 0 14px #d4af371a;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.lore-scroll-trigger > img { display: block; width: 100%; max-width: 100%; height: auto; }
+.lore-scroll-relic > figcaption {
+  margin-top: 12px;
+  color: var(--muted, #aca995);
+  text-align: center;
+  font: italic 13px/1.7 Georgia, serif;
+}
+.lore-scroll-trigger:focus-visible { outline: 3px solid #f1e5c5; outline-offset: 5px; }
+@media (hover: hover) {
+  .lore-manuscript .lore-scroll-trigger:hover { transform: translateY(-2px); box-shadow: 0 20px 42px #000c, 0 0 20px #d4af373d; filter: none; }
+}
+.lore-scroll-lightbox {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: clamp(12px, 3vw, 32px);
+  border: 0;
+  background: #030706ed;
+  color: #f1e5c5;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.lore-scroll-lightbox:not([open]) { display: none; }
+.lore-scroll-lightbox[open] { display: grid; place-items: start center; }
+.lore-scroll-lightbox::backdrop { background: #000d; }
+.lore-scroll-viewer {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  padding: clamp(14px, 2vw, 28px);
+  border: 1px solid #d4af3773;
+  border-radius: 8px;
+  background: #0b1110;
+  box-shadow: 0 20px 70px #000c;
+}
+.lore-scroll-controls, .lore-scroll-tools { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.lore-scroll-controls > h2 { margin: 0; font-size: clamp(20px, 3vw, 28px); }
+.lore-scroll-lightbox button { padding: 7px 12px; border: 1px solid #d4af37; border-radius: 4px; background: #17201b; color: #f1e5c5; font: 14px/1.5 Arial, sans-serif; cursor: pointer; }
+.lore-scroll-lightbox button:focus-visible, .lore-scroll-lightbox a:focus-visible, .lore-scroll-image-stage:focus-visible { outline: 3px solid #f1e5c5; outline-offset: 4px; }
+.lore-scroll-lightbox #lore-scroll-help { margin: 14px 0; color: #aca995; font: 13px/1.6 Arial, sans-serif; }
+.lore-scroll-tools { margin-bottom: 16px; }
+.lore-scroll-tools > a { color: #d4af37; text-decoration: underline; font: 13px/1.6 Arial, sans-serif; }
+.lore-scroll-image-stage { max-height: calc(100vh - 210px); max-height: calc(100dvh - 210px); min-height: 120px; overflow: auto; overscroll-behavior: contain; }
+.lore-scroll-image-stage > img { display: block; width: auto; max-width: 100%; height: auto; margin: 0 auto; }
+.lore-scroll-lightbox.is-actual-size .lore-scroll-image-stage > img { max-width: none; margin-inline: 0; }
+@media (max-width: 900px) {
+  .triforce-lore-section .lore-manuscript { grid-template-columns: minmax(0, 1fr); }
+  .lore-manuscript .lore-scroll-relic { width: 100%; max-width: 520px; margin-inline: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lore-manuscript .lore-scroll-trigger { transition: none; }
+  .lore-manuscript .lore-scroll-trigger:hover { transform: none; }
+}
