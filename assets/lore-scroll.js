@@ -1,16 +1,17 @@
 (() => {
   'use strict';
   function init() {
-    const trigger = document.getElementById('lore-scroll-trigger');
+    const triggers = document.querySelectorAll('.lore-manuscript [data-lore-artifact]');
     const dialog = document.getElementById('lore-scroll-lightbox');
     const image = document.getElementById('lore-scroll-full-image');
     const stage = document.getElementById('lore-scroll-image-stage');
     const close = document.getElementById('lore-scroll-close');
     const zoom = document.getElementById('lore-scroll-zoom');
-    if (!trigger || !dialog || !image || !stage || !close || !zoom || typeof dialog.showModal !== 'function' || dialog.dataset.ready) return;
+    const title = document.getElementById('lore-scroll-lightbox-title');
+    const fullSizeLink = dialog?.querySelector('.lore-scroll-tools > a');
+    if (!triggers.length || !dialog || !image || !stage || !close || !zoom || !title || !fullSizeLink || typeof dialog.showModal !== 'function' || dialog.dataset.ready) return;
     dialog.dataset.ready = 'true';
-    trigger.setAttribute('aria-haspopup', 'dialog');
-    trigger.setAttribute('aria-controls', dialog.id);
+    let activeTrigger = null;
     let outsidePress = false;
     function resetView() {
       dialog.classList.remove('is-actual-size');
@@ -18,16 +19,32 @@
       zoom.textContent = 'Actual size';
       stage.scrollTop = 0; stage.scrollLeft = 0;
     }
-    trigger.addEventListener('click', event => {
-      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      if (dialog.open) { event.preventDefault(); return; }
-      try {
-        if (!image.getAttribute('src')) image.src = image.dataset.src;
-        resetView();
-        dialog.showModal();
-        event.preventDefault();
-        dialog.scrollTop = 0;
-      } catch (_) { /* Leave the direct artwork link usable if the modal cannot open. */ }
+    triggers.forEach(trigger => {
+      trigger.setAttribute('aria-haspopup', 'dialog');
+      trigger.setAttribute('aria-controls', dialog.id);
+      trigger.addEventListener('click', event => {
+        if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        if (dialog.open) { event.preventDefault(); return; }
+        const source = trigger.getAttribute('href');
+        if (!source) return;
+        const thumbnail = trigger.querySelector('img');
+        const artifactTitle = trigger.dataset.artifactTitle || 'Archive artifact';
+        try {
+          image.alt = thumbnail?.alt || artifactTitle;
+          if (image.getAttribute('src') !== source) image.src = source;
+          title.textContent = artifactTitle;
+          fullSizeLink.href = source;
+          fullSizeLink.setAttribute('aria-label', `Open full-size artwork: ${artifactTitle}`);
+          stage.setAttribute('aria-label', `Scrollable high-resolution artwork: ${artifactTitle}`);
+          resetView(); activeTrigger = trigger; outsidePress = false;
+          dialog.showModal();
+          event.preventDefault();
+          dialog.scrollTop = 0;
+        } catch (_) {
+          activeTrigger = null;
+          // Preserve the direct artwork link if the dialog cannot open.
+        }
+      });
     });
     close.addEventListener('click', () => dialog.close());
     zoom.addEventListener('click', () => {
@@ -45,7 +62,9 @@
     });
     dialog.addEventListener('close', () => {
       outsidePress = false; resetView();
-      if (trigger.isConnected) trigger.focus({preventScroll: true});
+      const returnTarget = activeTrigger;
+      activeTrigger = null;
+      if (returnTarget?.isConnected) returnTarget.focus({preventScroll: true});
     });
     // Native modal behavior supplies Escape dismissal, focus containment and background inertness.
   }
