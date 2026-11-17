@@ -24,15 +24,6 @@
     if (home) {
       const hero = document.querySelector('main > #home.hero');
       if (hero) {
-        const inscription = hero.querySelector(':scope > .wrap > .micro');
-        if (inscription) {
-          let valance = document.getElementById('hylian-home-valance');
-          if (!valance) {
-            valance = decoration('hylian-home-valance', 'hylian-banner-valance');
-            valance.append(banner('large_horizontal_street_banner.png', 'hylian-home-valance-image', '', true));
-          }
-          inscription.before(valance);
-        }
         hero.classList.add('hylian-hero-banner-host');
         if (!document.getElementById('hylian-home-banner-left')) {
           hero.append(banner('multi-colored_hylian_banner_left.png', 'hylian-home-banner-left', 'hylian-hero-flank hylian-hero-flank-left'));
@@ -40,6 +31,20 @@
         if (!document.getElementById('hylian-home-banner-right')) {
           hero.append(banner('multi-colored_hylian_banner_right.png', 'hylian-home-banner-right', 'hylian-hero-flank hylian-hero-flank-right'));
         }
+      }
+      const footer = document.querySelector('body > footer');
+      let valance = document.getElementById('hylian-home-valance');
+      if (footer) {
+        const footerContent = footer.querySelector(':scope > .wrap') || footer;
+        if (!valance) {
+          valance = decoration('hylian-home-valance', 'hylian-banner-valance');
+          valance.append(banner('large_horizontal_street_banner.png', 'hylian-home-valance-image'));
+        }
+        const image = valance.querySelector('img');
+        if (image) image.loading = 'lazy';
+        footerContent.prepend(valance);
+      } else if (valance) {
+        valance.remove();
       }
     }
     if (library) {
