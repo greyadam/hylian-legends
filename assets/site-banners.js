@@ -51,10 +51,7 @@
       const archive = library.querySelector('.lore-archive');
       if (archive && !document.getElementById('hylian-lore-corridor')) {
         const corridor = decoration('hylian-lore-corridor', 'hylian-banner-corridor');
-        corridor.append(
-          banner('vertical_hylian_banner.png', 'hylian-corridor-banner-vertical'),
-          banner('hylian_banner.png', 'hylian-corridor-banner-crest')
-        );
+        corridor.append(banner('hylian_banner.png', 'hylian-corridor-banner-crest'));
         archive.before(corridor);
       }
       const footer = document.querySelector('body > footer');

@@ -50,9 +50,31 @@ img.hylian-site-banner {
 }
 .hylian-banner-corridor > img {
   flex: 0 1 180px;
-  width: min(40%, 180px);
+  width: min(100%, 180px);
   min-width: 0;
   height: clamp(160px, 35vw, 320px);
+}
+.triforce-origins .hylian-origins-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  min-width: 0;
+}
+.triforce-origins .hylian-origins-copy {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.triforce-origins .hylian-origins-intro > .hylian-origins-banner {
+  position: static;
+  float: none;
+  flex: 0 0 170px;
+  flex-shrink: 0;
+  width: 170px;
+  max-width: min(100%, 170px);
+  height: auto;
+  align-self: flex-start;
+  margin: 0;
 }
 #hylian-charter-banner {
   width: min(100%, 480px);
@@ -80,4 +102,7 @@ img.hylian-site-banner {
   .guild-home .hylian-hero-banner-host > .hylian-hero-flank { display: none; }
   .hylian-banner-valance { padding: 12px 16px 18px; }
   .hylian-banner-valance > img { max-height: 160px; }
+  .triforce-origins .hylian-origins-intro { flex-direction: column; }
+  .triforce-origins .hylian-origins-copy { flex: 0 1 auto; width: 100%; }
+  .triforce-origins .hylian-origins-intro > .hylian-origins-banner { flex: 0 0 auto; }
 }
