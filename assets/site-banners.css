@@ -33,11 +33,11 @@ img.hylian-site-banner {
   position: absolute;
   top: clamp(30px, 10vw, 140px);
   z-index: 2;
-  width: clamp(60px, 8vw, 120px);
-  height: clamp(180px, 24vw, 360px);
+  width: clamp(75px, 10vw, 150px);
+  height: clamp(225px, 30vw, 450px);
 }
-.guild-home .hylian-hero-banner-host > .hylian-hero-flank-left { left: clamp(12px, 2vw, 32px); }
-.guild-home .hylian-hero-banner-host > .hylian-hero-flank-right { right: clamp(12px, 2vw, 32px); }
+.guild-home .hylian-hero-banner-host > .hylian-hero-flank-left { left: clamp(24px, 3vw, 48px); }
+.guild-home .hylian-hero-banner-host > .hylian-hero-flank-right { right: clamp(24px, 3vw, 48px); }
 .hylian-banner-corridor {
   display: flex;
   flex-direction: row;
