@@ -1,0 +1,63 @@
+/* Decorative vertical banners for the Quest Board and Trial introduction. */
+.royal-banner-layout {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.royal-banner-layout > .royal-banner-content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.royal-banner-layout > img.royal-vertical-banner {
+  display: block;
+  flex: 0 0 120px;
+  width: 120px;
+  max-width: 120px;
+  height: auto;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.75));
+  pointer-events: none;
+  user-select: none;
+}
+
+#quests > .wrap.royal-banner-layout {
+  max-width: 1408px;
+}
+
+#quests .royal-banner-content > .section-head {
+  flex-wrap: wrap;
+}
+
+#quests .royal-banner-content > .two {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+.royal-trial-intro {
+  margin-bottom: 32px;
+}
+
+.royal-trial-intro > .trial-intro {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  #quests .royal-banner-content > .two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .royal-banner-layout {
+    display: block;
+  }
+
+  .royal-banner-layout > img.royal-vertical-banner {
+    display: none;
+  }
+}
