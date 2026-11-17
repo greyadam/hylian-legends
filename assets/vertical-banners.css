@@ -6,7 +6,7 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  gap: clamp(12px, 2vw, 24px);
+  gap: clamp(14px, 2vw, 28px);
   width: 100%;
   min-width: 0;
 }
@@ -28,10 +28,10 @@
   display: block;
   flex: 0 0 auto;
   align-self: center;
-  width: clamp(72px, 8vw, 120px);
-  max-width: 120px;
+  width: clamp(90px, 10vw, 150px);
+  max-width: 150px;
   height: auto;
-  max-height: 360px;
+  max-height: 450px;
   object-fit: contain;
   margin: 0;
   padding: 0;
@@ -46,7 +46,7 @@
 /* Extra runtime section children must not share the three-item banner row. */
 #quests > .wrap.royal-banner-layout {
   width: 100%;
-  max-width: 1408px;
+  max-width: 1476px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -54,7 +54,7 @@
 
 #quests > .royal-banner-layout > .royal-banner-content {
   order: 2;
-  flex: 1 1 calc(100% - 288px);
+  flex: 1 1 calc(100% - 356px);
 }
 
 #quests > .royal-banner-layout > img.royal-vertical-banner:first-of-type {
