@@ -3,11 +3,12 @@ body:is(.guild-home, .trials-page).atmosphere-enabled { isolation: isolate; }
 .atmosphere-dust {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 3;
   width: 100%;
   height: 100%;
   pointer-events: none;
   user-select: none;
+  mix-blend-mode: screen;
 }
 :is(.guild-home, .trials-page) :is(#quests .panel, #quests .event, #quests .days > div:not(.dim), header nav a, header nav button) {
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
@@ -40,6 +41,7 @@ body:is(.guild-home, .trials-page).atmosphere-enabled { isolation: isolate; }
 }
 .atmosphere-audio-toggle svg { display: block; width: 16px; height: 16px; }
 .atmosphere-audio-toggle[aria-pressed='true'] .atmosphere-audio-cross { display: none; }
+.atmosphere-audio-toggle[aria-pressed='true'] { box-shadow: 0 0 10px #55e6dc80; }
 .atmosphere-audio-toggle:focus-visible, .atmosphere-ticker-pause:focus-visible {
   outline: 2px solid #f1e5c5;
   outline-offset: 3px;
