@@ -24,10 +24,14 @@
     if (home) {
       const hero = document.querySelector('main > #home.hero');
       if (hero) {
-        if (!document.getElementById('hylian-home-valance')) {
-          const valance = decoration('hylian-home-valance', 'hylian-banner-valance');
-          valance.append(banner('large_horizontal_street_banner.png', 'hylian-home-valance-image', '', true));
-          hero.before(valance);
+        const inscription = hero.querySelector(':scope > .wrap > .micro');
+        if (inscription) {
+          let valance = document.getElementById('hylian-home-valance');
+          if (!valance) {
+            valance = decoration('hylian-home-valance', 'hylian-banner-valance');
+            valance.append(banner('large_horizontal_street_banner.png', 'hylian-home-valance-image', '', true));
+          }
+          inscription.before(valance);
         }
         hero.classList.add('hylian-hero-banner-host');
         if (!document.getElementById('hylian-home-banner-left')) {
