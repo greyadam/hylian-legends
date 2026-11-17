@@ -6,7 +6,6 @@
     body.dataset.atmosphereReady = 'true';
     body.classList.add('atmosphere-enabled');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const fineHover = window.matchMedia('(hover: hover) and (pointer: fine)');
     const canvas = document.createElement('canvas');
     canvas.className = 'atmosphere-dust';
     canvas.setAttribute('aria-hidden', 'true');
@@ -57,7 +56,7 @@
 
     const nav = document.querySelector('header nav');
     let audio = null, master = null, enabled = false, activation = 0;
-    const lastCue = {hover: -Infinity, action: -Infinity};
+    let lastCue = -Infinity;
     const voices = new Set();
     let toggle = null;
     function updateToggle() {
@@ -86,17 +85,17 @@
       source.start(start); source.stop(start + duration + .02);
     }
     function cue(kind) {
+      if (!['confirm', 'rsvp', 'tap'].includes(kind)) return;
       if (!enabled || !audio || !master || audio.state !== 'running' || document.hidden || away) return;
-      const now = performance.now(), group = kind === 'hover' ? 'hover' : 'action';
-      if (kind !== 'confirm' && now - lastCue[group] < (kind === 'hover' ? 220 : 90)) return;
-      if (kind === 'hover' && voices.size >= 8) return;
-      lastCue[group] = now;
-      if (kind !== 'hover') silence();
+      const now = performance.now();
+      if (kind !== 'confirm' && now - lastCue < 90) return;
+      lastCue = now;
+      silence();
       try {
         const start = audio.currentTime;
-        const notes = kind === 'confirm' ? [523.25, 659.25, 783.99] : kind === 'rsvp' ? [659.25, 830.61, 1108.73] : kind === 'hover' ? [783.99] : [440, 659.25];
-        const duration = kind === 'hover' ? .24 : kind === 'tap' ? .32 : .55;
-        const volume = kind === 'hover' ? .09 : kind === 'rsvp' ? .18 : .15;
+        const notes = kind === 'confirm' ? [523.25, 659.25, 783.99] : kind === 'rsvp' ? [659.25, 830.61, 1108.73] : [440, 659.25];
+        const duration = kind === 'tap' ? .32 : .55;
+        const volume = kind === 'rsvp' ? .18 : .15;
         notes.forEach((frequency, index) => {
           const tone = audio.createOscillator(), gain = audio.createGain();
           const when = start + index * .09;
@@ -149,18 +148,10 @@
       document.addEventListener('click', event => {
         const target = event.target instanceof Element ? event.target : null;
         if (!event.isTrusted || !target || target.closest('.atmosphere-audio-toggle')) return;
-        const control = target.closest('#quests .rsvp, header nav a, a.button, button:not(.trial-option):not(.trial-button)');
+        const control = target.closest('#quests .rsvp, a[href], [role="navigation"] [role="link"], [role="menu"] [role="menuitem"]');
         if (!control || control.matches(':disabled, [aria-disabled="true"]')) return;
         playFromClick(control.matches('#quests .rsvp') ? 'rsvp' : 'tap');
       }, {capture: true, passive: true});
-      document.addEventListener('pointerover', event => {
-        if (!event.isTrusted || event.pointerType !== 'mouse' || !fineHover.matches || !enabled) return;
-        const target = event.target instanceof Element ? event.target : null;
-        const control = target && target.closest('button, header nav a, a.button, [role="button"]');
-        if (!control || control.matches(':disabled, [aria-disabled="true"]') || control.closest('.atmosphere-audio-toggle')) return;
-        if (event.relatedTarget instanceof Node && control.contains(event.relatedTarget)) return;
-        cue('hover');
-      }, {passive: true});
     }
 
     const ticker = document.createElement('aside');
