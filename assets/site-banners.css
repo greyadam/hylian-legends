@@ -1,0 +1,83 @@
+/* Isolated banner artwork: no interaction, cropping, animation, or global overrides. */
+img.hylian-site-banner {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.65));
+  pointer-events: none;
+  user-select: none;
+}
+.hylian-banner-valance,
+.hylian-banner-corridor,
+.hylian-banner-footer-divider {
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.hylian-banner-valance {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px 20px 24px;
+}
+.hylian-banner-valance > img {
+  width: min(100%, 1120px);
+  max-height: 260px;
+}
+.guild-home .hylian-hero-banner-host { position: relative; }
+.guild-home .hylian-hero-banner-host > .hylian-hero-flank {
+  position: absolute;
+  top: clamp(30px, 10vw, 140px);
+  z-index: 2;
+  width: clamp(60px, 8vw, 120px);
+  height: clamp(180px, 24vw, 360px);
+}
+.guild-home .hylian-hero-banner-host > .hylian-hero-flank-left { left: clamp(12px, 2vw, 32px); }
+.guild-home .hylian-hero-banner-host > .hylian-hero-flank-right { right: clamp(12px, 2vw, 32px); }
+.hylian-banner-corridor {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(16px, 5vw, 56px);
+  width: min(100%, 640px);
+  margin: 28px auto 32px;
+  padding: 0 12px;
+}
+.hylian-banner-corridor > img {
+  flex: 0 1 180px;
+  width: min(40%, 180px);
+  min-width: 0;
+  height: clamp(160px, 35vw, 320px);
+}
+#hylian-charter-banner {
+  width: min(100%, 480px);
+  max-height: 200px;
+  margin: 0 auto 28px;
+}
+.hylian-banner-footer-divider {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 20px 28px;
+}
+.hylian-banner-footer-divider > img {
+  width: min(100%, 520px);
+  max-height: 180px;
+}
+@media screen and (min-width: 768px) {
+  .guild-home .hylian-hero-banner-host > .wrap {
+    padding-left: clamp(92px, 12vw, 150px);
+    padding-right: clamp(92px, 12vw, 150px);
+  }
+}
+@media screen and (max-width: 767.98px) {
+  .guild-home .hylian-hero-banner-host > .hylian-hero-flank { display: none; }
+  .hylian-banner-valance { padding: 12px 16px 18px; }
+  .hylian-banner-valance > img { max-height: 160px; }
+}

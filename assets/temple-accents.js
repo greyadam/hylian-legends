@@ -26,6 +26,12 @@
       mobileStyles.href = 'assets/mobile-polish.css';
       document.head.append(mobileStyles);
     }
+    if (!document.getElementById('hylian-site-banner-loader')) {
+      const banners = document.createElement('script');
+      banners.id = 'hylian-site-banner-loader';
+      banners.src = 'assets/site-banners.js';
+      document.head.append(banners);
+    }
     if (home) {
       const stones = {COURAGE:"Kokiri's Emerald",WISDOM:"Zora's Sapphire",POWER:"Goron's Ruby"};
       document.querySelectorAll('#codex .virtues .panel').forEach(card => {
