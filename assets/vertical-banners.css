@@ -1,23 +1,40 @@
-/* Decorative vertical banners for the Quest Board and Trial introduction. */
+/* Keep decorative banners beside a full-width, readable content area. */
 .royal-banner-layout {
+  box-sizing: border-box;
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: clamp(12px, 2vw, 24px);
+  width: 100%;
   min-width: 0;
 }
 
 .royal-banner-layout > .royal-banner-content {
-  flex: 1 1 0;
-  min-width: 0;
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: min(100%, 480px);
+  max-width: 100%;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .royal-banner-layout > img.royal-vertical-banner {
+  box-sizing: border-box;
   display: block;
-  flex: 0 0 120px;
-  width: 120px;
+  flex: 0 0 auto;
+  align-self: center;
+  width: clamp(72px, 8vw, 120px);
   max-width: 120px;
   height: auto;
+  max-height: 360px;
+  object-fit: contain;
   margin: 0;
+  padding: 0;
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -26,16 +43,52 @@
   user-select: none;
 }
 
+/* Extra runtime section children must not share the three-item banner row. */
 #quests > .wrap.royal-banner-layout {
+  width: 100%;
   max-width: 1408px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#quests > .royal-banner-layout > .royal-banner-content {
+  order: 2;
+  flex: 1 1 calc(100% - 288px);
+}
+
+#quests > .royal-banner-layout > img.royal-vertical-banner:first-of-type {
+  order: 1;
+}
+
+#quests > .royal-banner-layout > img.royal-vertical-banner:last-of-type {
+  order: 3;
+}
+
+#quests > .royal-banner-layout > :not(.royal-banner-content):not(.royal-vertical-banner) {
+  order: 4;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
 }
 
 #quests .royal-banner-content > .section-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
 }
 
 #quests .royal-banner-content > .two {
+  display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+
+#quests .royal-banner-content > .two > .panel {
+  min-width: 0;
 }
 
 .royal-trial-intro {
@@ -53,11 +106,22 @@
 }
 
 @media (max-width: 900px) {
-  .royal-banner-layout {
-    display: block;
-  }
-
   .royal-banner-layout > img.royal-vertical-banner {
     display: none;
+  }
+
+  .royal-banner-layout > .royal-banner-content,
+  #quests > .royal-banner-layout > .royal-banner-content {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  #quests .royal-banner-content > .section-head {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
