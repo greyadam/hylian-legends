@@ -19,6 +19,13 @@
 @media(forced-colors:active){.temple-script-divider,.temple-footer-seal{display:none}}
 `;
     document.head.append(style);
+    if (!document.getElementById('hylian-mobile-polish-styles')) {
+      const mobileStyles = document.createElement('link');
+      mobileStyles.id = 'hylian-mobile-polish-styles';
+      mobileStyles.rel = 'stylesheet';
+      mobileStyles.href = 'assets/mobile-polish.css';
+      document.head.append(mobileStyles);
+    }
     if (home) {
       const stones = {COURAGE:"Kokiri's Emerald",WISDOM:"Zora's Sapphire",POWER:"Goron's Ruby"};
       document.querySelectorAll('#codex .virtues .panel').forEach(card => {

@@ -1,0 +1,43 @@
+/* Selector-matched mobile polish; desktop and artifact layouts are unchanged. */
+@media screen and (max-width: 900px) {
+  /* The existing vertical-banners.css already hides side banners at this width. */
+  .triforce-lore-section > .hylian-crest-watermark {
+    opacity: 0.025;
+    transform: scale(0.9);
+    pointer-events: none;
+    max-width: 40px;
+  }
+
+  #guides .hunt-card,
+  #guides .hunt-note,
+  #codex #decrees,
+  #codex .virtues > .panel > p,
+  .triforce-lore-section .goddess-description,
+  .triforce-lore-section .triforce-origins,
+  .triforce-lore-section .lore-manuscript > .triforce-summary {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Override the existing 12px guide paragraph rule, not labels or buttons. */
+  #guides .hunt-card > p {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .triforce-lore-section > .hylian-crest-watermark {
+    display: none;
+  }
+
+  #guides .hunt-card,
+  #guides .hunt-note,
+  .triforce-lore-section .goddess-description,
+  .triforce-lore-section .triforce-origins,
+  .triforce-lore-section .lore-manuscript > .triforce-summary {
+    font-size: 0.9rem;
+  }
+}
