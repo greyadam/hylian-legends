@@ -57,6 +57,8 @@
 <link rel="stylesheet" href="assets/vertical-banners.css">
 <link rel="stylesheet" href="assets/atmosphere.css">
 <script src="assets/atmosphere.js" defer></script>
+<link rel="stylesheet" href="assets/guild-hall-relay/relay.css?v=1">
+<script type="module" src="assets/guild-hall-relay/app.js?v=1"></script>
 </head><body class="guild-home">
 <header><div class="wrap nav"><a class="brand" href="#home"><img class="brand-logo" src="assets/logo.png" alt="" width="48" height="48"><span>HYLIAN LEGENDS<small>GUILD · HQ</small></span></a><nav aria-label="Main navigation"><a id="about-link" href="about.html">About</a><a id="guildhall-link" href="guildhall.html">Guildhall</a><a id="lore-link" href="lore.html">Lore</a><a href="#codex">Codex</a><a href="#ranks">Ranks</a><a href="#quests">Quests</a><a href="#guides">Guides</a><a class="trials-nav-link" href="trials.html">TRIALS</a><a id="apply-to-guild" href="https://www.tibia.com/community/?subtopic=guilds&amp;page=view&amp;GuildName=Hylian+Legends&amp;character=Linkmupi&amp;action=characters">Apply to guild</a><button class="button discord">♧ Join Discord</button></nav></div></header>
 <main><section class="hero" id="home"><div class="wrap"><img class="royal-tapestry" src="assets/royal-tapestry.png" alt="Hylian Legends Royal Tapestry"><div class="micro">— Est. in the Temple of Time</div><h1>HYLIAN<span>LEGENDS</span></h1><div class="tagline">— a guild sworn to courage, wisdom &amp; power.</div><div style="text-align:right;margin:-16px 0 34px"><p style="color:var(--gold);font:clamp(20px,3vw,28px)/1.4 Georgia,serif;margin:0 0 8px">Protectors of the Triforce</p><p style="color:var(--cream);font-size:14px;letter-spacing:1px;margin:0">Menera's 2nd oldest Guild</p></div><div class="hero-bottom"><div class="actions"><button class="button discord">♧ Enter the Discord</button><a class="button outline" href="#quests">View quest board ↓</a></div><div><div class="micro green">Next quest</div><h3>Forest Temple Night Raid</h3><small>Tue, Nov 3, 11:00 AM</small></div></div></div></section>
@@ -132,7 +134,97 @@
 <p class="memory-announcement" role="status" aria-live="polite" aria-atomic="true"></p><noscript><p>The first memory is shown above. Enable JavaScript to select others.</p></noscript>
 </section>
 <section id="guides"><div class="wrap"><div class="section-head"><div><div class="micro">04 — The Library</div><h2>FIELD <em>guides</em></h2></div><p>Routes, songs and boss strats written by guildmates who have already died so you don't have to.</p></div><div class="guide-tools"><div class="filters" id="guide-filters"></div><input id="search" aria-label="Search the library" placeholder="⌕  Search the library" type="search"></div><div class="guides" id="guide-list"></div></div></section>
-<section class="hearth" id="discord"><div class="wrap two"><div><div class="micro green">05 — The Hearth</div><h2>THE FIRE’S LIT.<em>Pull up a log.</em></h2><p>Live chat, voice raids, event pings and the occasional ocarina duet. Our Discord is where the guild actually lives.</p><button class="button discord">♧ Join the Discord server</button></div><aside class="panel channels"><div class="micro" style="color:var(--muted)">Channels</div><ul><li>announcements</li><li>raid-planning</li><li>speedrun-lab</li><li>lore-library</li><li>ocarina-jams</li><li>tavern</li></ul></aside></div></section></main>
+<section class="hearth" id="discord" aria-labelledby="relay-title"><div class="wrap">
+<div id="guild-hall-relay" data-server-id="304897700338597889">
+<div class="relay-intro"><div><div class="micro">05 — The Hearth · Live Discord activity</div><h2 id="relay-title">Guild Hall <em>Relay</em></h2><p>Gather by the hearth. See who’s online and where the party is gathering.</p></div><a class="button relay-join" href="https://discord.gg/avApuUXfN9" target="_blank" rel="noopener noreferrer">Join the Discord server <span aria-hidden="true">↗</span></a></div>
+<svg aria-hidden="true" class="icon-library" xmlns="http://www.w3.org/2000/svg">
+<symbol id="relay-i-signal" viewBox="0 0 24 24"><path d="M2 10v4m5-8v12M12 3v18m5-15v12m5-8v4"></path></symbol>
+<symbol id="relay-i-external" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></symbol>
+<symbol id="relay-i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"></path></symbol>
+<symbol id="relay-i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"></path></symbol>
+<symbol id="relay-i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></symbol>
+<symbol id="relay-i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5m5 0a8 8 0 1 0-2 5.3"></path></symbol>
+<symbol id="relay-i-voice" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm4.5 4a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"></path></symbol>
+<symbol id="relay-i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"></path><circle cx="9" cy="7" r="4"></circle></symbol>
+<symbol id="relay-i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></symbol>
+<symbol id="relay-i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4m.1 3h.01"></path></symbol>
+<symbol id="relay-i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="relay-i-hash" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16m-10-12L8 21m8-18-2 18"></path></symbol>
+<symbol id="relay-i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
+<symbol id="relay-i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></symbol>
+<symbol id="relay-i-moon" viewBox="0 0 24 24"><path d="M20.9 13.35A9 9 0 0 1 10.65 3.1a9 9 0 1 0 10.25 10.25Z"></path></symbol>
+</svg><div class="activity-grid">
+<div class="overview">
+<section aria-labelledby="relay-server-name" class="monitor" id="relay-monitor">
+<div class="live-panel">
+<div class="live-content">
+<div class="live-kicker"><span class="connection-status" data-state="loading" id="relay-connection-status" role="status" aria-live="polite" aria-atomic="true"><span></span><span id="relay-connection-label">Connecting</span></span><span class="live-separator"></span><span class="eyebrow live-source">PUBLIC SERVER WIDGET</span></div>
+<h2 id="relay-server-name">Connecting to Discord</h2>
+<dl class="metrics">
+<div><dt>Online now</dt><dd id="relay-online-number">–</dd></div>
+<div><dt>Visible in voice</dt><dd id="relay-voice-number">–</dd></div>
+<div><dt>Active channels</dt><dd id="relay-active-number">–</dd></div>
+</dl>
+</div>
+<div aria-hidden="true" class="scope">
+<div class="scope-top"><span><svg class="icon"><use href="#relay-i-signal"></use></svg> RELAY FEED</span><span>01 / DISCORD</span></div>
+<div class="scope-screen">
+<svg class="scope-trace" fill="none" preserveAspectRatio="none" viewBox="0 0 500 144">
+<defs>
+<pattern height="12" id="relay-minor-grid" patternUnits="userSpaceOnUse" width="25"><path d="M25 0H0V12" stroke="#d4af37" stroke-opacity=".11"></path></pattern>
+<pattern height="48" id="relay-major-grid" patternUnits="userSpaceOnUse" width="100"><path d="M100 0H0V48" stroke="#d4af37" stroke-opacity=".2"></path></pattern>
+<linearGradient id="relay-trace-fade"><stop stop-color="#ae8738" stop-opacity=".24"></stop><stop offset=".24" stop-color="#e9b34d"></stop><stop offset=".55" stop-color="#fff0ba"></stop><stop offset=".82" stop-color="#e9b34d"></stop><stop offset="1" stop-color="#ae8738" stop-opacity=".35"></stop></linearGradient>
+<linearGradient id="relay-band-fill" x2="0" y2="1"><stop stop-color="#d4af37" stop-opacity=".34"></stop><stop offset="1" stop-color="#d4af37" stop-opacity=".04"></stop></linearGradient>
+<path d="M0 72h17l7-2 7 3 7-2 7 1 7-4 7 9 7-15 7 22 7-32 7 44 7-53 7 55 7-46 7 34 7-20 7 10 7-5 7 1 7-3 7 7 7-12 7 20 7-31 7 44 7-56 7 63 7-69 7 74 7-82 7 88 7-98 7 108 7-118 7 127 7-110 7 83 7-59 7 41 7-28 7 16 7-8 7 2 7-5 7 10 7-14 7 19 7-24 7 29 7-35 7 38 7-42 7 44 7-35 7 24 7-15 7 8 7-4 7 2 7-2 7 3 7-2h12" id="relay-wave"></path>
+</defs>
+<rect fill="url(#relay-minor-grid)" height="144" width="500"></rect>
+<rect fill="url(#relay-major-grid)" height="144" width="500"></rect>
+<path d="M0 72H500M250 0V144" stroke="#d4af37" stroke-dasharray="2 4" stroke-opacity=".38"></path>
+<path d="M0 72c25 0 37-4 49-5 16-4 23-19 43-26 22-7 36 27 58 25 31-2 44-38 78-45 31-7 38-11 47-8 29 9 28 42 51 52 27 12 46-22 64-21 27 1 32 24 66 25l44 3c-36 0-50 2-64 6-18 5-29 16-46 16-20 0-33-20-64-18-19 1-21 33-39 47-15 11-34 13-59 8-33-7-48-45-78-50-28-5-28 24-52 24-24 0-33-25-56-29C27 73 10 72 0 72Z" fill="url(#relay-band-fill)" stroke="#d4af37" stroke-opacity=".32"></path>
+<use href="#relay-wave" stroke="#e9b34d" stroke-linejoin="round" stroke-opacity=".26" stroke-width="5" vector-effect="non-scaling-stroke"></use>
+<use href="#relay-wave" stroke="url(#relay-trace-fade)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" vector-effect="non-scaling-stroke"></use>
+<path d="M12 25V12h13m450 0h13v13m0 94v13h-13m-450 0H12v-13" stroke="#d4af37" stroke-opacity=".64"></path>
+<circle cx="431" cy="72" fill="#182019" r="5.5" stroke="#e9b34d"></circle>
+<circle cx="431" cy="72" fill="#fff0ba" r="2"></circle>
+</svg>
+<span class="scope-sweep"></span>
+</div>
+<div class="scope-bottom"><span>WIDGET.JSON</span><span class="scope-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+</div>
+</div>
+<div class="feed-bar">
+<span id="relay-last-checked"><svg class="icon"><use href="#relay-i-clock"></use></svg><span id="relay-last-checked-text">Waiting for first check</span></span>
+<div class="feed-actions">
+<button class="button refresh-button" disabled="" id="relay-refresh-button" title="Refresh now" type="button"><svg class="icon"><use href="#relay-i-refresh"></use></svg><span class="refresh-label">Refresh now</span></button>
+
+</div>
+</div>
+</section>
+<div class="feed-message" hidden="" id="relay-feed-message" role="status"></div>
+</div>
+<div class="panels">
+<section aria-labelledby="relay-voice-title" class="panel">
+<div class="panel-head">
+<div class="panel-title"><span class="panel-icon"><svg class="icon"><use href="#relay-i-voice"></use></svg></span><div><h2 id="relay-voice-title">Voice channels</h2><p>Public voice &amp; stage channels</p></div></div>
+<span class="count-tag" data-kind="voice" id="relay-voice-tag">–</span>
+</div>
+<div aria-busy="true" class="panel-content" id="relay-voice-content"></div>
+</section>
+<section aria-labelledby="relay-members-title" class="panel">
+<div class="panel-head">
+<div class="panel-title"><span class="panel-icon"><svg class="icon"><use href="#relay-i-users"></use></svg></span><div><h2 id="relay-members-title">Online members</h2><p>Discord member preview</p></div></div>
+<span class="count-tag" id="relay-member-tag">–</span>
+</div>
+<div aria-busy="true" class="panel-content" id="relay-member-content"></div>
+<div class="member-actions" hidden="" id="relay-member-actions"><button aria-controls="relay-member-content" aria-expanded="false" class="button list-toggle" id="relay-member-toggle" type="button">Show all <svg class="icon"><use href="#relay-i-chevron"></use></svg></button></div>
+</section>
+</div>
+</div><div class="page-footer">
+<p><svg class="icon"><use href="#relay-i-info"></use></svg><span>Discord shares up to 100 member profiles. Voice counts reflect only occupants reported by the public widget.</span></p>
+<a href="https://docs.discord.com/developers/resources/guild#guild-widget-object" rel="noopener noreferrer" target="_blank">About widget data <svg class="icon"><use href="#relay-i-external"></use></svg></a>
+</div>
+<noscript><p class="relay-noscript">Enable JavaScript to view live activity. You can still <a href="https://discord.gg/avApuUXfN9" target="_blank" rel="noopener noreferrer">join the guild’s Discord server</a>.</p></noscript>
+</div></div></section></main>
 <footer><div class="wrap"><div class="top"><a class="brand" href="#home"><img class="brand-logo" src="assets/logo.png" alt="" width="80" height="80"><span>HYLIAN<br>LEGENDS</span></a><div class="links"><a href="#codex">CODEX</a><a href="#quests">QUESTS</a><a href="#guides">GUIDES</a><a href="#discord">DISCORD</a></div></div><div style="margin-bottom:24px"><a href="./" aria-label="Hylian Legends homepage" style="display:inline-block"><img src="assets/site-badge.svg" alt="Hylian Legends" width="123" height="43" loading="lazy" style="display:block;max-width:100%;height:auto"></a></div><div class="copyright">© 2026 Hylian Legends Guild · A fan community. Not affiliated with Nintendo.</div></div></footer>
 <dialog id="modal"><button class="button outline" id="close">Close ×</button><h3 id="modal-title"></h3><p id="modal-text"></p></dialog>
 <script>
