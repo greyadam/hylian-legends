@@ -1,0 +1,256 @@
+#guild-hall-relay{--paper: #11101a;
+  --surface: #1b1926;
+  --surface-lift: #211e2e;
+  --canvas: #15131e;
+  --ink: #f6f2fc;
+  --muted: #bbb3cd;
+  --quiet: #aea4c2;
+  --line: #383148;
+  --line-soft: #2c2739;
+  --control-line: #76658c;
+  --primary: #c5aaff;
+  --primary-hover: #dac6ff;
+  --primary-active: #b798f6;
+  --primary-text: #1e132e;
+  --primary-line: #dfcbff;
+  --primary-hover-line: #ecdfff;
+  --accent: #d9c6ff;
+  --accent-surface: #302545;
+  --accent-line: #584771;
+  --monitor: #251d36;
+  --monitor-depth: #1c172a;
+  --monitor-line: #4e3d66;
+  --monitor-detail: #d1c5e3;
+  --monitor-divider: #69587e;
+  --positive: #92e5bf;
+  --positive-surface: #273b35;
+  --positive-label: #b2ebd2;
+  --positive-line: #527365;
+  --warm: #f5cc94;
+  --warn-bg: #342735;
+  --warn-pill: #422e35;
+  --warn-line: #815a57;
+  --danger: #ffa5b4;
+  --focus: #d5baff;
+  --voice-active: #242035;
+  --avatar-pink: #423047;
+  --avatar-pink-ink: #f3cae8;
+  --avatar-blue: #2c324f;
+  --avatar-blue-ink: #d4d9ff;
+  --glint: #fae4ff19;
+  --well: #09071155;
+  --backdrop: #0c0a13cf;
+  --shadow-card: 0 10px 24px #09071128, inset 0 1px #fae4ff06;
+  --shadow-frame: 0 15px 40px #09061166, inset 0 1px var(--glint);
+  --shadow-dialog: 0 24px 70px #0907119e, inset 0 1px var(--glint);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --interactive: 180ms var(--ease-out);
+  --font-body: "Satoshi", "Segoe UI", sans-serif;
+  --font-display: "Cabinet Grotesk", "Satoshi", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --text-xs: clamp(.75rem, .718rem + .13vw, .8125rem);
+  --text-sm: clamp(.875rem, .837rem + .17vw, .9375rem);
+  --text-base: clamp(1rem, .966rem + .15vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.03rem + .42vw, 1.3125rem);
+  --text-xl: clamp(1.85rem, 1.66rem + .83vw, 2.25rem);
+  --s1: .25rem;
+  --s2: .5rem;
+  --s3: .75rem;
+  --s4: 1rem;
+  --s5: 1.25rem;
+  --s6: 1.5rem;
+  --s7: 1.75rem;
+  --s8: 2rem;
+  --s10: 2.5rem;
+  --s12: 3rem;
+  --mono-spacing: .09em;
+  color: var(--ink);
+  color-scheme: dark;
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-size: 100%;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;}
+#guild-hall-relay *,#guild-hall-relay *::before,#guild-hall-relay *::after{box-sizing: border-box;}
+#guild-hall-relay{margin: 0; min-width: 0; font-size: var(--text-base); line-height: 1.5;}
+#guild-hall-relay button,#guild-hall-relay select,#guild-hall-relay input,#guild-hall-relay textarea{color: inherit; font: inherit;}
+#guild-hall-relay button{cursor: pointer;}
+#guild-hall-relay a{color: inherit;}
+#guild-hall-relay button:disabled{cursor: default;}
+#guild-hall-relay button,#guild-hall-relay input,#guild-hall-relay select,#guild-hall-relay textarea,#guild-hall-relay a{-webkit-tap-highlight-color: transparent;}
+#guild-hall-relay :focus-visible{outline: 2px solid var(--focus); outline-offset: 3px;}
+#guild-hall-relay ::selection{background: var(--primary); color: var(--primary-text);}
+#guild-hall-relay [hidden]{display: none !important;}
+#guild-hall-relay h1,#guild-hall-relay h2,#guild-hall-relay h3,#guild-hall-relay p,#guild-hall-relay dl,#guild-hall-relay dd{margin: 0;}
+#guild-hall-relay h1,#guild-hall-relay h2,#guild-hall-relay h3{line-height: 1.13;}
+#guild-hall-relay .icon-library{display: none;}
+#guild-hall-relay .icon{display: inline-block; width: 1.125rem; height: 1.125rem; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle;}
+#guild-hall-relay .eyebrow{font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--mono-spacing);}
+#guild-hall-relay .feed-actions{display: flex; align-items: center; flex: 0 0 auto; gap: var(--s4);}
+#guild-hall-relay .page-footer a:hover{color: var(--ink); text-decoration: underline; text-underline-offset: .2em;}
+#guild-hall-relay .main{container: activity / inline-size; padding: var(--s7) 0 var(--s5);}
+#guild-hall-relay .live-panel h2{font: 800 var(--text-xl)/1.07 var(--font-display); letter-spacing: -.035em; word-spacing: .03em;}
+#guild-hall-relay .button{display: inline-flex; align-items: center; justify-content: center; gap: var(--s2); min-height: 2.75rem; padding: 0 var(--s4); border: 1px solid transparent; border-radius: .55rem; background: transparent; color: var(--ink); font-size: var(--text-sm); line-height: 1.2; font-weight: 700; white-space: nowrap; transition: background-color var(--interactive), border-color var(--interactive), color var(--interactive), box-shadow var(--interactive);}
+#guild-hall-relay .button .icon{width: 1rem; height: 1rem;}
+#guild-hall-relay .secondary{background: var(--surface); border-color: var(--line); box-shadow: var(--shadow-card);}
+#guild-hall-relay .secondary .icon{color: var(--accent);}
+#guild-hall-relay .secondary:not(:disabled):hover{background: var(--accent-surface); border-color: var(--accent-line);}
+#guild-hall-relay .secondary:disabled{color: var(--muted); background: var(--canvas); box-shadow: none;}
+#guild-hall-relay .primary{background: var(--primary); color: var(--primary-text); border-color: var(--primary-line); box-shadow: 0 2px 8px #0f091a40, inset 0 1px #fbf1ff51;}
+#guild-hall-relay .primary:hover{background: var(--primary-hover); border-color: var(--primary-hover-line); box-shadow: 0 4px 14px #ae85ff30, inset 0 1px #fbf1ff68;}
+#guild-hall-relay .primary:active{background: var(--primary-active);}
+#guild-hall-relay .connection{display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: var(--s3) var(--s5); padding: var(--s3) var(--s5); background: var(--surface); border: 1px solid var(--line); border-radius: .75rem; margin-bottom: var(--s5); box-shadow: var(--shadow-card);}
+#guild-hall-relay .id-field{flex: 1 1 18rem; max-width: 24rem;}
+#guild-hall-relay .interval-field{flex: 0 0 10.75rem;}
+#guild-hall-relay textarea{width: 100%; min-height: 2.75rem; background: var(--canvas); border: 1px solid var(--control-line); border-radius: .55rem; font-size: var(--text-sm); box-shadow: inset 0 1px 3px var(--well); transition: border-color var(--interactive);}
+#guild-hall-relay .refresh-button:not(:disabled):hover,#guild-hall-relay .list-toggle:hover,#guild-hall-relay .icon-button:hover{background: var(--accent-surface); color: var(--ink);}
+#guild-hall-relay .monitor{border: 1px solid var(--monitor-line); border-radius: .95rem; background: var(--monitor); box-shadow: var(--shadow-frame); margin-bottom: var(--s5);}
+#guild-hall-relay .live-panel{min-height: 13.25rem; display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr); gap: var(--s7); padding: var(--s5) var(--s6);}
+#guild-hall-relay .live-content{min-width: 0; display: flex; flex-direction: column; justify-content: center;}
+#guild-hall-relay .live-kicker{display: flex; align-items: center; gap: var(--s3); margin-bottom: var(--s2);}
+#guild-hall-relay .connection-status{display: inline-flex; align-items: center; gap: var(--s2); min-height: 1.6875rem; padding: 0 var(--s3); border: 1px solid var(--positive-line); border-radius: 2rem; color: var(--positive-label); background: var(--positive-surface); font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 600; line-height: 1; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;}
+#guild-hall-relay .connection-status > span:first-child{width: .375rem; height: .375rem; background: var(--positive); border-radius: 50%; box-shadow: 0 0 0 .16rem color-mix(in srgb, var(--positive) 18%, transparent);}
+#guild-hall-relay .connection-status[data-state="error"],#guild-hall-relay .connection-status[data-state="stale"]{color: var(--warm); background: var(--warn-pill); border-color: var(--warn-line);}
+#guild-hall-relay .connection-status[data-state="error"] > span:first-child,#guild-hall-relay .connection-status[data-state="stale"] > span:first-child{background: var(--warm); box-shadow: 0 0 0 .16rem color-mix(in srgb, var(--warm) 18%, transparent);}
+#guild-hall-relay .connection-status[data-state="loading"]{background: var(--accent-surface); color: var(--accent); border-color: var(--accent-line);}
+#guild-hall-relay .connection-status[data-state="loading"] > span:first-child{background: var(--primary); box-shadow: 0 0 0 .16rem color-mix(in srgb, var(--primary) 18%, transparent);}
+#guild-hall-relay .live-separator{height: .875rem; width: 1px; background: var(--monitor-divider);}
+#guild-hall-relay .live-source{color: var(--monitor-detail); letter-spacing: .07em;}
+#guild-hall-relay .live-panel h2{overflow-wrap: anywhere;}
+#guild-hall-relay .metrics{display: grid; grid-template-columns: 1.15fr 1fr 1fr; margin-top: var(--s5); padding-top: var(--s3); border-top: 1px solid var(--monitor-line); font-variant-numeric: tabular-nums lining-nums;}
+#guild-hall-relay .metrics > div{display: grid; grid-template-rows: auto 1fr; align-content: start; min-width: 0;}
+#guild-hall-relay .metrics > div + div{border-left: 1px solid var(--monitor-line); padding-left: var(--s5);}
+#guild-hall-relay .metrics dt{grid-row: 2; color: var(--monitor-detail); font-size: var(--text-xs); font-weight: 650; margin-top: var(--s1);}
+#guild-hall-relay .metrics dd{grid-row: 1; font-family: var(--font-display); color: var(--ink); font-size: var(--text-xl); font-weight: 800; line-height: 1; letter-spacing: -.025em; overflow-wrap: anywhere;}
+#guild-hall-relay .metrics > div:first-child dd{color: var(--accent);}
+#guild-hall-relay .scope{min-width: 0; height: 11.2rem; display: grid; grid-template-rows: auto minmax(88px, 1fr) auto; align-self: center; position: relative; overflow: hidden; border: 1px solid #4e3d66; border-radius: .6rem; color-scheme: dark; color: #c9bbde; background: var(--monitor-depth); box-shadow: inset 0 0 0 1px #09071040;}
+#guild-hall-relay .scope-top,#guild-hall-relay .scope-bottom{display: flex; justify-content: space-between; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3); font: 500 var(--text-xs)/1.15 var(--font-mono); letter-spacing: .065em;}
+#guild-hall-relay .scope-top > span:first-child{display: inline-flex; align-items: center; gap: var(--s2);}
+#guild-hall-relay .scope-top .icon{width: .8rem; height: .8rem; color: var(--accent);}
+#guild-hall-relay .scope-bars{display: flex; gap: .1875rem; align-items: flex-end; color: var(--accent);}
+#guild-hall-relay .scope-bars i{display: inline-block; width: .1875rem; height: .3125rem; background: currentColor; opacity: .55;}
+#guild-hall-relay .scope-bars i:nth-child(2n){height: .5rem;}
+#guild-hall-relay .scope-bars i:nth-child(5){height: .625rem;}
+#guild-hall-relay .scope-bars i:last-child{opacity: 1;}
+#guild-hall-relay .scope-screen{min-width: 0; min-height: 0; position: relative; overflow: hidden; border-block: 1px solid #3d3153; background: #201a31;}
+#guild-hall-relay .scope-trace{display: block; width: 100%; height: 100%;}
+#guild-hall-relay .scope-sweep{display: block; position: absolute; top: 0; left: 0; bottom: 0; width: 16%; opacity: 0; border-right: 1px solid #e3cbff9e; background: linear-gradient(to right, #b69bff00, #b69bff22); transform: translateX(-100%); pointer-events: none;}
+#guild-hall-relay .monitor:is([data-phase="stale"], [data-phase="error"]) .scope-trace{opacity: .55;}
+#guild-hall-relay .feed-bar{display: flex; align-items: center; justify-content: space-between; gap: var(--s2); min-height: 3.125rem; padding-inline: var(--s6); color: var(--muted); border-top: 1px solid var(--monitor-line); border-radius: 0 0 .9rem .9rem; background: var(--monitor-depth);}
+#guild-hall-relay #relay-last-checked{display: inline-flex; gap: var(--s2); align-items: center; font-size: var(--text-xs); font-weight: 650; font-variant-numeric: tabular-nums;}
+#guild-hall-relay #relay-last-checked > .icon{width: .9rem; height: .9rem; color: var(--accent);}
+#guild-hall-relay .feed-actions{gap: var(--s1);}
+#guild-hall-relay .refresh-button{color: var(--accent); margin-right: calc(var(--s2) * -1); padding-inline: var(--s2);}
+#guild-hall-relay .refresh-button:disabled{color: var(--quiet);}
+#guild-hall-relay .refresh-button:disabled .icon{opacity: .64;}
+#guild-hall-relay .monitor[data-checking="true"] .refresh-button .icon{animation: relay-refresh-turn 1s linear infinite;}
+@keyframes relay-refresh-turn { to { transform: rotate(1turn); } }
+#guild-hall-relay .feed-message{padding: var(--s3) var(--s4); margin-bottom: var(--s4); border: 1px solid var(--warn-line); border-radius: .6rem; background: var(--warn-bg); color: var(--warm); font-size: var(--text-sm);}
+#guild-hall-relay .panels{display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: var(--s5);}
+#guild-hall-relay .panel{min-width: 0; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: .8rem; box-shadow: var(--shadow-card);}
+#guild-hall-relay .panel-head{min-height: 4.375rem; display: flex; align-items: center; justify-content: space-between; gap: var(--s2); padding: var(--s3) var(--s5); border-bottom: 1px solid var(--line); background: var(--surface-lift);}
+#guild-hall-relay .panel-title{display: flex; align-items: center; gap: var(--s3); min-width: 0;}
+#guild-hall-relay .panel-icon{width: 2.375rem; height: 2.375rem; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid var(--accent-line); border-radius: .55rem; background: var(--accent-surface); color: var(--accent);}
+#guild-hall-relay .panel-icon .icon{width: 1.125rem; height: 1.125rem;}
+#guild-hall-relay .panel h2{font-size: var(--text-lg); font-weight: 800; letter-spacing: -.035em;}
+#guild-hall-relay .panel-head p{color: var(--quiet); font-size: var(--text-xs); margin-top: var(--s1);}
+#guild-hall-relay .count-tag{flex: 0 0 auto; padding: var(--s1) var(--s2); border: 1px solid var(--line); background: var(--canvas); border-radius: 2rem; color: var(--muted); font-size: var(--text-xs); font-weight: 700; white-space: nowrap;}
+#guild-hall-relay .count-tag[data-kind="voice"]{background: var(--accent-surface); border-color: var(--accent-line); color: var(--accent);}
+#guild-hall-relay .panel-list,#guild-hall-relay .occupant-list{padding: 0; list-style: none;}
+#guild-hall-relay .panel-list{margin: 0;}
+#guild-hall-relay .row,#guild-hall-relay .channel-line{display: flex; align-items: center; gap: var(--s3); min-height: 2.9375rem; padding: var(--s2) var(--s5);}
+#guild-hall-relay .row + .row,#guild-hall-relay .channel + .channel{border-top: 1px solid var(--line-soft);}
+#guild-hall-relay .channel-text > .icon{width: 1rem; height: 1rem; color: var(--quiet);}
+#guild-hall-relay .row-label{min-width: 0; flex: 1; overflow-wrap: anywhere; font-size: var(--text-sm); font-weight: 750; line-height: 1.25;}
+#guild-hall-relay .channel-text{display: flex; align-items: center; min-width: 0; flex: 1; gap: var(--s2);}
+#guild-hall-relay .row-status{white-space: nowrap; color: var(--quiet); font-size: var(--text-xs); font-weight: 650;}
+#guild-hall-relay .member-status[data-presence="online"]{color: var(--positive);}
+#guild-hall-relay .member-status[data-presence="idle"]{color: var(--warm);}
+#guild-hall-relay .member-status[data-presence="dnd"]{color: var(--danger);}
+#guild-hall-relay .channel .row-status{text-align: right; white-space: normal;}
+#guild-hall-relay .channel.active{background: var(--voice-active);}
+#guild-hall-relay .channel.active .channel-line .row-status,#guild-hall-relay .channel.active .channel-text > .icon{color: var(--accent);}
+#guild-hall-relay .occupant-list{margin: 0 var(--s5) var(--s3) calc(var(--s5) + 1rem + var(--s3)); border-left: 1px solid var(--accent-line);}
+#guild-hall-relay .occupant-list .row{min-height: 2.5rem; padding: var(--s1) 0 var(--s1) var(--s3);}
+#guild-hall-relay .occupant-list .row + .row{border-top: 0;}
+#guild-hall-relay .avatar{display: inline-grid; place-items: center; position: relative; flex: 0 0 auto; width: 2rem; height: 2rem; border-radius: 50%; isolation: isolate; background: var(--accent-surface); color: var(--accent); font-size: var(--text-xs); font-weight: 800; box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);}
+#guild-hall-relay .avatar[data-tone="1"]{background: var(--avatar-pink); color: var(--avatar-pink-ink);}
+#guild-hall-relay .avatar[data-tone="2"]{background: var(--avatar-blue); color: var(--avatar-blue-ink);}
+#guild-hall-relay .avatar img{position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%;}
+#guild-hall-relay .avatar-dot{position: absolute; bottom: -.0625rem; right: -.0625rem; width: .6875rem; height: .6875rem; border: 2px solid var(--surface); z-index: 1; border-radius: 50%; background: var(--quiet);}
+#guild-hall-relay .avatar-dot[data-status="online"]{background: var(--positive);}
+#guild-hall-relay .avatar-dot[data-status="idle"]{background: var(--warm);}
+#guild-hall-relay .avatar-dot[data-status="dnd"]{background: var(--danger);}
+#guild-hall-relay .member-actions{border-top: 1px solid var(--line-soft); display: flex; justify-content: center;}
+#guild-hall-relay .list-toggle{color: var(--accent); width: 100%; border-radius: 0;}
+#guild-hall-relay .list-toggle[aria-expanded="true"] .icon{transform: rotate(180deg);}
+#guild-hall-relay .empty{padding: var(--s7) var(--s5); color: var(--muted); font-size: var(--text-sm);}
+#guild-hall-relay .empty strong{display: block; color: var(--ink); margin-bottom: var(--s1);}
+#guild-hall-relay .placeholder{background: var(--accent-surface); border-radius: .275rem; width: min(56%, 9rem); height: .72rem;}
+#guild-hall-relay .placeholder.short{width: 3.25rem; margin-left: auto;}
+#guild-hall-relay .placeholder.round{width: 2rem; height: 2rem; border-radius: 50%;}
+#guild-hall-relay .placeholder.voice{width: 1rem; height: 1rem;}
+#guild-hall-relay .page-footer{display: flex; align-items: center; justify-content: space-between; gap: var(--s2) var(--s4); flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: var(--s5); color: var(--muted); padding-top: var(--s2); font-size: var(--text-xs);}
+#guild-hall-relay .page-footer p,#guild-hall-relay .page-footer a{display: inline-flex; align-items: center; gap: var(--s2);}
+#guild-hall-relay .page-footer a{min-height: 2.75rem; text-decoration: none; font-weight: 750; color: var(--accent);}
+#guild-hall-relay .page-footer .icon{width: .9rem; height: .9rem;}
+
+/* Palette and layout are local: the existing homepage trim is not restyled. */
+#guild-hall-relay{--paper:#0b1110;--surface:#131b17;--surface-lift:#18231c;--canvas:#0d1511;--ink:#f1e5c5;--muted:#bdb7a2;--quiet:#b0aa94;--line:#d4af374d;--line-soft:#d4af3726;--primary:#e9b34d;--primary-text:#211b0c;--accent:#e9b34d;--accent-surface:#322a17;--accent-line:#8b7134;--monitor:#162019;--monitor-depth:#0d1511;--monitor-line:#8b713466;--monitor-detail:#c4bda5;--monitor-divider:#8b7134;--positive:#92e5bf;--positive-surface:#173325;--positive-label:#b2ebd2;--positive-line:#527365;--warm:#f5cc94;--warn-bg:#30261a;--warn-pill:#382a18;--warn-line:#967340;--danger:#ffa5b4;--focus:#ffe096;--voice-active:#20291b;--avatar-pink:#3b3021;--avatar-pink-ink:#f1d49d;--avatar-blue:#24372e;--avatar-blue-ink:#d1e5cc;--glint:#fff0ba15;--shadow-card:0 10px 24px #0003;--shadow-frame:0 15px 40px #0005,inset 0 1px #fff0ba10;--font-body:Arial,sans-serif;--font-display:'CinzelCustom',Georgia,serif;min-width:0;max-width:100%;font-size:14px;line-height:1.5;background:transparent}
+#guild-hall-relay section{padding:0;scroll-margin-top:0}
+#guild-hall-relay h2,#guild-hall-relay h3{margin:0;font-variant:normal;letter-spacing:normal}
+#guild-hall-relay p{margin:0;color:var(--muted)}
+#guild-hall-relay .panel{padding:0}
+#guild-hall-relay .button{padding:0 14px;min-height:44px;letter-spacing:normal}
+#guild-hall-relay .refresh-button,#guild-hall-relay .list-toggle{background:transparent;border-color:transparent;color:var(--accent)}
+#guild-hall-relay .button:disabled{color:var(--quiet);cursor:default}
+#guild-hall-relay .relay-intro{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:28px}
+#guild-hall-relay .relay-intro h2{margin:12px 0;font-size:clamp(30px,4vw,48px);line-height:1.2}
+#guild-hall-relay .relay-intro h2 em{display:inline;margin:0;color:var(--accent)}
+#guild-hall-relay .relay-intro p{max-width:620px}
+#guild-hall-relay .relay-join{flex-shrink:0;white-space:normal;min-height:48px;padding:12px 22px;background:var(--accent);border-color:var(--accent);color:#211b0c}
+#guild-hall-relay .activity-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
+#guild-hall-relay .overview{min-width:0}
+#guild-hall-relay .monitor{margin-bottom:0;overflow:hidden}
+#guild-hall-relay .live-panel{display:flex;flex-direction:column;gap:20px;padding:22px;min-height:0}
+#guild-hall-relay .live-panel h2{font-size:clamp(24px,3vw,34px);color:var(--ink)}
+#guild-hall-relay .live-kicker{flex-wrap:wrap;gap:8px}
+#guild-hall-relay .live-source{font-size:10px;letter-spacing:.04em}
+#guild-hall-relay .metrics{margin-top:22px}
+#guild-hall-relay .metrics dd{margin:0;font-size:clamp(24px,3vw,34px)}
+#guild-hall-relay .metrics dt{line-height:1.5}
+#guild-hall-relay .metrics>div+div{padding-left:12px}
+#guild-hall-relay .scope{width:100%;height:9rem;border-color:#8b713466;color:#d8cda9}
+#guild-hall-relay .scope-screen{background:#111b14;border-color:#8b713455}
+#guild-hall-relay .scope-sweep{border-color:#ffe09699;background:linear-gradient(to right,#d4af3700,#d4af3722)}
+#guild-hall-relay .feed-bar{flex-wrap:wrap;padding:8px 14px;gap:4px 8px}
+#guild-hall-relay .feed-message{margin:12px 0 0}
+#guild-hall-relay .panels{grid-template-columns:minmax(0,1fr);gap:18px}
+#guild-hall-relay .panel-head{padding:14px;flex-wrap:wrap}
+#guild-hall-relay .panel-title{flex:1;gap:10px}
+#guild-hall-relay .panel h2{font-size:18px;line-height:1.35;color:var(--ink)}
+#guild-hall-relay .panel-head p{margin-top:4px}
+#guild-hall-relay .panel-content{max-height:380px;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#8b7134 #131b17;scrollbar-width:thin}
+#guild-hall-relay .row,#guild-hall-relay .channel-line{padding:10px 14px;min-width:0}
+#guild-hall-relay .row-label{margin:0;color:var(--ink);font:700 13px/1.4 Arial,sans-serif!important;text-shadow:none!important}
+#guild-hall-relay .row-status{white-space:normal;overflow-wrap:anywhere;text-align:right;max-width:38%;font-size:11px}
+#guild-hall-relay .occupant-list{margin:0 14px 12px 40px}
+#guild-hall-relay .occupant-list .row{padding:4px 0 4px 10px}
+#guild-hall-relay .page-footer{padding:14px 0 0;margin-top:18px;font-size:12px}
+#guild-hall-relay .page-footer p{align-items:flex-start;flex:1 1 440px}
+#guild-hall-relay .page-footer p>.icon{margin-top:3px}
+#guild-hall-relay .relay-noscript{margin-top:18px;padding:14px;border:1px solid var(--line)}
+#guild-hall-relay .relay-noscript a{text-decoration:underline;color:var(--accent)}
+@media(max-width:767px){
+ #guild-hall-relay .activity-grid,#guild-hall-relay .panels{grid-template-columns:minmax(0,1fr)}
+ #guild-hall-relay .relay-intro{flex-direction:column;align-items:flex-start;gap:18px}
+ #guild-hall-relay .relay-join{width:100%}
+ #guild-hall-relay .live-panel{padding:18px}
+ #guild-hall-relay .scope{height:7rem}
+ #guild-hall-relay .live-separator{display:none}
+ #guild-hall-relay .live-source{flex-basis:100%}
+ #guild-hall-relay .metrics>div+div{padding-left:8px}
+ #guild-hall-relay .panel-content{max-height:320px}
+}
+@media(prefers-reduced-motion:reduce){#guild-hall-relay *,#guild-hall-relay *::before,#guild-hall-relay *::after{animation:none!important;transition:none!important}}
+
