@@ -1,0 +1,54 @@
+name: Activate reviewed Guild Hall Relay homepage
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/activate-guild-hall-relay.yml']
+permissions:
+  contents: write
+concurrency:
+  group: activate-guild-hall-relay
+  cancel-in-progress: false
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Apply exact reviewed homepage with source and asset guards
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, json, re, zlib
+          def blob(data):
+              return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+          home = Path('index.html')
+          source = home.read_bytes()
+          assert blob(source) == 'ceba4987ed9ed048bd975d974b2747b8c413f1f5', 'Homepage changed; refusing to overwrite it'
+          assets = {
+              'assets/guild-hall-relay/app.js': 'c0c134ae3dd563cc5a306a70372cea21da2eb9fd',
+              'assets/guild-hall-relay/widget.js': 'c2a19ae73c996056655744ce3cd638d81d9f1dc0',
+              'assets/guild-hall-relay/relay.css': 'd0a8e65ec96e4dd2d64989b259e04c6816c77551',
+          }
+          for name, expected in assets.items():
+              assert blob(Path(name).read_bytes()) == expected, 'Widget asset changed: ' + name
+          payload = json.loads(zlib.decompress(base64.b64decode('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')))
+          text = source.decode('utf-8')
+          pattern = r'<section class="hearth" id="discord">.*?</section>'
+          assert len(re.findall(pattern, text, re.S)) == 1, 'Expected exactly one static Discord section'
+          assert text.count('</head>') == 1, 'Expected exactly one document head'
+          updated = re.sub(pattern, lambda _: payload['fragment'], text, count=1, flags=re.S)
+          updated = updated.replace('</head>', payload['wiring'] + '</head>', 1).encode('utf-8')
+          assert blob(updated) == '5afd549dbc98ed1457cea079a99ad8b54a256c89', 'Result does not match the reviewed homepage'
+          home.write_bytes(updated)
+          Path('.github/workflows/activate-guild-hall-relay.yml').unlink()
+          PY
+      - name: Commit homepage and remove this temporary installer
+        run: |
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- index.html .github/workflows/activate-guild-hall-relay.yml
+          git commit -m 'Activate Guild Hall Relay live Discord widget on homepage'
+          git push origin HEAD:main
