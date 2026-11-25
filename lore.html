@@ -25,14 +25,21 @@
 #hylian-spiritual-stones figcaption>span:not(.stone-title){display:block;margin-top:6px;color:var(--muted,#aca995);font:10px/1.5 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
 @media(max-width:900px){#hylian-spiritual-stones .stone-showcase-row{grid-template-columns:minmax(0,1fr);gap:22px}#hylian-spiritual-stones figure{max-width:640px;width:100%;margin:0 auto}}
 </style>
+<style id="lore-crest-wing-alignment">
+/* Pin the decorative right wingtip to the lower-left Triforce area. */
+#main .triforce-stage>.hylian-crest-watermark{top:74%;left:calc(50% - min(25.8%,132px));right:auto;width:min(60%,360px);max-width:none;height:auto;margin:0;transform-origin:100% 2.083%;transform:translate(-100%,-2.083%) rotate(28deg);z-index:0}
+/* Preserve the existing tablet reduction and small-screen hiding. */
+@media screen and (max-width:900px){#main .triforce-stage>.hylian-crest-watermark{opacity:.025;max-width:40px;transform:translate(-100%,-2.083%) rotate(28deg) scale(.9)}}
+@media screen and (max-width:480px){#main .triforce-stage>.hylian-crest-watermark{display:none}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header><div class="wrap nav"><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="" width="48" height="48"><span>HYLIAN LEGENDS<small>GUILD · HQ</small></span></a><nav aria-label="Main navigation"><a href="about.html">About</a><a href="guildhall.html">Guildhall</a><a href="lore.html" aria-current="page">Lore</a><a href="index.html#codex">Codex</a><a href="index.html#ranks">Ranks</a><a href="index.html#quests">Quests</a><a href="index.html#guides">Guides</a><a class="trials-nav-link" href="trials.html">TRIALS</a><a href="https://www.tibia.com/community/?subtopic=guilds&amp;page=view&amp;GuildName=Hylian+Legends&amp;character=Linkmupi&amp;action=characters">Apply to guild</a><a class="button" href="https://discord.gg/B7ax89XtBp" target="_blank" rel="noopener noreferrer">Join Discord</a></nav></div></header>
 <main id="main" class="triforce-lore-section">
-<img class="hylian-crest-watermark" src="assets/images/hylian-crest-watermark.svg.svg" alt="" aria-hidden="true" width="1146" height="683" decoding="async" draggable="false">
 <section class="lore-hero wrap" aria-labelledby="lore-title"><div class="micro">The Lore Library</div><h1 id="lore-title">The Triforce</h1><p class="subtitle">Three sacred virtues. One enduring legend.</p>
-<figure style="margin:0"><div class="triforce-stage triforce-hero-wrapper" tabindex="0" role="group" aria-label="Golden Triforce; hover or focus to illuminate its aura"><div class="triforce-pulse-glow" aria-hidden="true"></div>
+<figure style="margin:0"><div class="triforce-stage triforce-hero-wrapper" tabindex="0" role="group" aria-label="Golden Triforce; hover or focus to illuminate its aura"><img class="hylian-crest-watermark" src="assets/images/hylian-crest-watermark.svg.svg" alt="" aria-hidden="true" width="1146" height="683" decoding="async" draggable="false">
+<div class="triforce-pulse-glow" aria-hidden="true"></div>
 <img class="triforce-img" src="assets/images/The_Triforce.gif" alt="Shiny animated golden Triforce representing Power, Wisdom and Courage" decoding="async">
 </div><figcaption class="triforce-caption">Power · Wisdom · Courage</figcaption></figure></section>
 <article class="lore-content goddesses-content" aria-label="The Three Goddesses and the Triforce">
