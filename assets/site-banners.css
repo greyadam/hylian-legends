@@ -106,3 +106,14 @@ img.hylian-site-banner {
   .triforce-origins .hylian-origins-copy { flex: 0 1 auto; width: 100%; }
   .triforce-origins .hylian-origins-intro > .hylian-origins-banner { flex: 0 0 auto; }
 }
+
+/* Lore only: center the watermark without changing its mobile scale or opacity. */
+main#main.triforce-lore-section > .hylian-crest-watermark {
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+}
+/* The standalone corridor decoration must not appear beneath the middle stone. */
+main#main.triforce-lore-section #hylian-lore-corridor {
+  display: none;
+}
