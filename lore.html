@@ -21,7 +21,8 @@
 #hylian-spiritual-stones figure{min-width:0;margin:0;padding:28px 8px 20px;text-align:center;overflow:visible}
 #hylian-spiritual-stones img{display:block;width:min(100%,224px);height:224px;margin:0 auto;object-fit:contain;background:transparent;mix-blend-mode:screen;filter:none;border:0;border-radius:0;box-shadow:none;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(0deg,transparent 0%,#000 16%,#000 84%,transparent 100%);-webkit-mask-composite:source-in;-webkit-mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(0deg,transparent 0%,#000 16%,#000 84%,transparent 100%);mask-composite:intersect;mask-repeat:no-repeat;mask-size:100% 100%}
 #hylian-spiritual-stones figcaption{margin-top:20px;color:var(--cream,#f1e5c5);font:19px/1.4 Georgia,serif}
-#hylian-spiritual-stones figcaption span{display:block;margin-top:6px;color:var(--muted,#aca995);font:10px/1.5 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
+#hylian-spiritual-stones figcaption>.stone-title{color:#e9b34d;font-style:normal;letter-spacing:.025em}
+#hylian-spiritual-stones figcaption>span:not(.stone-title){display:block;margin-top:6px;color:var(--muted,#aca995);font:10px/1.5 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
 @media(max-width:900px){#hylian-spiritual-stones .stone-showcase-row{grid-template-columns:minmax(0,1fr);gap:22px}#hylian-spiritual-stones figure{max-width:640px;width:100%;margin:0 auto}}
 </style>
 </head>
@@ -53,9 +54,9 @@
 <div id="hylian-spiritual-stones" role="group" aria-labelledby="hylian-spiritual-stones-heading">
 <h3 id="hylian-spiritual-stones-heading">The Spiritual Stones</h3>
 <div class="stone-showcase-row">
-<figure style="--stone-shadow:rgba(220,80,65,.12)"><img src="assets/goron-ruby-switch-2.gif" width="224" height="224" alt="Animated Goron's Ruby Spiritual Stone with its natural red glow" loading="lazy" decoding="async"><figcaption>Goron's Ruby<span>Power</span></figcaption></figure>
-<figure style="--stone-shadow:rgba(117,171,255,.12)"><img src="assets/zora-sapphire-switch-2.gif" width="224" height="224" alt="Animated Zora's Sapphire Spiritual Stone with its natural blue glow" loading="lazy" decoding="async"><figcaption>Zora's Sapphire<span>Wisdom</span></figcaption></figure>
-<figure style="--stone-shadow:rgba(57,175,119,.12)"><img src="assets/kokiri%27s-emerald-switch-2.gif" width="224" height="224" alt="Animated Kokiri's Emerald Spiritual Stone with its natural green glow" loading="lazy" decoding="async"><figcaption>Kokiri's Emerald<span>Courage</span></figcaption></figure>
+<figure style="--stone-shadow:rgba(220,80,65,.12)"><img src="assets/goron-ruby-switch-2.gif" width="224" height="224" alt="Animated Goron's Ruby Spiritual Stone with its natural red glow" loading="lazy" decoding="async"><figcaption><span class="stone-title font-ravenna">Goron's Ruby</span><span>Power</span></figcaption></figure>
+<figure style="--stone-shadow:rgba(117,171,255,.12)"><img src="assets/zora-sapphire-switch-2.gif" width="224" height="224" alt="Animated Zora's Sapphire Spiritual Stone with its natural blue glow" loading="lazy" decoding="async"><figcaption><span class="stone-title font-ravenna">Zora's Sapphire</span><span>Wisdom</span></figcaption></figure>
+<figure style="--stone-shadow:rgba(57,175,119,.12)"><img src="assets/kokiri%27s-emerald-switch-2.gif" width="224" height="224" alt="Animated Kokiri's Emerald Spiritual Stone with its natural green glow" loading="lazy" decoding="async"><figcaption><span class="stone-title font-ravenna">Kokiri's Emerald</span><span>Courage</span></figcaption></figure>
 </div></div>
 </section>
 <div class="lore-manuscript lore-archive" role="region" aria-label="Legendary artifacts archive">
