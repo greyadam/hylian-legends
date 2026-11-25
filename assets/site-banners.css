@@ -117,3 +117,18 @@ main#main.triforce-lore-section > .hylian-crest-watermark {
 main#main.triforce-lore-section #hylian-lore-corridor {
   display: none;
 }
+
+/* Lore hero only: enlarge the crest and raise its wingtip away from both captions. */
+main#main.triforce-lore-section .triforce-stage > .hylian-crest-watermark {
+  top: 46%;
+  left: calc(50% - min(21.5%, 110px));
+  width: min(80%, 480px, calc(54vw - 140px));
+  max-width: none;
+  transform: translate(-100%, -2.083%) rotate(36deg);
+}
+@media screen and (max-width: 900px) {
+  main#main.triforce-lore-section .triforce-stage > .hylian-crest-watermark {
+    width: min(60%, 280px, calc(54vw - 140px));
+    transform: translate(-100%, -2.083%) rotate(36deg) scale(.9);
+  }
+}
